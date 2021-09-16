@@ -1,7 +1,7 @@
 # Личный проект «Readme»
 
-* Студент: [Никита Шишкин](https://up.htmlacademy.ru/php/12/user/1518675).
-* Наставник: [Антон Попов](https://htmlacademy.ru/profile/joker).
+* Студент: [Никита Шишкин](https://up.htmlacademy.ru/php/12/user/1518675)
+* Наставник: [Антон Попов](https://htmlacademy.ru/profile/joker)
 
 ---
 
