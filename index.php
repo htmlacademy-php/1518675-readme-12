@@ -14,7 +14,7 @@ $posts = [
   [
     'caption' => 'Игра престолов',
     'type' => 'post-text',
-    'content' => 'Не могу дождаться начала финального сезона своего любимого сериала!',
+    'content' => 'Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала!',
     'user' => 'Владик',
     'avatar' => 'userpic.jpg'
   ],
@@ -40,7 +40,33 @@ $posts = [
     'avatar' => 'userpic.jpg'
   ]
 ];
+
+$textLimit = 300;
+
+function cutLongText ($text, $textLimit) {
+  $textSize = strlen($text);
+
+  if ($textSize > $textLimit) {
+    $words = explode(' ', $text);
+
+    $wordsCount = 0;
+    $index = 0;
+
+    while ($wordsCount < 300) {
+      $wordsCount += strlen($words[$index]);
+      $newStringArray[$index] = $words[$index];
+      $index++;
+    }
+
+    $link = '<a class="post-text__more-link" href="#">Читать далее</a>';
+
+    return $newString = '<p>' . implode(' ', $newStringArray) . '...' . '</p>' . $link;
+  } else {
+    return $text;
+  }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -240,26 +266,26 @@ $posts = [
         </div>
       </div>
       <div class="popular__posts">
-        <?php foreach ($posts as $key => $value): ?>
-          <article class="popular__post post <?= $value['type']; ?>">
+        <?php foreach ($posts as $post): ?>
+          <article class="popular__post post <?= $post['type']; ?>">
             <header class="post__header">
-              <h2><?= $value['caption']; ?></h2>
+              <h2><?= $post['caption']; ?></h2>
             </header>
             <div class="post__main">
-              <?php if ($value['type'] === 'post-quote'): ?>
+              <?php if ($post['type'] === 'post-quote'): ?>
                 <blockquote>
                   <p>
-                    <?= $value['content'] ?>
+                    <?= $post['content']; ?>
                   </p>
                   <cite>Неизвестный Автор</cite>
                 </blockquote>
-              <?php elseif ($value['type'] === 'post-text'): ?>
-                <p><?= $value['content'] ?></p>
-              <?php elseif ($value['type'] === 'post-photo'): ?>
+              <?php elseif ($post['type'] === 'post-text'): ?>
+                <?= cutLongText($post['content'], $textLimit); ?>
+              <?php elseif ($post['type'] === 'post-photo'): ?>
                 <div class="post-photo__image-wrapper">
-                  <img src="img/<?= $value['content'] ?>" alt="Фото от пользователя" width="360" height="240">
+                  <img src="img/<?= $post['content'] ?>" alt="Фото от пользователя" width="360" height="240">
                 </div>
-              <?php elseif ($value['type'] === 'post-link'): ?>
+              <?php elseif ($post['type'] === 'post-link'): ?>
                 <div class="post-link__wrapper">
                   <a class="post-link__external" href="http://" title="Перейти по ссылке">
                     <div class="post-link__info-wrapper">
@@ -267,10 +293,10 @@ $posts = [
                         <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">
                       </div>
                       <div class="post-link__info">
-                        <h3><?= $value['caption']; ?></h3>
+                        <h3><?= $post['caption']; ?></h3>
                       </div>
                     </div>
-                    <span><?= $value['content']; ?></span>
+                    <span><?= $post['content']; ?></span>
                   </a>
                 </div>
               <?php endif; ?>
@@ -279,10 +305,10 @@ $posts = [
               <div class="post__author">
                 <a class="post__author-link" href="#" title="Автор">
                   <div class="post__avatar-wrapper">
-                    <img class="post__author-avatar" src="img/<?= $value['avatar'] ?>" alt="Аватар пользователя">
+                    <img class="post__author-avatar" src="img/<?= $post['avatar'] ?>" alt="Аватар пользователя">
                   </div>
                   <div class="post__info">
-                    <b class="post__author-name"><?= $value['user'] ?></b>
+                    <b class="post__author-name"><?= $post['user'] ?></b>
                     <time class="post__time" datetime="">дата</time>
                   </div>
                 </a>
