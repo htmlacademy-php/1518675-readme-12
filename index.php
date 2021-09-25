@@ -14,7 +14,7 @@ $posts = [
   [
     'caption' => 'Игра престолов',
     'type' => 'post-text',
-    'content' => 'Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала!',
+    'content' => 'Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала!',
     'user' => 'Владик',
     'avatar' => 'userpic.jpg'
   ],
@@ -41,18 +41,28 @@ $posts = [
   ]
 ];
 
-$textLimit = 300;
+define('TEXT_LIMIT', 300);
 
-function cutLongText ($text, $textLimit) {
-  $textSize = strlen($text);
+/**
+ * Обрезает переданный текст, если он больше заданного значения
+ *
+ * Примеры использования:
+ * cutLongText('Привет, я строка');
+ *
+ * @param string $text Данные в виде строки
+ *
+ * @return Возвращает обрезанную строку, если больше заданного значения, иначе просто возвращает исходные данные
+ */
+function cutLongText ($text, $TEXT_LIMIT) {
+  $textSize = mb_strlen($text);
 
-  if ($textSize > $textLimit) {
+  if ($textSize > TEXT_LIMIT) {
     $words = explode(' ', $text);
 
     $wordsCount = 0;
     $index = 0;
 
-    while ($wordsCount < 300) {
+    while ($wordsCount < TEXT_LIMIT) {
       $wordsCount += strlen($words[$index]);
       $newStringArray[$index] = $words[$index];
       $index++;
@@ -61,9 +71,9 @@ function cutLongText ($text, $textLimit) {
     $link = '<a class="post-text__more-link" href="#">Читать далее</a>';
 
     return $newString = '<p>' . implode(' ', $newStringArray) . '...' . '</p>' . $link;
-  } else {
-    return $text;
   }
+
+  return '<p>' . $text . '</p>';
 }
 ?>
 
@@ -280,7 +290,7 @@ function cutLongText ($text, $textLimit) {
                   <cite>Неизвестный Автор</cite>
                 </blockquote>
               <?php elseif ($post['type'] === 'post-text'): ?>
-                <?= cutLongText($post['content'], $textLimit); ?>
+                <?= cutLongText($post['content'], TEXT_LIMIT); ?>
               <?php elseif ($post['type'] === 'post-photo'): ?>
                 <div class="post-photo__image-wrapper">
                   <img src="img/<?= $post['content'] ?>" alt="Фото от пользователя" width="360" height="240">
