@@ -77,7 +77,8 @@ CREATE TABLE readme.hashtags (
 
 CREATE TABLE readme.types (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	name VARCHAR(128)
+	name VARCHAR(128),
+	icon VARCHAR(128)
 );
 
 CREATE TABLE readme.auth (
