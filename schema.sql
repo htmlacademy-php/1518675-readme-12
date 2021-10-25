@@ -2,7 +2,9 @@ CREATE DATABASE readme
 DEFAULT CHARACTER SET utf8
 DEFAULT COLLATE utf8_general_ci;
 
-CREATE TABLE readme.users (
+USE readme;
+
+CREATE TABLE users (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	email VARCHAR(128) NOT NULL UNIQUE,
@@ -10,35 +12,50 @@ CREATE TABLE readme.users (
 	avatar VARCHAR(128)
 );
 
-CREATE TABLE readme.posts (
+CREATE TABLE types (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(128),
+	icon VARCHAR(128)
+);
+
+CREATE TABLE hashtags (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	hashtag VARCHAR(128)
+);
+
+CREATE TABLE posts (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	caption VARCHAR(128),
-	content TEXT(1000),
+	content VARCHAR(128),
 	autor_q VARCHAR(128),
-	img VARCHAR(128) NOT NULL,
+	img VARCHAR(128),
 	video VARCHAR(128),
 	site VARCHAR(128),
 	counter INT,
 	autor_id INT,
+	type_post INT,
+	hashtag INT,
 	CONSTRAINT autor_post_fk
-	FOREIGN KEY (autor_id) REFERENCES readme.users (id)
-	-- Внешний ключ: тип контента
-	-- Внешний ключ: хештеги
+	FOREIGN KEY (autor_id) REFERENCES readme.users (id),
+	CONSTRAINT type_posk_fk
+	FOREIGN KEY (type_post) REFERENCES readme.types (id),
+	CONSTRAINT hashtag_post_fk
+	FOREIGN KEY (hashtag) REFERENCES readme.hashtags (id)
 );
 
-CREATE TABLE readme.comments (
+CREATE TABLE comments (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	autor_id INT,
-	content_id INT,
-	CONSTRAINT autor_comment_fk
-	FOREIGN KEY (autor_id) REFERENCES readme.users (id),
-	CONSTRAINT content_id_fk
-	FOREIGN KEY (content_id) REFERENCES readme.posts (id)
+	user_id INT,
+	post_id INT,
+	CONSTRAINT user_comment_fk
+	FOREIGN KEY (user_id) REFERENCES readme.users (id),
+	CONSTRAINT post_comment_fk
+	FOREIGN KEY (post_id) REFERENCES readme.posts (id)
 );
 
-CREATE TABLE readme.likes (
+CREATE TABLE likes (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	user_id INT,
 	post_id INT,
@@ -48,7 +65,7 @@ CREATE TABLE readme.likes (
 	FOREIGN KEY (post_id) REFERENCES readme.posts (id)
 );
 
-CREATE TABLE readme.subscibes (
+CREATE TABLE subscibes (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	user_id INT,
 	user_subscribed INT,
@@ -58,7 +75,7 @@ CREATE TABLE readme.subscibes (
 	FOREIGN KEY (user_subscribed) REFERENCES readme.users (id)
 );
 
-CREATE TABLE readme.messages (
+CREATE TABLE messages (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	content TEXT(1000),
@@ -70,18 +87,7 @@ CREATE TABLE readme.messages (
 	FOREIGN KEY (user_recipient) REFERENCES readme.users (id)
 );
 
-CREATE TABLE readme.hashtags (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	hashtag VARCHAR(128)
-);
-
-CREATE TABLE readme.types (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	name VARCHAR(128),
-	icon VARCHAR(128)
-);
-
-CREATE TABLE readme.auth (
+CREATE TABLE auth (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	role VARCHAR(128)
-)
+);
