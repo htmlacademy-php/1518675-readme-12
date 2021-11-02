@@ -34,11 +34,21 @@ UPDATE posts SET counter = '165' WHERE id = '5';
 -- Придумываем несколько комментариев к разным постам
 INSERT INTO comments (dt_add, user_id, post_id, content) VALUES ('10.02.21', '2', '1', 'Хороший комментарий');
 INSERT INTO comments (dt_add, user_id, post_id, content) VALUES ('29.04.21', '1', '1', 'Плохой комментарий');
+INSERT INTO comments (dt_add, user_id, post_id, content) VALUES ('13.07.21', '2', '2', 'Очень плохой комментарий');
 
 -- Получаем список постов с сортировкой по популярности (с именами авторов и типом контента)
 SELECT p.id, counter, type_post, login FROM posts p JOIN users u ON p.autor_id = u.id ORDER BY counter ASC;
 
 -- Получаем список постов для конкретного пользователя
 SELECT autor_id, content FROM posts WHERE autor_id = '2';
+
+-- Получаем список комментариев для одного поста (с логином пользователя)
+SELECT content, login, post_id FROM comments c JOIN users u ON c.user_id = u.id WHERE post_id = '1';
+
+-- Добавляем лайк к посту
+INSERT INTO likes (user_id, post_id) VALUES ('1', '1');
+
+-- Подписываемся на пользователя
+INSERT INTO subscribes (user_id, user_subscribed) VALUES ('2', '1');
 
 
