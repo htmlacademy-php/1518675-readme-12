@@ -8,6 +8,7 @@ CREATE TABLE users (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	email VARCHAR(128) NOT NULL UNIQUE,
+	login VARCHAR(128) NOT NULL UNIQUE,
 	password CHAR(64) NOT NULL,
 	avatar VARCHAR(128)
 );
@@ -27,7 +28,7 @@ CREATE TABLE posts (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	caption VARCHAR(128),
-	content VARCHAR(128),
+	content TEXT(1000),
 	autor_q VARCHAR(128),
 	img VARCHAR(128),
 	video VARCHAR(128),
@@ -37,11 +38,20 @@ CREATE TABLE posts (
 	type_post INT,
 	hashtag INT,
 	CONSTRAINT autor_post_fk
-	FOREIGN KEY (autor_id) REFERENCES readme.users (id),
+	FOREIGN KEY (autor_id) REFERENCES users (id),
 	CONSTRAINT type_posk_fk
-	FOREIGN KEY (type_post) REFERENCES readme.types (id),
+	FOREIGN KEY (type_post) REFERENCES types (id),
 	CONSTRAINT hashtag_post_fk
-	FOREIGN KEY (hashtag) REFERENCES readme.hashtags (id)
+	FOREIGN KEY (hashtag) REFERENCES hashtags (id)
+);
+
+CREATE TABLE hashtags_posts (
+	user_id INT NOT NULL,
+	hashtag_id INT NOT NULL,
+	CONSTRAINT user_post_fk
+	FOREIGN KEY (user_id) REFERENCES users (id),
+	CONSTRAINT hashtags_posts_fk
+	FOREIGN KEY (hashtag_id) REFERENCES hashtags (id)
 );
 
 CREATE TABLE comments (
@@ -49,10 +59,11 @@ CREATE TABLE comments (
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	user_id INT,
 	post_id INT,
+	content TEXT(1000),
 	CONSTRAINT user_comment_fk
-	FOREIGN KEY (user_id) REFERENCES readme.users (id),
+	FOREIGN KEY (user_id) REFERENCES users (id),
 	CONSTRAINT post_comment_fk
-	FOREIGN KEY (post_id) REFERENCES readme.posts (id)
+	FOREIGN KEY (post_id) REFERENCES posts (id)
 );
 
 CREATE TABLE likes (
@@ -60,19 +71,19 @@ CREATE TABLE likes (
 	user_id INT,
 	post_id INT,
 	CONSTRAINT user_like_fk
-	FOREIGN KEY (user_id) REFERENCES readme.users (id),
+	FOREIGN KEY (user_id) REFERENCES users (id),
 	CONSTRAINT post_id_fk
-	FOREIGN KEY (post_id) REFERENCES readme.posts (id)
+	FOREIGN KEY (post_id) REFERENCES posts (id)
 );
 
-CREATE TABLE subscibes (
+CREATE TABLE subscribes (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	user_id INT,
 	user_subscribed INT,
 	CONSTRAINT user_subscribe_fk
-	FOREIGN KEY (user_id) REFERENCES readme.users (id),
+	FOREIGN KEY (user_id) REFERENCES users (id),
 	CONSTRAINT user_on_subscribe_fk
-	FOREIGN KEY (user_subscribed) REFERENCES readme.users (id)
+	FOREIGN KEY (user_subscribed) REFERENCES users (id)
 );
 
 CREATE TABLE messages (
@@ -82,9 +93,9 @@ CREATE TABLE messages (
 	user_message INT,
 	user_recipient INT,
 	CONSTRAINT user_message_fk
-	FOREIGN KEY (user_message) REFERENCES readme.users (id),
+	FOREIGN KEY (user_message) REFERENCES users (id),
 	CONSTRAINT user_recipient_fk
-	FOREIGN KEY (user_recipient) REFERENCES readme.users (id)
+	FOREIGN KEY (user_recipient) REFERENCES users (id)
 );
 
 CREATE TABLE auth (
