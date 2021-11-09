@@ -85,23 +85,25 @@
   </div>
   <div class="popular__posts">
     <?php foreach ($posts as $post): ?>
-      <article class="popular__post post <?= $post['type']; ?>">
+      <article class="popular__post post <?= $post['type_post']; ?>">
         <header class="post__header">
+          <?php if (!empty($post['caption'])): ?>
           <h2><?= htmlspecialchars($post['caption']); ?></h2>
+          <?php endif; ?>
         </header>
         <div class="post__main">
-          <?php if ($post['type'] === 'post-quote'): ?>
+          <?php if ($post['type_post'] === '2'): ?>
             <blockquote>
               <p><?= htmlspecialchars($post['content']); ?></p>
               <cite>Неизвестный Автор</cite>
             </blockquote>
-          <?php elseif ($post['type'] === 'post-text'): ?>
+          <?php elseif ($post['type_post'] === '1'): ?>
             <?= cutLongText($post['content'], TEXT_LIMIT); ?>
-          <?php elseif ($post['type'] === 'post-photo'): ?>
+          <?php elseif ($post['type_post'] === '3'): ?>
             <div class="post-photo__image-wrapper">
               <img src="img/<?= htmlspecialchars($post['content']) ?>" alt="Фото от пользователя" width="360" height="240">
             </div>
-          <?php elseif ($post['type'] === 'post-link'): ?>
+          <?php elseif ($post['type_post'] === '5'): ?>
             <div class="post-link__wrapper">
               <a class="post-link__external" href="http://" title="Перейти по ссылке">
                 <div class="post-link__info-wrapper">
@@ -109,7 +111,9 @@
                     <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">
                   </div>
                   <div class="post-link__info">
+                    <?php if (!empty($post['caption'])): ?>
                     <h3><?= htmlspecialchars($post['caption']); ?></h3>
+                    <?php endif; ?>
                   </div>
                 </div>
                 <span><?= htmlspecialchars($post['content']); ?></span>
@@ -124,7 +128,7 @@
                 <img class="post__author-avatar" src="img/<?= $post['avatar'] ?>" alt="Аватар пользователя">
               </div>
               <div class="post__info">
-                <b class="post__author-name"><?= htmlspecialchars($post['user']); ?></b>
+                <b class="post__author-name"><?= htmlspecialchars($post['login']); ?></b>
                 <time class="post__time" datetime="" title="<?= $pastFormatted; ?>">
                   <?php
 
