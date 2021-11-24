@@ -8,9 +8,9 @@ INSERT INTO types (name, icon) VALUES ('Видео', 'video');
 INSERT INTO types (name, icon) VALUES ('Ссылка', 'link');
 
 -- Добавляем в таблицу users несколько пользователей
-INSERT INTO users (dt_add, email, login, password, avatar) VALUES ('01.08.21', 'my-mail@mail.ru', 'Marina', 'password367', 'avatar-3.png');
-INSERT INTO users (dt_add, email, login, password, avatar) VALUES ('24.05.21', 'testg@gmail.ru', 'KHARN', '000091', 'avatarochka.png');
-INSERT INTO users (dt_add, email, login, password, avatar) VALUES ('26.06.21', 'komar@gmail.ru', 'mindF', '1234', 'ava3000.png');
+INSERT INTO users (dt_add, email, login, password, avatar) VALUES ('01.08.21', 'my-mail@mail.ru', 'Лариса', 'password367', 'userpic-larisa-small.jpg');
+INSERT INTO users (dt_add, email, login, password, avatar) VALUES ('24.05.21', 'testg@gmail.ru', 'Виктор', '000091', 'userpic-mark.jpg');
+INSERT INTO users (dt_add, email, login, password, avatar) VALUES ('26.06.21', 'komar@gmail.ru', 'Владик', '1234', 'userpic.jpg');
 
 -- Добавляем в таблицу posts существующие посты
 INSERT INTO posts (dt_add, author_quote, content, author_id, type_post, counter) 
@@ -18,9 +18,9 @@ VALUES ('11.11.20', 'Неизвестный автор', 'Мы в жизни л�
 INSERT INTO posts (dt_add, caption, content, author_id, type_post, counter) 
 VALUES ('28.10.21', 'Игра престолов', 'Не могу дождаться начала финального сезона своего любимого сериала!', '2', '1', '0');
 INSERT INTO posts (dt_add, caption, img, author_id, type_post, counter) 
-VALUES ('22.02.21', 'Наконец, обработал фотка!', 'picture-4.jpg', '3', '3', '0');
+VALUES ('22.02.21', 'Наконец, обработал фотки!', 'rock-medium.jpg', '3', '3', '0');
 INSERT INTO posts (dt_add, caption, img, author_id, type_post, counter) 
-VALUES ('22.02.21', 'Моя мечта', 'picture-1.jpg', '1', '3', '0');
+VALUES ('22.02.21', 'Моя мечта', 'coast-medium.jpg', '1', '3', '0');
 INSERT INTO posts (dt_add, caption, site, author_id, type_post, counter) 
 VALUES ('19.11.19', 'Лучшие курсы', 'https://htmlacademy.ru/', '2', '5', '0');
 

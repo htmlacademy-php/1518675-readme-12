@@ -85,7 +85,7 @@
   </div>
   <div class="popular__posts">
     <?php foreach ($posts as $post): ?>
-      <article class="popular__post post <?= $post['type_post']; ?>">
+      <article class="popular__post post post-<?= $post['type_post']; ?>">
         <header class="post__header">
           <?php if (!empty($post['caption'])): ?>
           <h2><?= htmlspecialchars($post['caption']); ?></h2>
@@ -101,11 +101,11 @@
             <?= cutLongText($post['content'], TEXT_LIMIT); ?>
           <?php elseif ($post['type_post'] === '3'): ?>
             <div class="post-photo__image-wrapper">
-              <img src="img/<?= htmlspecialchars($post['content']) ?>" alt="Фото от пользователя" width="360" height="240">
+              <img src="img/<?= htmlspecialchars($post['img']); ?>" alt="Фото от пользователя" width="360" height="240">
             </div>
           <?php elseif ($post['type_post'] === '5'): ?>
             <div class="post-link__wrapper">
-              <a class="post-link__external" href="http://" title="Перейти по ссылке">
+              <a class="post-link__external" href="<?= htmlspecialchars($post['site']); ?>" title="Перейти по ссылке">
                 <div class="post-link__info-wrapper">
                   <div class="post-link__icon-wrapper">
                     <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">

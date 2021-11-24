@@ -1,65 +1,22 @@
 <?php
 
-// Подключение к БД
-$con = mysqli_connect('readme', 'root', '', 'readme');
-// Установка кодировки
-mysqli_set_charset($con, 'utf8');
-// Формирование SQL-запроса
-$sql_types = "SELECT * FROM types";
-// Выполнение SQL-запроса (типы контента)
-$result_types = mysqli_query($con, $sql_types);
-// Преобразование результата в двумерный массив
-$rows_types = mysqli_fetch_all($result_types, MYSQLI_ASSOC);
+require('helpers.php');
+require_once('config.php');
 
-$sql_posts = "SELECT p.id, counter, type_post, login, content, avatar FROM posts p JOIN users u ON p.author_id = u.id ORDER BY counter ASC";
-$result_posts = mysqli_query($con, $sql_posts);
-$rows_posts = mysqli_fetch_all($result_posts, MYSQLI_ASSOC);
 
-// print_r($rows_types);
-print_r($rows_posts);
+// Неработающее подготовленное выражение
+// $statement_types = "SELECT * FROM category=?";
+// $statement = $con->prepare($statement_types);
+// $statement->bind_param('s', 'types');
+// $statement->execute();
+// Неработающее подготовленное выражение
 
+$types_list = get_content($con, "SELECT * FROM types");
+$posts_list = get_content($con, "SELECT p.id, counter, type_post, login, content, avatar FROM posts p JOIN users u ON p.author_id = u.id ORDER BY counter ASC");
 
 $is_auth = rand(0, 1);
 
 $user_name = 'Никита Шишкин';
-
-// $posts = [
-//   [
-//     'caption' => 'Цитата',
-//     'type' => 'post-quote',
-//     'content' => 'Мы в жизни любим только раз, а после ищем лишь похожих',
-//     'user' => 'Лариса',
-//     'avatar' => 'userpic-larisa-small.jpg'
-//   ],
-//   [
-//     'caption' => 'Игра престолов',
-//     'type' => 'post-text',
-//     'content' => 'Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала! Не могу дождаться начала финального сезона своего любимого сериала!',
-//     'user' => 'Владик',
-//     'avatar' => 'userpic.jpg'
-//   ],
-//   [
-//     'caption' => 'Наконец, обработал фотки!',
-//     'type' => 'post-photo',
-//     'content' => 'rock-medium.jpg',
-//     'user' => 'Виктор',
-//     'avatar' => 'userpic-mark.jpg'
-//   ],
-//   [
-//     'caption' => 'Моя мечта',
-//     'type' => 'post-photo',
-//     'content' => 'coast-medium.jpg',
-//     'user' => 'Лариса',
-//     'avatar' => 'userpic-larisa-small.jpg'
-//   ],
-//   [
-//     'caption' => 'Лучшие курсы',
-//     'type' => 'post-link',
-//     'content' => 'www.htmlacademy.ru',
-//     'user' => 'Владик',
-//     'avatar' => 'userpic.jpg'
-//   ]
-// ];
 
 define('TEXT_LIMIT', 300);
 
@@ -96,9 +53,22 @@ function cutLongText ($text, $textLimit) {
   return '<p>' . $text . '</p>';
 }
 
-require('helpers.php');
+/**
+ * Делает mySQL-запрос к базе данных со всеми возможными типами контента
+ *
+ * Примеры использования:
+ * get_types($db);
+ * 
+ * @param string $text Ссылка на базу данных
+ *
+ * @return Возвращает массив с типами данных
+ */
+function get_content ($db, $statement) {
+  $result_content = mysqli_query($db, $statement);
+  return $rows_content = mysqli_fetch_all($result_content, MYSQLI_ASSOC);
+}
 
-$pageContent = include_template('main.php', ['posts' => $rows_posts]);
+$pageContent = include_template('main.php', ['posts' => $posts_list]);
 $layoutContent = include_template('layout.php', ['content' => $pageContent, 'title' => $user_name, 'is_auth' => $is_auth]);
 
 print($layoutContent);
