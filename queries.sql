@@ -14,15 +14,15 @@ INSERT INTO users (dt_add, email, login, password, avatar) VALUES ('26.06.21', '
 
 -- Добавляем в таблицу posts существующие посты
 INSERT INTO posts (dt_add, author_quote, content, author_id, type_post, counter) 
-VALUES ('11.11.20', 'Неизвестный автор', 'Мы в жизни любим только раз, а после ищем лишь похожих', '1', '2', '0');
+VALUES ('11.11.20', 'Неизвестный автор', 'Мы в жизни любим только раз, а после ищем лишь похожих', '1', 2, '0');
 INSERT INTO posts (dt_add, caption, content, author_id, type_post, counter) 
-VALUES ('28.10.21', 'Игра престолов', 'Не могу дождаться начала финального сезона своего любимого сериала!', '2', '1', '0');
+VALUES ('28.10.21', 'Игра престолов', 'Не могу дождаться начала финального сезона своего любимого сериала!', '2', 1, '0');
 INSERT INTO posts (dt_add, caption, img, author_id, type_post, counter) 
-VALUES ('22.02.21', 'Наконец, обработал фотки!', 'rock-medium.jpg', '3', '3', '0');
+VALUES ('22.02.21', 'Наконец, обработал фотки!', 'rock-medium.jpg', '3', 3, '0');
 INSERT INTO posts (dt_add, caption, img, author_id, type_post, counter) 
 VALUES ('22.02.21', 'Моя мечта', 'coast-medium.jpg', '1', '3', '0');
 INSERT INTO posts (dt_add, caption, site, author_id, type_post, counter) 
-VALUES ('19.11.19', 'Лучшие курсы', 'https://htmlacademy.ru/', '2', '5', '0');
+VALUES ('19.11.19', 'Лучшие курсы', 'https://htmlacademy.ru/', '2', 5, '0');
 
 -- Добавляем случайное количество просмотров для постов
 UPDATE posts SET counter = '250' WHERE id = '1';

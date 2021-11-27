@@ -85,25 +85,25 @@
   </div>
   <div class="popular__posts">
     <?php foreach ($posts as $post): ?>
-      <article class="popular__post post post-<?= $post['type_post']; ?>">
+      <article class="popular__post post post-<?= get_type($post['type_post']); ?>">
         <header class="post__header">
           <?php if (!empty($post['caption'])): ?>
-          <h2><?= htmlspecialchars($post['caption']); ?></h2>
+            <h2><?= htmlspecialchars($post['caption']); ?></h2>
           <?php endif; ?>
         </header>
         <div class="post__main">
-          <?php if ($post['type_post'] === '2'): ?>
+          <?php if (get_type($post['type_post']) == 'quote'): ?>
             <blockquote>
               <p><?= htmlspecialchars($post['content']); ?></p>
               <cite>Неизвестный Автор</cite>
             </blockquote>
-          <?php elseif ($post['type_post'] === '1'): ?>
-            <?= cutLongText($post['content'], TEXT_LIMIT); ?>
-          <?php elseif ($post['type_post'] === '3'): ?>
+          <?php elseif (get_type($post['type_post']) == 'text'): ?>
+            <?= cut_long_text($post['content'], TEXT_LIMIT); ?>
+          <?php elseif (get_type($post['type_post']) == 'photo'): ?>
             <div class="post-photo__image-wrapper">
-              <img src="img/<?= htmlspecialchars($post['img']); ?>" alt="Фото от пользователя" width="360" height="240">
+              <img src="img/<?= htmlspecialchars($post['img']) ?>" alt="Фото от пользователя" width="360" height="240">
             </div>
-          <?php elseif ($post['type_post'] === '5'): ?>
+          <?php elseif (get_type($post['type_post']) == 'link'): ?>
             <div class="post-link__wrapper">
               <a class="post-link__external" href="<?= htmlspecialchars($post['site']); ?>" title="Перейти по ссылке">
                 <div class="post-link__info-wrapper">
