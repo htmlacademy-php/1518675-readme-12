@@ -13,8 +13,8 @@ INSERT INTO users (dt_add, email, login, password, avatar) VALUES ('24.05.21', '
 INSERT INTO users (dt_add, email, login, password, avatar) VALUES ('26.06.21', 'komar@gmail.ru', 'Владик', '1234', 'userpic.jpg');
 
 -- Добавляем в таблицу posts существующие посты
-INSERT INTO posts (dt_add, author_quote, content, author_id, type_post, counter) 
-VALUES ('11.11.20', 'Неизвестный автор', 'Мы в жизни любим только раз, а после ищем лишь похожих', '1', 2, '0');
+INSERT INTO posts (dt_add, caption, author_quote, content, author_id, type_post, counter)
+VALUES ('11.11.20', 'Цитата', 'Неизвестный автор', 'Мы в жизни любим только раз, а после ищем лишь похожих', '1', 2, '0');
 INSERT INTO posts (dt_add, caption, content, author_id, type_post, counter) 
 VALUES ('28.10.21', 'Игра престолов', 'Не могу дождаться начала финального сезона своего любимого сериала!', '2', 1, '0');
 INSERT INTO posts (dt_add, caption, img, author_id, type_post, counter) 

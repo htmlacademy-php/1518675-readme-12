@@ -1,3 +1,14 @@
+<?php
+
+$filter_value = 'all';
+
+if (isset($_GET['filter']))
+{
+  $filter_value = $_GET['filter'];
+};
+
+?>
+
 <div class="container">
   <h1 class="page__title page__title--popular">Популярное</h1>
 </div>
@@ -36,12 +47,12 @@
       <b class="popular__filters-caption filters__caption">Тип контента:</b>
       <ul class="popular__filters-list filters__list">
         <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-          <a class="filters__button filters__button--ellipse filters__button--all filters__button--active" href="#">
+          <a class="filters__button filters__button--ellipse filters__button--all <?php print ($filter_value === 'all') ? 'filters__button--active' : ''; ?>" href="index.php?filter=all">
             <span>Все</span>
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--photo button" href="#">
+          <a class="filters__button filters__button--photo button <?php print ($filter_value === 'photo') ? 'filters__button--active' : ''; ?>" href="index.php?filter=photo">
             <span class="visually-hidden">Фото</span>
             <svg class="filters__icon" width="22" height="18">
               <use xlink:href="#icon-filter-photo"></use>
@@ -49,7 +60,7 @@
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--video button" href="#">
+          <a class="filters__button filters__button--video button <?php print ($filter_value === 'video') ? 'filters__button--active' : ''; ?>" href="index.php?filter=video">
             <span class="visually-hidden">Видео</span>
             <svg class="filters__icon" width="24" height="16">
               <use xlink:href="#icon-filter-video"></use>
@@ -57,7 +68,7 @@
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--text button" href="#">
+          <a class="filters__button filters__button--text button <?php print ($filter_value === 'text') ? 'filters__button--active' : ''; ?>" href="index.php?filter=text">
             <span class="visually-hidden">Текст</span>
             <svg class="filters__icon" width="20" height="21">
               <use xlink:href="#icon-filter-text"></use>
@@ -65,7 +76,7 @@
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--quote button" href="#">
+          <a class="filters__button filters__button--quote button <?php print ($filter_value === 'quote') ? 'filters__button--active' : ''; ?>" href="index.php?filter=quote">
             <span class="visually-hidden">Цитата</span>
             <svg class="filters__icon" width="21" height="20">
               <use xlink:href="#icon-filter-quote"></use>
@@ -73,7 +84,7 @@
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--link button" href="#">
+          <a class="filters__button filters__button--link button <?php print ($filter_value === 'link') ? 'filters__button--active' : ''; ?>" href="index.php?filter=link">
             <span class="visually-hidden">Ссылка</span>
             <svg class="filters__icon" width="21" height="18">
               <use xlink:href="#icon-filter-link"></use>
@@ -88,7 +99,9 @@
       <article class="popular__post post post-<?= get_type($post['type_post']); ?>">
         <header class="post__header">
           <?php if (!empty($post['caption'])): ?>
-            <h2><?= htmlspecialchars($post['caption']); ?></h2>
+            <a href="post.php?id=<?= $post['id']; ?>">
+              <h2><?= htmlspecialchars($post['caption']); ?></h2>
+            </a>
           <?php endif; ?>
         </header>
         <div class="post__main">
