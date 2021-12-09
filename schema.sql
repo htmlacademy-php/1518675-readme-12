@@ -27,18 +27,18 @@ CREATE TABLE hashtags (
 CREATE TABLE posts (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	caption VARCHAR(128),
+	caption VARCHAR(128) NOT NULL,
 	content TEXT(1000),
-	autor_q VARCHAR(128),
+	author_quote VARCHAR(128),
 	img VARCHAR(128),
 	video VARCHAR(128),
 	site VARCHAR(128),
 	counter INT,
-	autor_id INT,
+	author_id INT,
 	type_post INT,
 	hashtag INT,
-	CONSTRAINT autor_post_fk
-	FOREIGN KEY (autor_id) REFERENCES users (id),
+	CONSTRAINT author_post_fk
+	FOREIGN KEY (author_id) REFERENCES users (id),
 	CONSTRAINT type_posk_fk
 	FOREIGN KEY (type_post) REFERENCES types (id),
 	CONSTRAINT hashtag_post_fk

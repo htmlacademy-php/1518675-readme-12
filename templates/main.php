@@ -1,3 +1,14 @@
+<?php
+
+$filter_value = 'all';
+
+if (isset($_GET['filter']))
+{
+  $filter_value = $_GET['filter'];
+};
+
+?>
+
 <div class="container">
   <h1 class="page__title page__title--popular">Популярное</h1>
 </div>
@@ -36,12 +47,12 @@
       <b class="popular__filters-caption filters__caption">Тип контента:</b>
       <ul class="popular__filters-list filters__list">
         <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-          <a class="filters__button filters__button--ellipse filters__button--all filters__button--active" href="#">
+          <a class="filters__button filters__button--ellipse filters__button--all <?php print ($filter_value === 'all') ? 'filters__button--active' : ''; ?>" href="index.php?filter=all">
             <span>Все</span>
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--photo button" href="#">
+          <a class="filters__button filters__button--photo button <?php print ($filter_value === 'photo') ? 'filters__button--active' : ''; ?>" href="index.php?filter=photo">
             <span class="visually-hidden">Фото</span>
             <svg class="filters__icon" width="22" height="18">
               <use xlink:href="#icon-filter-photo"></use>
@@ -49,7 +60,7 @@
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--video button" href="#">
+          <a class="filters__button filters__button--video button <?php print ($filter_value === 'video') ? 'filters__button--active' : ''; ?>" href="index.php?filter=video">
             <span class="visually-hidden">Видео</span>
             <svg class="filters__icon" width="24" height="16">
               <use xlink:href="#icon-filter-video"></use>
@@ -57,7 +68,7 @@
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--text button" href="#">
+          <a class="filters__button filters__button--text button <?php print ($filter_value === 'text') ? 'filters__button--active' : ''; ?>" href="index.php?filter=text">
             <span class="visually-hidden">Текст</span>
             <svg class="filters__icon" width="20" height="21">
               <use xlink:href="#icon-filter-text"></use>
@@ -65,7 +76,7 @@
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--quote button" href="#">
+          <a class="filters__button filters__button--quote button <?php print ($filter_value === 'quote') ? 'filters__button--active' : ''; ?>" href="index.php?filter=quote">
             <span class="visually-hidden">Цитата</span>
             <svg class="filters__icon" width="21" height="20">
               <use xlink:href="#icon-filter-quote"></use>
@@ -73,7 +84,7 @@
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--link button" href="#">
+          <a class="filters__button filters__button--link button <?php print ($filter_value === 'link') ? 'filters__button--active' : ''; ?>" href="index.php?filter=link">
             <span class="visually-hidden">Ссылка</span>
             <svg class="filters__icon" width="21" height="18">
               <use xlink:href="#icon-filter-link"></use>
@@ -85,31 +96,37 @@
   </div>
   <div class="popular__posts">
     <?php foreach ($posts as $post): ?>
-      <article class="popular__post post <?= $post['type']; ?>">
+      <article class="popular__post post post-<?= get_type($post['type_post']); ?>">
         <header class="post__header">
-          <h2><?= htmlspecialchars($post['caption']); ?></h2>
+          <?php if (!empty($post['caption'])): ?>
+            <a href="post.php?id=<?= $post['id']; ?>">
+              <h2><?= htmlspecialchars($post['caption']); ?></h2>
+            </a>
+          <?php endif; ?>
         </header>
         <div class="post__main">
-          <?php if ($post['type'] === 'post-quote'): ?>
+          <?php if (get_type($post['type_post']) == 'quote'): ?>
             <blockquote>
               <p><?= htmlspecialchars($post['content']); ?></p>
               <cite>Неизвестный Автор</cite>
             </blockquote>
-          <?php elseif ($post['type'] === 'post-text'): ?>
-            <?= cutLongText($post['content'], TEXT_LIMIT); ?>
-          <?php elseif ($post['type'] === 'post-photo'): ?>
+          <?php elseif (get_type($post['type_post']) == 'text'): ?>
+            <?= cut_long_text($post['content'], TEXT_LIMIT); ?>
+          <?php elseif (get_type($post['type_post']) == 'photo'): ?>
             <div class="post-photo__image-wrapper">
-              <img src="img/<?= htmlspecialchars($post['content']) ?>" alt="Фото от пользователя" width="360" height="240">
+              <img src="img/<?= htmlspecialchars($post['img']) ?>" alt="Фото от пользователя" width="360" height="240">
             </div>
-          <?php elseif ($post['type'] === 'post-link'): ?>
+          <?php elseif (get_type($post['type_post']) == 'link'): ?>
             <div class="post-link__wrapper">
-              <a class="post-link__external" href="http://" title="Перейти по ссылке">
+              <a class="post-link__external" href="<?= htmlspecialchars($post['site']); ?>" title="Перейти по ссылке">
                 <div class="post-link__info-wrapper">
                   <div class="post-link__icon-wrapper">
                     <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">
                   </div>
                   <div class="post-link__info">
+                    <?php if (!empty($post['caption'])): ?>
                     <h3><?= htmlspecialchars($post['caption']); ?></h3>
+                    <?php endif; ?>
                   </div>
                 </div>
                 <span><?= htmlspecialchars($post['content']); ?></span>
@@ -124,7 +141,7 @@
                 <img class="post__author-avatar" src="img/<?= $post['avatar'] ?>" alt="Аватар пользователя">
               </div>
               <div class="post__info">
-                <b class="post__author-name"><?= htmlspecialchars($post['user']); ?></b>
+                <b class="post__author-name"><?= htmlspecialchars($post['login']); ?></b>
                 <time class="post__time" datetime="" title="<?= $pastFormatted; ?>">
                   <?php
 
