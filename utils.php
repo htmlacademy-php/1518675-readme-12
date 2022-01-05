@@ -154,7 +154,7 @@ function get_filtered_posts($db, $filter)
 function get_content_post($db, $id)
 {
     $stmt = $db->stmt_init();
-    $stmt->prepare("SELECT p.id, counter, content, img, site, caption, avatar, type_post, login, author_quote FROM posts p JOIN users u ON p.author_id = u.id WHERE p.id = ?");
+    $stmt->prepare("SELECT p.id, counter, content, img, site, caption, avatar, type_post, login, author_quote FROM posts p JOIN users u ON p.author_id = u.id WHERE p.id = ? LIMIT 1");
     $stmt->bind_param('i', $id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -241,3 +241,54 @@ function check_exist_post($db, $id)
     return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
+/**
+ * Функцию для получения значений из POST-запроса
+ *
+ * Примеры использования:
+ * get_post_value($name);
+ *
+ * @param string $text наименование значения
+ *
+ * @return Возвращает название поля либо пустую строку
+ */
+function get_post_value($name)
+{
+    return $_POST[$name] ?? "";
+}
+
+/**
+ * Функцию для проверки длины поля
+ *
+ * Примеры использования:
+ * validate_length($text, 20, 100);
+ *
+ * @param string $text наименование значения
+ * @param string $min минимальное значение строки
+ * @param string $max максимальное значение строки
+ *
+ * @return Возвращает название поля либо пустую строку
+ */
+function validate_length($text, $min, $max)
+{
+    $len = strlen($_POST[$name]);
+
+    if ($len < $min or $len > $max) {
+        return 'Значение должно быть от $min до $max символов';
+    }
+}
+
+/**
+ * Функцию для проверки длины поля
+ *
+ * Примеры использования:
+ * validate_filled($name);
+ *
+ * @param string $name наименование значения
+ *
+ * @return Возвращает название поля либо пустую строку
+ */
+function validate_filled($name) {
+    if (empty($_POST[$name])) {
+        return "Это поле должно быть заполнено";
+    }
+}
