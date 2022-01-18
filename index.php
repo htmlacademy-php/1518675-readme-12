@@ -4,30 +4,51 @@ require('helpers.php');
 require_once('config.php');
 require_once('utils.php');
 
-if (isset($_GET['filter'])) {
-    $filter_value = $_GET['filter'];
+session_start();
 
-    if ($filter_value === 'all') {
-        $posts_list = get_posts_with_users($con);
-    } else {
-       $posts_list = get_filtered_posts($con, get_type_db($filter_value));
+$rules = [
+    'login' => function() {
+        return validate_filled('login');
+    },
+    'password' => function() {
+        return validate_filled('password');
     }
-} else {
-    $posts_list = get_posts_with_users($con);
+];
+
+$errors = [];
+
+if (!empty($_POST)) {
+    foreach ($_POST as $key => $value) {
+        if (isset($rules[$key])) {
+            $rule = $rules[$key];
+            $errors[$key] = $rule();
+        }
+    }
+
+    $errors = array_filter($errors);
 }
 
-$types_list = get_all_types($con);
+// $_SESSION = []; // CLEAR
 
+if (!count($errors) and !empty($_POST)) {
+    $login = $_POST['login'];
+    $pass_hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $result = get_login_and_pass($con, $login);
 
-$is_auth = rand(0, 1);
+    if ($result) {
+        if (password_verify($_POST['password'], $result[0]['password'])) {
+            session_start();
+            $_SESSION['user']['login'] = $result[0]['login'];
+            $_SESSION['user']['password'] = $result[0]['password'];
+            header("Location: /feed.php");
+        }
+    }
+}
 
-$user_name = 'Никита Шишкин';
-
-define('TEXT_LIMIT', 300);
-
-$page_content = include_template('main.php', ['posts' => $posts_list]);
-$layout_content = include_template('layout.php', ['content' => $page_content, 'title' => $user_name, 'is_auth' => $is_auth]);
-
-print($layout_content);
-
-?>
+if (isset($_SESSION['user'])) {
+    header("Location: /feed.php");
+    exit();
+} else {
+    $page_content = include_template('../main.php', []);
+    print($page_content);
+}
