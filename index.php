@@ -4,7 +4,7 @@ require('helpers.php');
 require_once('config.php');
 require_once('utils.php');
 
-session_start();
+$_SESSION = [];
 
 $rules = [
     'login' => function() {
@@ -28,8 +28,6 @@ if (!empty($_POST)) {
     $errors = array_filter($errors);
 }
 
-// $_SESSION = []; // CLEAR
-
 if (!count($errors) and !empty($_POST)) {
     $login = $_POST['login'];
     $pass_hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -37,7 +35,6 @@ if (!count($errors) and !empty($_POST)) {
 
     if ($result) {
         if (password_verify($_POST['password'], $result[0]['password'])) {
-            session_start();
             $_SESSION['user']['login'] = $result[0]['login'];
             $_SESSION['user']['password'] = $result[0]['password'];
             header("Location: /feed.php");

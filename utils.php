@@ -46,7 +46,7 @@ return '<p>' . $text . '</p>';
  */
 function get_posts_with_users($db)
 {
-    $result_content = mysqli_query($db, "SELECT p.id, counter, type_post, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id ORDER BY counter ASC");
+    $result_content = mysqli_query($db, "SELECT p.id, author_id, counter, type_post, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id ORDER BY counter ASC");
     return $rows_content = mysqli_fetch_all($result_content, MYSQLI_ASSOC);
 }
 
@@ -319,7 +319,7 @@ function validate_length($name, $min, $max)
 }
 
 /**
- * Функцию для проверки длины поля
+ * Функция для проверки длины поля
  *
  * Примеры использования:
  * validate_filled($name);
@@ -332,4 +332,42 @@ function validate_filled($name) {
     if (empty($_POST[$name])) {
         return "Это поле должно быть заполнено";
     }
+}
+
+/**
+ * Функция для полнотекстового поиска
+ *
+ * Примеры использования:
+ * search_text($text);
+ *
+ * @param string $text набранный текст
+ *
+ * @return Возвращает определённый пост, в котором есть совпадение
+ */
+function search_by_text($db, $text) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT * FROM posts p LEFT JOIN users u ON p.author_id = u.id WHERE MATCH(caption, content) AGAINST(?)");
+    $stmt->bind_param('s', $text);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+/**
+ * Функция для получения всех постов юзера
+ *
+ * Примеры использования:
+ * search_text($text);
+ *
+ * @param string $text набранный текст
+ *
+ * @return Возвращает определённый пост, в котором есть совпадение
+ */
+function get_posts_with_content($db, $id) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT * FROM posts p LEFT JOIN users u ON u.id = p.author_id WHERE author_id = ?");
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
