@@ -22,10 +22,11 @@
           micro blogging
         </p>
       </div>
-      <form class="header__search-form form" action="#" method="get">
+      <form class="header__search-form form" action="search.php" method="get">
+        <?php if (!isset($registration)): ?>
         <div class="header__search">
           <label class="visually-hidden">Поиск</label>
-          <input class="header__search-input form__input" type="search">
+          <input class="header__search-input form__input" name="header-search" id="header-search" type="search">
           <button class="header__search-button button" type="submit">
             <svg class="header__search-icon" width="18" height="18">
               <use xlink:href="#icon-search"></use>
@@ -33,10 +34,12 @@
             <span class="visually-hidden">Начать поиск</span>
           </button>
         </div>
+        <?php endif; ?>
       </form>
       <div class="header__nav-wrapper">
         <?php if ($is_auth): ?>
           <nav class="header__nav">
+            <?php if (!isset($registration)): ?>
             <ul class="header__my-nav">
               <li class="header__my-page header__my-page--popular">
                 <a class="header__page-link header__page-link--active" title="Популярный контент">
@@ -54,12 +57,14 @@
                 </a>
               </li>
             </ul>
+            <?php endif ?>
             <!-- здесь должен быть PHP код, который показывает следующий тег по условию -->
+            <?php if (!isset($registration)): ?>
             <ul class="header__user-nav">
               <li class="header__profile">
                 <a class="header__profile-link" href="#">
                   <div class="header__avatar-wrapper">
-                    <img class="header__profile-avatar" src="img/userpic-medium.jpg" alt="Аватар профиля">
+                    <img class="header__profile-avatar" src="<?= $avatar; ?>" alt="Аватар профиля">
                   </div>
                   <div class="header__profile-name">
                     <span>
@@ -90,7 +95,7 @@
                       </li>
 
                       <li class="header__profile-nav-item">
-                        <a class="header__profile-nav-link" href="#">
+                        <a class="header__profile-nav-link" href="logout.php">
                           <span class="header__profile-nav-text">
                             Выход
                           </span>
@@ -104,6 +109,16 @@
                 <a class="header__post-button button button--transparent" href="add.php">Пост</a>
               </li>
             </ul>
+            <?php else: ?>
+            <ul class="header__user-nav">
+                <li class="header__authorization">
+                    <a class="header__user-button header__authorization-button button" href="index.php">Вход</a>
+                </li>
+                <li>
+                    <a class="header__user-button header__user-button--active header__register-button button">Регистрация</a>
+                </li>
+            </ul>
+            <?php endif; ?>
           </nav>
         <?php endif; ?>
       </div>

@@ -50,3 +50,11 @@ INSERT INTO likes (user_id, post_id) VALUES ('1', '1');
 
 -- Подписываемся на пользователя
 INSERT INTO subscribes (user_id, user_subscribed) VALUES ('2', '1');
+
+-- Добавляем на таблицу posts полнотекстовый индекс на поля caption и content
+CREATE FULLTEXT INDEX post_ft_search ON posts(caption, content);
+
+-- Возвращает список постов с совпадением по полнотекстовому поиску
+SELECT * FROM posts p
+LEFT JOIN users u ON p.author_id = u.id
+WHERE MATCH(caption, content) AGAINST('текст');

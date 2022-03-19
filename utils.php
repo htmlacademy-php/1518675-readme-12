@@ -46,7 +46,7 @@ return '<p>' . $text . '</p>';
  */
 function get_posts_with_users($db)
 {
-    $result_content = mysqli_query($db, "SELECT p.id, counter, type_post, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id ORDER BY counter ASC");
+    $result_content = mysqli_query($db, "SELECT p.id, author_id, counter, type_post, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id ORDER BY counter ASC");
     return $rows_content = mysqli_fetch_all($result_content, MYSQLI_ASSOC);
 }
 
@@ -207,7 +207,7 @@ function get_user_subscribers($db, $id)
  * Примеры использования:
  * get_user_id($_GET['id']);
  *
- * @param string $text Ссылка на базу данных
+ * @param string $db Ссылка на базу данных
  *
  * @return Возвращает массив с типами данных
  */
@@ -227,7 +227,7 @@ function get_user_id($db, $id)
  * Примеры использования:
  * check_exist_post($id);
  *
- * @param string $text Ссылка на базу данных
+ * @param string $db Ссылка на базу данных
  *
  * @return Возвращает массив с типами данных
  */
@@ -240,6 +240,47 @@ function check_exist_post($db, $id)
     $result = $stmt->get_result();
     return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
+
+/**
+ * Делает mySQL-запрос к базе данных для получения логина и пароля, поиск по логину
+ *
+ * Примеры использования:
+ * get_login_and_pass($id);
+ *
+ * @param string $db Ссылка на базу данных
+ *
+ * @return Возвращает массив с типами данных
+ */
+function get_login_and_pass($db, $login)
+{
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT login, password FROM users WHERE login = ?");
+    $stmt->bind_param('s', $login);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+/**
+ * Делает mySQL-запрос к базе данных для получения имении и аватара
+ *
+ * Примеры использования:
+ * get_name_and_avatar($db, $login);
+ *
+ * @param string $db Ссылка на базу данных
+ *
+ * @return Возвращает массив с типами данных
+ */
+function get_name_and_avatar($db, $login)
+{
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT login, avatar FROM users WHERE login = ?");
+    $stmt->bind_param('s', $login);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
 
 /**
  * Функцию для получения значений из POST-запроса
@@ -268,7 +309,7 @@ function get_post_value($name)
  *
  * @return Возвращает название поля либо пустую строку
  */
-function validate_length($text, $min, $max)
+function validate_length($name, $min, $max)
 {
     $len = strlen($_POST[$name]);
 
@@ -278,7 +319,7 @@ function validate_length($text, $min, $max)
 }
 
 /**
- * Функцию для проверки длины поля
+ * Функция для проверки длины поля
  *
  * Примеры использования:
  * validate_filled($name);
@@ -291,4 +332,42 @@ function validate_filled($name) {
     if (empty($_POST[$name])) {
         return "Это поле должно быть заполнено";
     }
+}
+
+/**
+ * Функция для полнотекстового поиска
+ *
+ * Примеры использования:
+ * search_text($text);
+ *
+ * @param string $text набранный текст
+ *
+ * @return Возвращает определённый пост, в котором есть совпадение
+ */
+function search_by_text($db, $text) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT * FROM posts p LEFT JOIN users u ON p.author_id = u.id WHERE MATCH(caption, content) AGAINST(?)");
+    $stmt->bind_param('s', $text);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+/**
+ * Функция для получения всех постов юзера
+ *
+ * Примеры использования:
+ * search_text($text);
+ *
+ * @param string $text набранный текст
+ *
+ * @return Возвращает определённый пост, в котором есть совпадение
+ */
+function get_posts_with_content($db, $id) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT * FROM posts p LEFT JOIN users u ON u.id = p.author_id WHERE author_id = ?");
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
