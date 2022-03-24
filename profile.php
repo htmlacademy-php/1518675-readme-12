@@ -20,7 +20,13 @@ if (!isset($_SESSION['user'])) {
     header("Location: /index.php");
     exit();
 } else {
-    $page_content = include_template('profile-content.php', ['posts' => $posts, 'subscribers' => $user_subscribers[0], 'user_id' => $_GET['id'], 'filter' => $current_filter]);
+    $subscribe_handler = false;
+
+    if (empty(is_subscribed($con, $_GET['id'], $_SESSION['user']['id']))) {
+        $subscribe_handler = true;
+    }
+
+    $page_content = include_template('profile-content.php', ['posts' => $posts, 'subscribers' => $user_subscribers[0], 'user_id' => $_GET['id'], 'filter' => $current_filter, 'subscribed' => $subscribe_handler]);
     $layout_content = include_template('layout.php', ['content' => $page_content, 'is_auth' => $is_auth, 'title' => $name_and_avatar[0]['login'], 'avatar' => $name_and_avatar[0]['avatar']]);
     print($layout_content);
 }
