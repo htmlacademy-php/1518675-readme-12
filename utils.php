@@ -242,19 +242,19 @@ function check_exist_post($db, $id)
 }
 
 /**
- * Делает mySQL-запрос к базе данных для получения логина и пароля, поиск по логину
+ * Делает mySQL-запрос к базе данных информации от юзера
  *
  * Примеры использования:
- * get_login_and_pass($id);
+ * get_user_data($id);
  *
  * @param string $db Ссылка на базу данных
  *
  * @return Возвращает массив с типами данных
  */
-function get_login_and_pass($db, $login)
+function get_user_data($db, $login)
 {
     $stmt = $db->stmt_init();
-    $stmt->prepare("SELECT login, password FROM users WHERE login = ?");
+    $stmt->prepare("SELECT * FROM users WHERE login = ?");
     $stmt->bind_param('s', $login);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -367,6 +367,148 @@ function get_posts_with_content($db, $id) {
     $stmt = $db->stmt_init();
     $stmt->prepare("SELECT * FROM posts p LEFT JOIN users u ON u.id = p.author_id WHERE author_id = ?");
     $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+/**
+ * Функция для подписки пользователя
+ *
+ * Примеры использования:
+ * subscribe_user($db, 6, 2);
+ *
+ * @param string $id номер id
+ */
+function subscribe_user($db, $id_user, $id_sub) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("INSERT INTO subscribes(user_id, user_subscribed) VALUES (?, ?)");
+    $stmt->bind_param('ii', $id_user, $id_sub);
+    $stmt->execute();
+}
+
+/**
+ * Функция проверки, подписан ли пользователь
+ *
+ * Примеры использования:
+ * is_subscribed($db, 6, 2);
+ *
+ * @param string $id номер id
+ */
+function is_subscribed($db, $id_user, $id_sub) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT user_id, user_subscribed FROM subscribes WHERE user_id = ? AND user_subscribed = ?");
+    $stmt->bind_param('ii', $id_user, $id_sub);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+
+/**
+ * Функция удаляет запись из таблицы subscribed
+ *
+ * Примеры использования:
+ * unsubscribe($db, 6, 2);
+ *
+ * @param string $id номер id
+ */
+function unsubscribe($db, $id_user, $id_sub) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("DELETE FROM subscribes WHERE user_id = ? AND user_subscribed = ?");
+    $stmt->bind_param('ii', $id_user, $id_sub);
+    $stmt->execute();
+}
+
+/**
+ * Функция ставит лайк посту
+ *
+ * Примеры использования:
+ * like_post($db, 6, 2);
+ *
+ * @param string $id номер id
+ */
+function like_post($db, $id_user, $id_post) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("INSERT INTO likes(user_id, post_id) VALUES (?, ?)");
+    $stmt->bind_param('ii', $id_user, $id_post);
+    $stmt->execute();
+}
+
+/**
+ * Функция определяет количество лайков у поста
+ * Примеры использования:
+ * get_likes_count($db, 2);
+ *
+ * @param string $id номер id
+ */
+function get_likes_count($db, $id_post) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT COUNT(*) FROM likes WHERE post_id = ?");
+    $stmt->bind_param('i', $id_post);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+/**
+ * Функция добавляет комментарий к посту
+ *
+ * Примеры использования:
+ * like_post($db, 6, 2);
+ *
+ * @param string $id номер id
+ */
+function create_comment($db, $id_user, $id_post, $text) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("INSERT INTO comments (user_id, post_id, content) VALUES (?, ?, ?)");
+    $stmt->bind_param('iis', $id_user, $id_post, $text);
+    $stmt->execute();
+}
+
+/**
+ * Функция убирает лишние пробелы у текстового поля и проверяет длину
+ *
+ * Примеры использования:
+ * validate_comment($text);
+ *
+ * @param string $text текст
+ */
+function validate_comment($text) {
+    $len = strlen(trim($_POST[$text]));
+
+    if ($len < 5) {
+        return 'Значение должно быть не меньше 4 символов';
+    }
+}
+
+/**
+ * Функция делают запрос ко всем комментариями поста
+ * Примеры использования:
+ * get_post_comments($db, 2);
+ *
+ * @param string $id номер id
+ */
+function get_post_comments($db, $id_post) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT avatar, content, c.dt_add, login, c.post_id FROM comments c JOIN users u ON c.user_id = u.id WHERE post_id = ?");
+    $stmt->bind_param('i', $id_post);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+/**
+ * Функция делают запрос ко всем постам, на которые пользователь подписан
+ * Примеры использования:
+ * get_feed_posts($db, 2);
+ *
+ * @param string $id номер id
+ */
+function get_feed_posts($db, $id_user) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT p.id, author_id, author_quote, counter, type_post, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id JOIN subscribes s ON s.user_id = p.author_id WHERE s.user_subscribed = ? ORDER BY counter ASC");
+    $stmt->bind_param('i', $id_user);
     $stmt->execute();
     $result = $stmt->get_result();
     return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);

@@ -4,16 +4,16 @@
     <div class="profile__user user container">
       <div class="profile__user-info user__info">
         <div class="profile__avatar user__avatar">
-          <img class="profile__picture user__picture" src="img/<?= $posts[0]['avatar']; ?>" alt="Аватар пользователя">
+          <img class="profile__picture user__picture" src="img/<?= (isset($posts[0]['avatar'])) ? $posts[0]['avatar'] : $_SESSION['user']['avatar']; ?>" alt="Аватар пользователя">
         </div>
         <div class="profile__name-wrapper user__name-wrapper">
-          <span class="profile__name user__name"><?= $posts[0]['login']; ?></span>
+          <span class="profile__name user__name"><?= (isset($posts[0]['login'])) ? $posts[0]['login'] : $_SESSION['user']['login']; ?></span>
           <time class="profile__user-time user__time" datetime="2014-03-20">5 лет на сайте</time>
         </div>
       </div>
       <div class="profile__rating user__rating">
         <p class="profile__rating-item user__rating-item user__rating-item--publications">
-          <span class="user__rating-amount"><?= count($posts); ?></span>
+          <span class="user__rating-amount"><?= (count($posts)) ? count($posts) : '0'; ?></span>
           <span class="profile__rating-text user__rating-text">публикаций</span>
         </p>
         <p class="profile__rating-item user__rating-item user__rating-item--subscribers">
@@ -22,7 +22,10 @@
         </p>
       </div>
       <div class="profile__user-buttons user__buttons">
-        <button class="profile__user-button user__button user__button--subscription button button--main" type="button">Подписаться</button>
+        <form action="subscribe.php" method="post">
+          <input class="visually-hidden" type="text" id="user-id" name="user-id" value="<?= $user_id; ?>">
+          <button class="profile__user-button user__button user__button--subscription button button--main" style="width: 100%" type="submit"><?= $subscribed ? 'Подписаться' : 'Отписаться'; ?></button>
+        </form>
         <a class="profile__user-button user__button user__button--writing button button--green" href="#">Сообщение</a>
       </div>
     </div>
@@ -46,7 +49,9 @@
       <div class="profile__tab-content">
         <section class="profile__posts tabs__content tabs__content--active">
           <h2 class="visually-hidden">Публикации</h2>
+          <?php if (isset($posts)): ?>
           <?php foreach ($posts as $post): ?>
+            <?php print_r($post); ?>
             <?php if (get_type($post['type_post']) == 'text'): ?>
               <article class="profile__post post post-text">
                 <header class="post__header">
@@ -72,16 +77,19 @@
                 <footer class="post__footer">
                   <div class="post__indicators">
                     <div class="post__buttons">
-                      <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
-                        <svg class="post__indicator-icon" width="20" height="17">
-                          <use xlink:href="#icon-heart"></use>
-                        </svg>
-                        <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
-                          <use xlink:href="#icon-heart-active"></use>
-                        </svg>
-                        <span>250</span>
-                        <span class="visually-hidden">количество лайков</span>
-                      </a>
+                      <form action="like.php" method="post">
+                        <button type="submit" class="post__indicator post__indicator--likes button" title="Лайк">
+                            <input class="visually-hidden" name="" id="post-id" name="post-id" value="<?= $post_id; ?>" type="text">
+                            <svg class="post__indicator-icon" width="20" height="17">
+                                <use xlink:href="#icon-heart"></use>
+                            </svg>
+                            <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
+                                <use xlink:href="#icon-heart-active"></use>
+                            </svg>
+                            <span>250</span>
+                            <span class="visually-hidden">количество лайков</span>
+                        </button>
+                      </form>
                       <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
                         <svg class="post__indicator-icon" width="19" height="17">
                           <use xlink:href="#icon-repost"></use>
@@ -211,6 +219,7 @@
 
             <?php endif; ?>
           <?php endforeach; ?>
+          <?php endif; ?>
         </section>
 
         <section class="profile__likes tabs__content">

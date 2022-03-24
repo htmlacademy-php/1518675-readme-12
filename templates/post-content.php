@@ -52,12 +52,14 @@
             <li><a href="#">#щикарныйвид</a></li>
           </ul>
           <div class="comments">
-            <form class="comments__form form" action="#" method="post">
+            <form class="comments__form form" action="comment.php" method="post">
               <div class="comments__my-avatar">
                 <img class="comments__picture" src="img/userpic-medium.jpg" alt="Аватар пользователя">
               </div>
               <div class="form__input-section form__input-section--error">
-                <textarea class="comments__textarea form__textarea form__input" placeholder="Ваш комментарий"></textarea>
+                <textarea class="comments__textarea form__textarea form__input" name="text-content" id="text-content" placeholder="Ваш комментарий"></textarea>
+                <input class="visually-hidden" name="id-post" id="id-post" type="text" value="<?= $content['id'] ?>">
+                <input class="visually-hidden" name="id-user" id="id-user" type="text" value="<?= $user_id; ?>">
                 <label class="visually-hidden">Ваш комментарий</label>
                 <button class="form__error-button button" type="button">!</button>
                 <div class="form__error-text">
@@ -69,42 +71,24 @@
             </form>
             <div class="comments__list-wrapper">
               <ul class="comments__list">
-                <li class="comments__item user">
-                  <div class="comments__avatar">
-                    <a class="user__avatar-link" href="#">
-                      <img class="comments__picture" src="img/userpic-larisa.jpg" alt="Аватар пользователя">
-                    </a>
-                  </div>
-                  <div class="comments__info">
-                    <div class="comments__name-wrapper">
-                      <a class="comments__user-name" href="#">
-                        <span>Лариса Роговая</span>
-                      </a>
-                      <time class="comments__time" datetime="2019-03-20">1 ч назад</time>
-                    </div>
-                    <p class="comments__text">
-                      Красота!!!1!
-                    </p>
-                  </div>
-                </li>
-                <li class="comments__item user">
-                  <div class="comments__avatar">
-                    <a class="user__avatar-link" href="#">
-                      <img class="comments__picture" src="img/userpic-larisa.jpg" alt="Аватар пользователя">
-                    </a>
-                  </div>
-                  <div class="comments__info">
-                    <div class="comments__name-wrapper">
-                      <a class="comments__user-name" href="#">
-                        <span>Лариса Роговая</span>
-                      </a>
-                      <time class="comments__time" datetime="2019-03-18">2 дня назад</time>
-                    </div>
-                    <p class="comments__text">
-                      Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской границы. Байкал считается самым глубоким озером в мире. Он окружен сетью пешеходных маршрутов, называемых Большой байкальской тропой. Деревня Листвянка, расположенная на западном берегу озера, – популярная отправная точка для летних экскурсий. Зимой здесь можно кататься на коньках и собачьих упряжках.
-                    </p>
-                  </div>
-                </li>
+                <?php foreach($comments as $comment): ?>
+                    <li class="comments__item user">
+                        <div class="comments__avatar">
+                            <a class="user__avatar-link" href="#">
+                                <img class="comments__picture" src="img/<?= $comment['avatar']; ?>" alt="Аватар пользователя">
+                            </a>
+                        </div>
+                        <div class="comments__info">
+                            <div class="comments__name-wrapper">
+                                <a class="comments__user-name" href="#">
+                                    <span><?= $comment['login']; ?></span>
+                                </a>
+                                <time class="comments__time" datetime="2019-03-20">1 ч назад</time>
+                            </div>
+                            <p class="comments__text"><?= $comment['content']; ?></p>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
               </ul>
               <a class="comments__more-link" href="#">
                 <span>Показать все комментарии</span>

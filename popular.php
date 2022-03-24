@@ -26,13 +26,12 @@ $types_list = get_all_types($con);
 $name_and_avatar = get_name_and_avatar($con, $_SESSION['user']['login']);
 
 $is_auth = 1;
+$current_url = 'popular';
 
 define('TEXT_LIMIT', 300);
 
-print_r($posts_list[0]);
-
-$page_content = include_template('main.php', ['posts' => $posts_list]);
-$layout_content = include_template('layout.php', ['content' => $page_content, 'title' => $name_and_avatar[0]['login'], 'is_auth' => $is_auth, 'avatar' => $name_and_avatar[0]['avatar']]);
+$page_content = include_template('popular-content.php', ['posts' => $posts_list]);
+$layout_content = include_template('layout.php', ['content' => $page_content, 'title' => $name_and_avatar[0]['login'], 'is_auth' => $is_auth, 'avatar' => $name_and_avatar[0]['avatar'], 'url' => $current_url]);
 
 print($layout_content);
 

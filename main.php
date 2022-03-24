@@ -59,7 +59,7 @@
         </section>
         <section class="authorization">
           <h2 class="visually-hidden">Авторизация</h2>
-          <form class="authorization__form form" action="#" method="post">
+          <form class="authorization__form form" action="index.php" method="post">
             <div class="authorization__input-wrapper form__input-wrapper">
               <input class="authorization__input authorization__input--login form__input" type="text" name="login" placeholder="Логин">
               <svg class="form__input-icon" width="19" height="18">
