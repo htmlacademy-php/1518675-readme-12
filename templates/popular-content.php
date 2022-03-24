@@ -1,5 +1,8 @@
 <?php
 
+require_once('config.php');
+require_once('utils.php');
+
 $filter_value = 'all';
 
 if (isset($_GET['filter']))
@@ -47,12 +50,12 @@ if (isset($_GET['filter']))
       <b class="popular__filters-caption filters__caption">Тип контента:</b>
       <ul class="popular__filters-list filters__list">
         <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-          <a class="filters__button filters__button--ellipse filters__button--all <?php print ($filter_value === 'all') ? 'filters__button--active' : ''; ?>" href="index.php?filter=all">
+          <a class="filters__button filters__button--ellipse filters__button--all <?php print ($filter_value === 'all') ? 'filters__button--active' : ''; ?>" href="popular.php?filter=all">
             <span>Все</span>
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--photo button <?php print ($filter_value === 'photo') ? 'filters__button--active' : ''; ?>" href="index.php?filter=photo">
+          <a class="filters__button filters__button--photo button <?php print ($filter_value === 'photo') ? 'filters__button--active' : ''; ?>" href="popular.php?filter=photo">
             <span class="visually-hidden">Фото</span>
             <svg class="filters__icon" width="22" height="18">
               <use xlink:href="#icon-filter-photo"></use>
@@ -60,7 +63,7 @@ if (isset($_GET['filter']))
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--video button <?php print ($filter_value === 'video') ? 'filters__button--active' : ''; ?>" href="index.php?filter=video">
+          <a class="filters__button filters__button--video button <?php print ($filter_value === 'video') ? 'filters__button--active' : ''; ?>" href="popular.php?filter=video">
             <span class="visually-hidden">Видео</span>
             <svg class="filters__icon" width="24" height="16">
               <use xlink:href="#icon-filter-video"></use>
@@ -68,7 +71,7 @@ if (isset($_GET['filter']))
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--text button <?php print ($filter_value === 'text') ? 'filters__button--active' : ''; ?>" href="index.php?filter=text">
+          <a class="filters__button filters__button--text button <?php print ($filter_value === 'text') ? 'filters__button--active' : ''; ?>" href="popular.php?filter=text">
             <span class="visually-hidden">Текст</span>
             <svg class="filters__icon" width="20" height="21">
               <use xlink:href="#icon-filter-text"></use>
@@ -76,7 +79,7 @@ if (isset($_GET['filter']))
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--quote button <?php print ($filter_value === 'quote') ? 'filters__button--active' : ''; ?>" href="index.php?filter=quote">
+          <a class="filters__button filters__button--quote button <?php print ($filter_value === 'quote') ? 'filters__button--active' : ''; ?>" href="popular.php?filter=quote">
             <span class="visually-hidden">Цитата</span>
             <svg class="filters__icon" width="21" height="20">
               <use xlink:href="#icon-filter-quote"></use>
@@ -84,7 +87,7 @@ if (isset($_GET['filter']))
           </a>
         </li>
         <li class="popular__filters-item filters__item">
-          <a class="filters__button filters__button--link button <?php print ($filter_value === 'link') ? 'filters__button--active' : ''; ?>" href="index.php?filter=link">
+          <a class="filters__button filters__button--link button <?php print ($filter_value === 'link') ? 'filters__button--active' : ''; ?>" href="popular.php?filter=link">
             <span class="visually-hidden">Ссылка</span>
             <svg class="filters__icon" width="21" height="18">
               <use xlink:href="#icon-filter-link"></use>
@@ -179,16 +182,19 @@ if (isset($_GET['filter']))
           </div>
           <div class="post__indicators">
             <div class="post__buttons">
-              <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
-                <svg class="post__indicator-icon" width="20" height="17">
-                  <use xlink:href="#icon-heart"></use>
-                </svg>
-                <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
-                  <use xlink:href="#icon-heart-active"></use>
-                </svg>
-                <span>0</span>
-                <span class="visually-hidden">количество лайков</span>
-              </a>
+              <form action="like.php" method="post">
+                <button type="submit" class="post__indicator post__indicator--likes button" title="Лайк">
+                  <svg class="post__indicator-icon" width="20" height="17">
+                    <use xlink:href="#icon-heart"></use>
+                  </svg>
+                  <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
+                    <use xlink:href="#icon-heart-active"></use>
+                  </svg>
+                  <span><?= $post['counter']; ?></span>
+                  <span class="visually-hidden">количество лайков</span>
+                </button>
+                <input class="visually-hidden" name="post-id" id="post-id" value="<?= $post['id']; ?>">
+              </form>
               <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
                 <svg class="post__indicator-icon" width="19" height="17">
                   <use xlink:href="#icon-comment"></use>
@@ -202,4 +208,8 @@ if (isset($_GET['filter']))
       </article>
     <?php endforeach; ?>
   </div>
+  <div class="popular__page-links">
+    <a class="popular__page-link popular__page-link--prev button button--gray" href="#">Предыдущая страница</a>
+    <a class="popular__page-link popular__page-link--next button button--gray" href="#">Следующая страница</a>
+</div>
 </div>

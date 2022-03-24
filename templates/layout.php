@@ -42,12 +42,12 @@
             <?php if (!isset($registration)): ?>
             <ul class="header__my-nav">
               <li class="header__my-page header__my-page--popular">
-                <a class="header__page-link header__page-link--active" title="Популярный контент">
+                <a class="header__page-link <?= ($url == 'popular') ? 'header__page-link--active' : ''; ?>" href="popular.php" title="Популярный контент">
                   <span class="visually-hidden">Популярный контент</span>
                 </a>
               </li>
               <li class="header__my-page header__my-page--feed">
-                <a class="header__page-link" href="feed.html" title="Моя лента">
+                <a class="header__page-link <?= ($url == 'feed') ? 'header__page-link--active' : ''; ?>" href="feed.php" title="Моя лента">
                   <span class="visually-hidden">Моя лента</span>
                 </a>
               </li>
@@ -62,9 +62,9 @@
             <?php if (!isset($registration)): ?>
             <ul class="header__user-nav">
               <li class="header__profile">
-                <a class="header__profile-link" href="#">
+                <a class="header__profile-link" href="profile.php?id=<?= $_SESSION['user']['id']; ?>">
                   <div class="header__avatar-wrapper">
-                    <img class="header__profile-avatar" src="<?= $avatar; ?>" alt="Аватар профиля">
+                    <img class="header__profile-avatar" src="img/<?= $avatar; ?>" alt="Аватар профиля">
                   </div>
                   <div class="header__profile-name">
                     <span>
@@ -79,7 +79,7 @@
                   <div class="header__profile-tooltip">
                     <ul class="header__profile-nav">
                       <li class="header__profile-nav-item">
-                        <a class="header__profile-nav-link" href="#">
+                        <a class="header__profile-nav-link" href="profile.php?id=<?= $_SESSION['user']['id']; ?>">
                           <span class="header__profile-nav-text">
                             Мой профиль
                           </span>
