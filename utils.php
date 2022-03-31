@@ -1,5 +1,9 @@
 <?php
 
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mime\Email;
+
 /**
  * Обрезает переданный текст, если он больше заданного значения
  *
@@ -503,7 +507,7 @@ function get_feed_posts($db, $id_user) {
  */
 function get_login($db, $id_user) {
   $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT u.login FROM subscribes s INNER JOIN users u ON s.user_id = u.id WHERE s.user_id = ? LIMIT 1");
+  $stmt->prepare("SELECT u.login, u.email FROM subscribes s INNER JOIN users u ON s.user_id = u.id WHERE s.user_id = ? LIMIT 1");
   $stmt->bind_param('i', $id_user);
   $stmt->execute();
   $result = $stmt->get_result();
@@ -520,9 +524,33 @@ function get_login($db, $id_user) {
  */
 function get_subscribers_list($db, $id_user) {
   $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT s.user_id, s.user_subscribed, u.id, u.login FROM subscribes s INNER JOIN users u ON s.user_id = u.id WHERE s.user_subscribed = ?");
+  $stmt->prepare("SELECT s.user_id, s.user_subscribed, u.id, u.login, u.email FROM subscribes s INNER JOIN users u ON s.user_id = u.id WHERE s.user_subscribed = ?");
   $stmt->bind_param('i', $id_user);
   $stmt->execute();
   $result = $stmt->get_result();
   return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+/**
+ * Функция делает email-рассылку пользователям
+ *
+ * Примеры использования:
+ * send_mail($$to, $from, $text);
+ *
+ * @param string $to текст
+ * @param string $from текст
+ * @param string $text текст
+ */
+function send_mail($to, $title_content, $text_content) {
+  $message = new Email();
+  $message->to($to);
+  $message->from('gladoratorx@yandex.com');
+  $message->subject($title_content);
+  $message->text($text_content);
+
+  $dsn = 'smtp://gladoratorx@yandex.ru:мой_токен@smtp.yandex.ru:465?encryption=tls&auth_mode=login';
+  $transport = Transport::fromDsn($dsn);
+
+  $mailer = new Mailer($transport);
+  $mailer->send($message);
 }

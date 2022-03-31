@@ -1,10 +1,10 @@
 <?php
 
+require 'vendor/autoload.php';
+
 require 'utils.php';
 require 'helpers.php';
 require_once 'config.php';
-
-require 'vendor/autoload.php';
 
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport;
@@ -56,21 +56,11 @@ if (count($errors)) {
     $subscribers_list = get_subscribers_list($con, $_SESSION['user']['id']);
 
     foreach ($subscribers_list as $item) {
+      $address = $item['email'];
       $title_content = 'Новая публикация от пользователя' . $_SESSION['user']['login'];
-
       $text_content = 'Здравствуйте, ' . $item['login'] . '. Пользователь ' . $_SESSION['user']['login'] . ' только что опубликовал новую запись „' . $caption . '“. Посмотрите её на странице пользователя: https://readme/profile.php?id=' . $_SESSION['user']['id'];
 
-      $message = new Email();
-      $message->to('gladosq@gmail.com'); // Подставить почту юзера
-      $message->from('gladoratorx@yandex.com');
-      $message->subject($title_content);
-      $message->text($text_content);
-
-      $dsn = 'smtp://gladoratorx@yandex.ru:pzzfqcltmwfsxrxi@smtp.yandex.ru:465?encryption=tls&auth_mode=login';
-      $transport = Transport::fromDsn($dsn);
-
-      $mailer = new Mailer($transport);
-      $mailer->send($message);
+      send_mail($address, $title_content, $text_content);
     }
   }
 }
