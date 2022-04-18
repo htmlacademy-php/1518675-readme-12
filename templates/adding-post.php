@@ -6,8 +6,9 @@ if ($_GET) {
     $default_filter = false;
 }
 
-?>
+print_r($_POST);
 
+?>
 
 <div class="page__main-section">
   <div class="container">
@@ -62,7 +63,7 @@ if ($_GET) {
       <div class="adding-post__tab-content">
         <section class="adding-post__photo tabs__content <?= (($_GET['filter'] == 'photo') or $default_filter) ? 'tabs__content--active' : ''; ?>">
           <h2 class="visually-hidden">Форма добавления фото</h2>
-          <form class="adding-post__form form" action="#" method="post" enctype="multipart/form-data" autocomplete="off">
+          <form class="adding-post__form form" action="add.php" method="post" enctype="multipart/form-data" autocomplete="off">
             <div class="form__text-inputs-wrapper">
               <div class="form__text-inputs">
                 <div class="adding-post__input-wrapper form__input-wrapper">
@@ -199,6 +200,7 @@ if ($_GET) {
               <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>
               <a class="adding-post__close" href="#">Закрыть</a>
             </div>
+            <input class="visually-hidden" type="text" id="post-type" name="post-type" value="video">
           </form>
         </section>
 
@@ -221,7 +223,7 @@ if ($_GET) {
                 <div class="adding-post__textarea-wrapper form__textarea-wrapper">
                   <label class="adding-post__label form__label" for="post-text">Текст поста <span class="form__input-required">*</span></label>
                   <div class="form__input-section">
-                    <textarea class="adding-post__textarea form__textarea form__input" id="post-text" placeholder="Введите текст публикации"></textarea>
+                    <textarea class="adding-post__textarea form__textarea form__input" name="post-text" id="post-text" placeholder="Введите текст публикации"></textarea>
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
@@ -253,6 +255,7 @@ if ($_GET) {
               <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>
               <a class="adding-post__close" href="#">Закрыть</a>
             </div>
+            <input class="visually-hidden" type="text" id="post-type" name="post-type" value="text">
           </form>
         </section>
 
@@ -275,7 +278,7 @@ if ($_GET) {
                 <div class="adding-post__input-wrapper form__textarea-wrapper">
                   <label class="adding-post__label form__label" for="cite-text">Текст цитаты <span class="form__input-required">*</span></label>
                   <div class="form__input-section">
-                    <textarea class="adding-post__textarea adding-post__textarea--quote form__textarea form__input" id="cite-text" placeholder="Текст цитаты"></textarea>
+                    <textarea class="adding-post__textarea adding-post__textarea--quote form__textarea form__input" name="cite-text" id="cite-text" placeholder="Текст цитаты"></textarea>
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
@@ -318,6 +321,7 @@ if ($_GET) {
               <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>
               <a class="adding-post__close" href="#">Закрыть</a>
             </div>
+            <input class="visually-hidden" type="text" id="post-type" name="post-type" value="quote">
           </form>
         </section>
 
@@ -372,6 +376,7 @@ if ($_GET) {
               <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>
               <a class="adding-post__close" href="#">Закрыть</a>
             </div>
+            <input class="visually-hidden" type="text" id="post-type" name="post-type" value="link">
           </form>
         </section>
       </div>

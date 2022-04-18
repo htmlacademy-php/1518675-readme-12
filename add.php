@@ -38,14 +38,57 @@ if (count($errors)) {
     print_r($errors);
 } else {
     if (!empty($_POST)) {
-        $caption = $_POST['photo-heading'];
-        $link = $_POST['photo-url'];
-        $tags = $_POST['photo-tags'];
+        if ($_POST['post-type'] == 'photo') {
+            if (isset($_FILES['userpic-file-photo'])) {
+                print_r($_FILES);
+                $photo_url = $_FILES['userpic-file-photo']['name'];
 
-        $stmt = $con->stmt_init();
-        $stmt->prepare("INSERT INTO posts(caption, site, content) VALUES (?, ?, ?)");
-        $stmt->bind_param('sss', $caption, $link, $tags);
-        $stmt->execute();
+                $caption = $_POST['photo-heading'];
+                $link = $_POST['photo-url'];
+                $tags = $_POST['photo-tags'];
+                $content = '';
+                $type_post = get_type_db($_POST['post-type']);
+
+                $stmt = $con->stmt_init();
+                $stmt->prepare("INSERT INTO posts(caption, img, content, type_post, author_id) VALUES (?, ?, ?, ?, ?)");
+                $stmt->bind_param('sssii', $caption, $link, $content, $type_post, $_SESSION['user']['id']);
+                $stmt->execute();
+            } elseif (isset($_POST['photo-url'])) {
+                if (filter_var($_POST['photo-url'], FILTER_VALIDATE_URL)) {
+                    $photo_url = $_POST['photo-url'];
+                } else {
+                    $errors['photo-url'] == 'invalid-url';
+                }
+            }
+        } elseif($_POST['post-type'] == 'video') {
+
+        } elseif($_POST['post-type'] == 'text') {
+            $caption = $_POST['text-heading'];
+            $text = $_POST['post-text'];
+            $type_post = get_type_db($_POST['post-type']);
+
+            $stmt = $con->stmt_init();
+            $stmt->prepare("INSERT INTO posts(caption, content, type_post, author_id) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param('sssii', $caption, $content, $type_post, $_SESSION['user']['id']);
+            $stmt->execute();
+
+        } elseif($_POST['post-type'] == 'quote') {
+            print_r('<h1>work</h1>');
+
+            $caption = $_POST['quote-heading'];
+            $text = $_POST['cite-text'];
+            $quote = $_POST['quote-author'];
+            $type_post = get_type_db($_POST['post-type']);
+
+            $stmt = $con->stmt_init();
+            $stmt->prepare("INSERT INTO posts(caption, content, author_quote, type_post, author_id) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param('sssii', $caption, $text, $author_quote, $type_post, $_SESSION['user']['id']);
+            $stmt->execute();
+
+        } elseif($_POST['post-type'] == 'link') {
+
+        }
+
     }
 }
 

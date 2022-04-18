@@ -46,6 +46,6 @@ if (isset($_SESSION['user'])) {
     header("Location: /feed.php");
     exit();
 } else {
-    $page_content = include_template('../main.php', []);
+    $page_content = include_template('main.php', []);
     print($page_content);
 }

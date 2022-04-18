@@ -44,10 +44,19 @@ return '<p>' . $text . '</p>';
  *
  * @return Возвращает массив с типами данных
  */
-function get_posts_with_users($db)
+function get_posts_with_users($db, $filter)
 {
-    $result_content = mysqli_query($db, "SELECT p.id, author_id, counter, type_post, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id ORDER BY counter ASC");
-    return $rows_content = mysqli_fetch_all($result_content, MYSQLI_ASSOC);
+    if ($filter == 'ASC') {
+        $sql = "SELECT p.id, author_id, counter, type_post, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id ORDER BY counter ASC";
+    } else {
+        $sql = "SELECT p.id, author_id, counter, type_post, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id ORDER BY counter DESC";
+    }
+
+    $stmt = $db->stmt_init();
+    $stmt->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**

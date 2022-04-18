@@ -68,9 +68,9 @@
                   </div>
                 </header>
                 <div class="post__main">
-                  <h2><a href="#"><?= $post['caption']; ?></a></h2>
+                  <h2><a href="#"><?= htmlspecialchars($post['caption']); ?></a></h2>
                   <p>
-                    <?= $post['content']; ?>
+                    <?= htmlspecialchars($post['content']); ?>
                   </p>
                   <a class="post-text__more-link" href="#">Читать далее</a>
                 </div>
@@ -164,13 +164,12 @@
                   <button class="comments__submit button button--green" type="submit">Отправить</button>
                 </form>
               </article>
-
             <?php elseif(get_type($post['type_post']) == 'quote'): ?>
 
             <?php elseif(get_type($post['type_post']) == 'photo'): ?>
               <article class="profile__post post post-photo">
                 <header class="post__header">
-                  <h2><a href="#"><?= $post['caption']; ?></a></h2>
+                  <h2><a href="#"><?= htmlspecialchars($post['caption']); ?></a></h2>
                 </header>
                 <div class="post__main">
                   <div class="post-photo__image-wrapper">
@@ -221,7 +220,6 @@
           <?php endforeach; ?>
           <?php endif; ?>
         </section>
-
         <section class="profile__likes tabs__content">
           <h2 class="visually-hidden">Лайки</h2>
           <ul class="profile__likes-list">

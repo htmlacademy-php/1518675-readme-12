@@ -1,6 +1,6 @@
 <main class="page__main page__main--publication">
   <div class="container">
-    <h1 class="page__title page__title--publication"><?= $content['caption']; ?></h1>
+    <h1 class="page__title page__title--publication"><?= htmlspecialchars($content['caption']); ?></h1>
     <section class="post-details">
       <h2 class="visually-hidden">Публикация</h2>
       <div class="post-details__wrapper post-photo">
@@ -81,11 +81,11 @@
                         <div class="comments__info">
                             <div class="comments__name-wrapper">
                                 <a class="comments__user-name" href="#">
-                                    <span><?= $comment['login']; ?></span>
+                                    <span><?= htmlspecialchars($comment['login']); ?></span>
                                 </a>
                                 <time class="comments__time" datetime="2019-03-20">1 ч назад</time>
                             </div>
-                            <p class="comments__text"><?= $comment['content']; ?></p>
+                            <p class="comments__text"><?= htmlspecialchars($comment['content']); ?></p>
                         </div>
                     </li>
                 <?php endforeach; ?>
@@ -106,7 +106,7 @@
             </div>
             <div class="post-details__name-wrapper user__name-wrapper">
               <a class="post-details__name user__name" href="#">
-                <span><?= $content['login'] ?></span>
+                <span><?= htmlspecialchars($content['login']); ?></span>
               </a>
               <time class="post-details__time user__time" datetime="2014-03-20">5 лет на сайте</time>
             </div>

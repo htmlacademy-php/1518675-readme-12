@@ -12,13 +12,17 @@ if (!isset($_SESSION['user'])) {
 if (isset($_GET['filter'])) {
     $filter_value = $_GET['filter'];
 
+    $filter_order = 'ASC';
+
     if ($filter_value === 'all') {
-        $posts_list = get_posts_with_users($con);
+        $posts_list = get_posts_with_users($con, $filter_order);
     } else {
        $posts_list = get_filtered_posts($con, get_type_db($filter_value));
     }
 } else {
-    $posts_list = get_posts_with_users($con);
+    print_r('work');
+    $posts_list = get_posts_with_users($con, $filter_order);
+    print_r('not work');
 }
 
 $types_list = get_all_types($con);
@@ -32,7 +36,6 @@ define('TEXT_LIMIT', 300);
 
 $page_content = include_template('popular-content.php', ['posts' => $posts_list]);
 $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => $name_and_avatar[0]['login'], 'is_auth' => $is_auth, 'avatar' => $name_and_avatar[0]['avatar'], 'url' => $current_url]);
-
 print($layout_content);
 
 ?>
