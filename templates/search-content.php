@@ -4,7 +4,7 @@
   <div class="search__query-wrapper">
     <div class="search__query container">
       <span>Вы искали:</span>
-      <span class="search__query-text"><?= $_GET['header-search']; ?></span>
+      <span class="search__query-text"><?= htmlspecialchars($_GET['header-search']); ?></span>
     </div>
   </div>
   <div class="search__results-wrapper">
@@ -19,15 +19,15 @@
                     <img class="post__author-avatar" src="img/<?= $post['avatar']; ?>" alt="Аватар пользователя">
                   </div>
                   <div class="post__info">
-                    <b class="post__author-name"><?= $post['login']; ?></b>
+                    <b class="post__author-name"><?= htmlspecialchars($post['login']); ?></b>
                     <span class="post__time">25 минут назад</span>
                   </div>
                 </a>
               </header>
               <div class="post__main">
-                <h2><a href="#"><?= $post['caption'] ?></a></h2>
+                <h2><a href="#"><?= htmlspecialchars($post['caption']); ?></a></h2>
                 <p>
-                  <?= $post['content']; ?>
+                  <?= htmlspecialchars($post['content']); ?>
                 </p>
                 <a class="post-text__more-link" href="#">Читать далее</a>
               </div>
@@ -61,7 +61,7 @@
                     <img class="post__author-avatar" src="img/<?= $post['avatar'] ?>" alt="Аватар пользователя">
                   </div>
                   <div class="post__info">
-                    <b class="post__author-name"><?= $post['login']; ?></b>
+                    <b class="post__author-name"><?= htmlspecialchars($post['login']); ?></b>
                     <span class="post__time">2 дня назад</span>
                   </div>
                 </a>
@@ -69,9 +69,9 @@
               <div class="post__main">
                 <blockquote>
                   <p>
-                    <?= $post['content']; ?>
+                    <?= htmlspecialchars($post['content']); ?>
                   </p>
-                  <cite><?= $post['author_quote']; ?></cite>
+                  <cite><?= htmlspecialchars($post['author_quote']); ?></cite>
                 </blockquote>
               </div>
               <footer class="post__footer post__indicators">
@@ -104,13 +104,13 @@
                     <img class="post__author-avatar" src="img/<?= $post['avatar']; ?>" alt="Аватар пользователя" width="60" height="60">
                   </div>
                   <div class="post__info">
-                    <b class="post__author-name"><?= $post['login']; ?></b>
+                    <b class="post__author-name"><?= htmlspecialchars($post['login']); ?></b>
                     <span class="post__time">15 минут назад</span>
                   </div>
                 </a>
               </header>
               <div class="post__main">
-                <h2><a href="#"><?= $post['caption']; ?></a></h2>
+                <h2><a href="#"><?= htmlspecialchars($post['caption']); ?></a></h2>
                 <div class="post-photo__image-wrapper">
                   <img src="img/<?= $post['img'] ?>" alt="Фото от пользователя" width="760" height="396">
                 </div>
@@ -204,7 +204,7 @@
                     <img class="post__author-avatar" src="img/<?= $post['avatar']; ?>" alt="Аватар пользователя">
                   </div>
                   <div class="post__info">
-                    <b class="post__author-name"><?= $post['login']; ?></b>
+                    <b class="post__author-name"><?= htmlspecialchars($post['login']); ?></b>
                     <span class="post__time">Месяц назад</span>
                   </div>
                 </a>
@@ -216,8 +216,8 @@
                       <img src="img/logo-vita.jpg" alt="Иконка">
                     </div>
                     <div class="post-link__info">
-                      <h3><?= $post['caption']; ?></h3>
-                      <span><?= $post['site']; ?></span>
+                      <h3><?= htmlspecialchars($post['caption']); ?></h3>
+                      <span><?= htmlspecialchars($post['site']); ?></span>
                     </div>
                     <svg class="post-link__arrow" width="11" height="16">
                       <use xlink:href="#icon-arrow-right-ad"></use>

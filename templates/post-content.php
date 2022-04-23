@@ -1,6 +1,6 @@
 <main class="page__main page__main--publication">
   <div class="container">
-    <h1 class="page__title page__title--publication"><?= $content['caption']; ?></h1>
+    <h1 class="page__title page__title--publication"><?= htmlspecialchars($content['caption']); ?></h1>
     <section class="post-details">
       <h2 class="visually-hidden">Публикация</h2>
       <div class="post-details__wrapper post-photo">
@@ -44,12 +44,9 @@
             <span class="post__view">500 просмотров</span>
           </div>
           <ul class="post__tags">
-            <li><a href="#">#nature</a></li>
-            <li><a href="#">#globe</a></li>
-            <li><a href="#">#photooftheday</a></li>
-            <li><a href="#">#canon</a></li>
-            <li><a href="#">#landscape</a></li>
-            <li><a href="#">#щикарныйвид</a></li>
+            <?php foreach($hashtags as $hashtag): ?>
+                <li><a href="#"><?= $hashtag['hashtag']; ?></a></li>
+            <?php endforeach; ?>
           </ul>
           <div class="comments">
             <form class="comments__form form" action="comment.php" method="post">
@@ -81,11 +78,11 @@
                         <div class="comments__info">
                             <div class="comments__name-wrapper">
                                 <a class="comments__user-name" href="#">
-                                    <span><?= $comment['login']; ?></span>
+                                    <span><?= htmlspecialchars($comment['login']); ?></span>
                                 </a>
                                 <time class="comments__time" datetime="2019-03-20">1 ч назад</time>
                             </div>
-                            <p class="comments__text"><?= $comment['content']; ?></p>
+                            <p class="comments__text"><?= htmlspecialchars($comment['content']); ?></p>
                         </div>
                     </li>
                 <?php endforeach; ?>
@@ -101,12 +98,12 @@
           <div class="post-details__user-info user__info">
             <div class="post-details__avatar user__avatar">
               <a class="post-details__avatar-link user__avatar-link" href="#">
-                <img class="post-details__picture user__picture" src="img/<?= $content['avatar']; ?>" alt="Аватар пользователя">
+                <img class="post-details__picture user__picture" src="<?= $content['avatar']; ?>" alt="Аватар пользователя">
               </a>
             </div>
             <div class="post-details__name-wrapper user__name-wrapper">
               <a class="post-details__name user__name" href="#">
-                <span><?= $content['login'] ?></span>
+                <span><?= htmlspecialchars($content['login']); ?></span>
               </a>
               <time class="post-details__time user__time" datetime="2014-03-20">5 лет на сайте</time>
             </div>

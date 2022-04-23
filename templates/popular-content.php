@@ -117,7 +117,7 @@ if (isset($_GET['filter']))
             <?= cut_long_text($post['content'], TEXT_LIMIT); ?>
           <?php elseif (get_type($post['type_post']) == 'photo'): ?>
             <div class="post-photo__image-wrapper">
-              <img src="img/<?= htmlspecialchars($post['img']) ?>" alt="Фото от пользователя" width="360" height="240">
+              <img src="<?= htmlspecialchars($post['img']) ?>" alt="Фото от пользователя" width="360" height="240">
             </div>
           <?php elseif (get_type($post['type_post']) == 'link'): ?>
             <div class="post-link__wrapper">
@@ -141,7 +141,7 @@ if (isset($_GET['filter']))
           <div class="post__author">
             <a class="post__author-link" href="profile.php?id=<?= $post['author_id']; ?>" title="Автор">
               <div class="post__avatar-wrapper">
-                <img class="post__author-avatar" src="img/<?= $post['avatar'] ?>" alt="Аватар пользователя">
+                <img class="post__author-avatar" src="<?= $post['avatar'] ?>" alt="Аватар пользователя">
               </div>
               <div class="post__info">
                 <b class="post__author-name"><?= htmlspecialchars($post['login']); ?></b>

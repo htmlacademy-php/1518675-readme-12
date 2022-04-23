@@ -4,7 +4,7 @@
     <div class="profile__user user container">
       <div class="profile__user-info user__info">
         <div class="profile__avatar user__avatar">
-          <img class="profile__picture user__picture" src="img/<?=(isset($posts[0]['avatar'])) ? $posts[0]['avatar'] : $_SESSION['user']['avatar'];?>" alt="Аватар пользователя">
+          <img class="profile__picture user__picture" src="<?= isset($posts[0]['avatar']) ? $posts[0]['avatar'] : ''; ?>" alt="">
         </div>
         <div class="profile__name-wrapper user__name-wrapper">
           <span class="profile__name user__name"><?=(isset($posts[0]['login'])) ? $posts[0]['login'] : $_SESSION['user']['login'];?></span>
@@ -67,9 +67,9 @@
                   </div>
                 </header>
                 <div class="post__main">
-                  <h2><a href="#"><?=$post['caption'];?></a></h2>
+                  <h2><a href="#"><?= htmlspecialchars($post['caption']); ?></a></h2>
                   <p>
-                    <?=$post['content'];?>
+                    <?= htmlspecialchars($post['content']); ?>
                   </p>
                   <a class="post-text__more-link" href="#">Читать далее</a>
                 </div>
@@ -163,17 +163,16 @@
                   <button class="comments__submit button button--green" type="submit">Отправить</button>
                 </form>
               </article>
-
             <?php elseif (get_type($post['type_post']) == 'quote'): ?>
 
             <?php elseif (get_type($post['type_post']) == 'photo'): ?>
               <article class="profile__post post post-photo">
                 <header class="post__header">
-                  <h2><a href="#"><?=$post['caption'];?></a></h2>
+                  <h2><a href="#"><?= htmlspecialchars($post['caption']); ?></a></h2>
                 </header>
                 <div class="post__main">
                   <div class="post-photo__image-wrapper">
-                    <img src="img/<?=$post['img'];?>" alt="Фото от пользователя" width="760" height="396">
+                    <img src="<?= $post['img']; ?>" alt="Фото от пользователя" width="760" height="396">
                   </div>
                 </div>
                 <footer class="post__footer">
@@ -220,7 +219,6 @@
           <?php endforeach;?>
           <?php endif;?>
         </section>
-
         <section class="profile__likes tabs__content">
           <h2 class="visually-hidden">Лайки</h2>
           <ul class="profile__likes-list">

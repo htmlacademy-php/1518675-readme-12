@@ -15,8 +15,7 @@ CREATE TABLE users (
 
 CREATE TABLE types (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	name VARCHAR(128),
-	icon VARCHAR(128)
+	name VARCHAR(128)
 );
 
 CREATE TABLE hashtags (
@@ -36,20 +35,17 @@ CREATE TABLE posts (
 	counter INT,
 	author_id INT,
 	type_post INT,
-	hashtag INT,
 	CONSTRAINT author_post_fk
 	FOREIGN KEY (author_id) REFERENCES users (id),
 	CONSTRAINT type_posk_fk
-	FOREIGN KEY (type_post) REFERENCES types (id),
-	CONSTRAINT hashtag_post_fk
-	FOREIGN KEY (hashtag) REFERENCES hashtags (id)
+	FOREIGN KEY (type_post) REFERENCES types (id)
 );
 
 CREATE TABLE hashtags_posts (
-	user_id INT NOT NULL,
+	post_id INT NOT NULL,
 	hashtag_id INT NOT NULL,
-	CONSTRAINT user_post_fk
-	FOREIGN KEY (user_id) REFERENCES users (id),
+	CONSTRAINT post_hash_fk
+	FOREIGN KEY (post_id) REFERENCES posts (id),
 	CONSTRAINT hashtags_posts_fk
 	FOREIGN KEY (hashtag_id) REFERENCES hashtags (id)
 );
@@ -98,7 +94,4 @@ CREATE TABLE messages (
 	FOREIGN KEY (user_recipient) REFERENCES users (id)
 );
 
-CREATE TABLE auth (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	role VARCHAR(128)
-);
+CREATE FULLTEXT INDEX posts ON posts(caption, content);

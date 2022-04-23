@@ -43,9 +43,19 @@ if (count($errors)) {
             $email = $_POST['email'];
             $login = $_POST['login'];
 
+            print_r($_FILES);
+
+
+            $file_name = $_FILES['userpic-file']['name'];
+            $file_path = __DIR__ . '/uploads/';
+            $file_url = '/uploads/' . $file_name;
+
+            move_uploaded_file($_FILES['userpic-file']['tmp_name'], $file_path . $file_name);
+
+
             $stmt = $con->stmt_init();
-            $stmt->prepare("INSERT INTO users(email, login, password) VALUES (?, ?, ?)");
-            $stmt->bind_param('sss', $email, $login, $pass_hash);
+            $stmt->prepare("INSERT INTO users(email, login, password, avatar) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param('ssss', $email, $login, $pass_hash, $file_url);
             $stmt->execute();
 
             header('Location: /index.php');
