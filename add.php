@@ -8,8 +8,6 @@ $is_auth = 1;
 
 $user_name = 'Никита Шишкин';
 
-// print_r($_POST);
-
 $rules = [
     'photo-heading' => function() {
         return validate_filled('photo-heading');
@@ -32,7 +30,6 @@ if (!empty($_POST)) {
             $errors[$key] = $rule();
         }
     }
-
     $errors = array_filter($errors);
 }
 
@@ -60,7 +57,6 @@ if (count($errors)) {
                 $stmt->bind_param('sssii', $caption, $file_url, $content, $type_post, $_SESSION['user']['id']);
                 $stmt->execute();
 
-
                 // Hashtahgs
                 $hashtags = format_hashtags($tags);
                 foreach($hashtags as $hashtag) {
@@ -83,9 +79,10 @@ if (count($errors)) {
                 header('Location: /feed.php');
 
             }
-        } elseif($_POST['post-type'] == 'video') {
-            header('Location: /feed.php');
 
+        } elseif($_POST['post-type'] == 'video') {
+
+            header('Location: /feed.php');
 
         } elseif($_POST['post-type'] == 'text') {
             $caption = $_POST['text-heading'];
@@ -111,8 +108,8 @@ if (count($errors)) {
 
         } elseif($_POST['post-type'] == 'link') {
 
+            header('Location: /feed.php');
         }
-
     }
 }
 
