@@ -1,0 +1,7 @@
+{
+    "name": "gladosq/readme",
+    "require": {
+        "symfony/mailer": "^5.4",
+        "symfony/google-mailer": "^5.4"
+    }
+}
