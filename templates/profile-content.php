@@ -4,10 +4,10 @@
     <div class="profile__user user container">
       <div class="profile__user-info user__info">
         <div class="profile__avatar user__avatar">
-          <img class="profile__picture user__picture" src="img/<?= (isset($posts[0]['avatar'])) ? $posts[0]['avatar'] : $_SESSION['user']['avatar']; ?>" alt="Аватар пользователя">
+          <img class="profile__picture user__picture" src="img/<?=(isset($posts[0]['avatar'])) ? $posts[0]['avatar'] : $_SESSION['user']['avatar'];?>" alt="Аватар пользователя">
         </div>
         <div class="profile__name-wrapper user__name-wrapper">
-          <span class="profile__name user__name"><?= (isset($posts[0]['login'])) ? $posts[0]['login'] : $_SESSION['user']['login']; ?></span>
+          <span class="profile__name user__name"><?=(isset($posts[0]['login'])) ? $posts[0]['login'] : $_SESSION['user']['login'];?></span>
           <time class="profile__user-time user__time" datetime="2014-03-20">5 лет на сайте</time>
         </div>
       </div>
@@ -17,7 +17,7 @@
           <span class="profile__rating-text user__rating-text">публикаций</span>
         </p>
         <p class="profile__rating-item user__rating-item user__rating-item--subscribers">
-          <span class="user__rating-amount"><?= $subscribers; ?></span>
+          <span class="user__rating-amount"><?=$subscribers;?></span>
           <span class="profile__rating-text user__rating-text">подписчиков</span>
         </p>
       </div>
@@ -36,13 +36,13 @@
         <b class="profile__tabs-caption filters__caption">Показать:</b>
         <ul class="profile__tabs-list filters__list tabs__list">
           <li class="profile__tabs-item filters__item">
-            <a class="profile__tabs-link filters__button <?= ($filter == 'posts') ? 'filters__button--active' : ''; ?> tabs__item <?= ($filter == 'posts') ? 'tabs__item--active' : ''; ?> button" href="profile.php?id=<?= $user_id; ?>&filter=posts">Посты</a>
+            <a class="profile__tabs-link filters__button <?=($filter == 'posts') ? 'filters__button--active' : '';?> tabs__item <?=($filter == 'posts') ? 'tabs__item--active' : '';?> button" href="profile.php?id=<?=$user_id;?>&filter=posts">Посты</a>
           </li>
           <li class="profile__tabs-item filters__item">
-            <a class="profile__tabs-link filters__button <?= ($filter == 'likes') ? 'filters__button--active' : ''; ?> tabs__item <?= ($filter == 'likes') ? 'tabs__item--active' : ''; ?> button" href="profile.php?id=<?= $user_id; ?>&filter=likes">Лайки</a>
+            <a class="profile__tabs-link filters__button <?=($filter == 'likes') ? 'filters__button--active' : '';?> tabs__item <?=($filter == 'likes') ? 'tabs__item--active' : '';?> button" href="profile.php?id=<?=$user_id;?>&filter=likes">Лайки</a>
           </li>
           <li class="profile__tabs-item filters__item">
-            <a class="profile__tabs-link filters__button <?= ($filter == 'subscribers') ? 'filters__button--active' : ''; ?> tabs__item <?= ($filter == 'subscribers') ? 'tabs__item--active' : ''; ?> button" href="profile.php?id=<?= $user_id; ?>&filter=subscribers">Подписки</a>
+            <a class="profile__tabs-link filters__button <?=($filter == 'subscribers') ? 'filters__button--active' : '';?> tabs__item <?=($filter == 'subscribers') ? 'tabs__item--active' : '';?> button" href="profile.php?id=<?=$user_id;?>&filter=subscribers">Подписки</a>
           </li>
         </ul>
       </div>
@@ -68,9 +68,9 @@
                   </div>
                 </header>
                 <div class="post__main">
-                  <h2><a href="#"><?= $post['caption']; ?></a></h2>
+                  <h2><a href="#"><?=$post['caption'];?></a></h2>
                   <p>
-                    <?= $post['content']; ?>
+                    <?=$post['content'];?>
                   </p>
                   <a class="post-text__more-link" href="#">Читать далее</a>
                 </div>
@@ -165,16 +165,16 @@
                 </form>
               </article>
 
-            <?php elseif(get_type($post['type_post']) == 'quote'): ?>
+            <?php elseif (get_type($post['type_post']) == 'quote'): ?>
 
-            <?php elseif(get_type($post['type_post']) == 'photo'): ?>
+            <?php elseif (get_type($post['type_post']) == 'photo'): ?>
               <article class="profile__post post post-photo">
                 <header class="post__header">
-                  <h2><a href="#"><?= $post['caption']; ?></a></h2>
+                  <h2><a href="#"><?=$post['caption'];?></a></h2>
                 </header>
                 <div class="post__main">
                   <div class="post-photo__image-wrapper">
-                    <img src="img/<?= $post['img']; ?>" alt="Фото от пользователя" width="760" height="396">
+                    <img src="img/<?=$post['img'];?>" alt="Фото от пользователя" width="760" height="396">
                   </div>
                 </div>
                 <footer class="post__footer">
@@ -213,15 +213,12 @@
                   <a class="comments__button button" href="#">Показать комментарии</a>
                 </div>
               </article>
-            <?php elseif(get_type($post['type_post']) == 'video'): ?>
-
-            <?php elseif(get_type($post['type_post']) == 'link'): ?>
-
+            <?php elseif (get_type($post['type_post']) == 'video'): ?>
+            <?php elseif (get_type($post['type_post']) == 'link'): ?>
             <?php endif; ?>
           <?php endforeach; ?>
           <?php endif; ?>
         </section>
-
         <section class="profile__likes tabs__content">
           <h2 class="visually-hidden">Лайки</h2>
           <ul class="profile__likes-list">
