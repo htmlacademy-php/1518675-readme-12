@@ -51,8 +51,6 @@
           <h2 class="visually-hidden">Публикации</h2>
           <?php if (isset($posts)): ?>
           <?php foreach ($posts as $post): ?>
-            <?php print_r($post); ?>
-            <?php print_r($post['avatar']); ?>
             <?php if (get_type($post['type_post']) == 'text'): ?>
               <article class="profile__post post post-text">
                 <header class="post__header">
