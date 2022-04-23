@@ -113,6 +113,7 @@ if (count($errors)) {
     }
 }
 
+
 $page_content = include_template('adding-post.php', ['errors' => $errors]);
 $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => $user_name, 'is_auth' => $is_auth]);
 print($layout_content);
