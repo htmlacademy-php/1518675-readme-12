@@ -44,12 +44,9 @@
             <span class="post__view">500 просмотров</span>
           </div>
           <ul class="post__tags">
-            <li><a href="#">#nature</a></li>
-            <li><a href="#">#globe</a></li>
-            <li><a href="#">#photooftheday</a></li>
-            <li><a href="#">#canon</a></li>
-            <li><a href="#">#landscape</a></li>
-            <li><a href="#">#щикарныйвид</a></li>
+            <?php foreach($hashtags as $hashtag): ?>
+                <li><a href="#"><?= $hashtag['hashtag']; ?></a></li>
+            <?php endforeach; ?>
           </ul>
           <div class="comments">
             <form class="comments__form form" action="comment.php" method="post">
@@ -101,7 +98,7 @@
           <div class="post-details__user-info user__info">
             <div class="post-details__avatar user__avatar">
               <a class="post-details__avatar-link user__avatar-link" href="#">
-                <img class="post-details__picture user__picture" src="img/<?= $content['avatar']; ?>" alt="Аватар пользователя">
+                <img class="post-details__picture user__picture" src="<?= $content['avatar']; ?>" alt="Аватар пользователя">
               </a>
             </div>
             <div class="post-details__name-wrapper user__name-wrapper">

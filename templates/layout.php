@@ -64,7 +64,7 @@
               <li class="header__profile">
                 <a class="header__profile-link" href="profile.php?id=<?= $_SESSION['user']['id']; ?>">
                   <div class="header__avatar-wrapper">
-                    <img class="header__profile-avatar" src="img/<?= $avatar; ?>" alt="Аватар профиля">
+                    <img class="header__profile-avatar" src="<?= $avatar; ?>" alt="Аватар профиля">
                   </div>
                   <div class="header__profile-name">
                     <span>
@@ -183,8 +183,5 @@
       </div>
     </div>
   </footer>
-  <script src="libs/dropzone.js"></script>
-  <script src="js/dropzone-settings.js"></script>
-  <script src="js/main.js"></script>
 </body>
 </html>

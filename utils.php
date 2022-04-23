@@ -31,7 +31,7 @@ function cut_long_text ($text, $text_limit)
 
         return $new_string = '<p>' . implode(' ', $new_string_array) . '...' . '</p>' . $link;
     }
-return '<p>' . $text . '</p>';
+    return '<p>' . $text . '</p>';
 }
 
 /**
@@ -522,3 +522,97 @@ function get_feed_posts($db, $id_user) {
     $result = $stmt->get_result();
     return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
+
+/**
+ * Функция форматирует хештеги и проводит их к нужному виду
+ *
+ * Примеры использования:
+ * format_hashtags($text);
+ *
+ * @param string $text текст
+ */
+function format_hashtags($text) {
+    $words = explode(' ', $text);
+
+    $correct_hashtags = [];
+
+    foreach($words as $word) {
+        if (mb_strlen($word) >= 2) {
+            if ($word[0] == '#') {
+                array_push($correct_hashtags, $word);
+            } else {
+
+                $word = '#' . $word;
+                array_push($correct_hashtags, $word);
+            }
+        }
+    }
+
+    return $correct_hashtags;
+}
+
+/**
+ * Функция делают запрос по хештегу и проверяет, есть ли такой в базе
+ * Примеры использования:
+ * check_hashtag($db, #text);
+ *
+ * @param string $id номер id
+ */
+function check_hashtag($db, $text) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT hashtag FROM hashtags WHERE hashtag = ?");
+    $stmt->bind_param('s', $text);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+/**
+ * Функция берёт id последнего поста юзера
+ * Примеры использования:
+ * get_last_post_id($db, #text);
+ *
+ * @param string $id номер id
+ */
+function get_last_post_id($db, $id) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT id, author_id, caption, dt_add FROM posts WHERE author_id = ? ORDER BY dt_add DESC LIMIT 1");
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+/**
+ * Функция берёт id хештега
+ * Примеры использования:
+ * get_hashtag_id($db, $text);
+ *
+ * @param string $text текст
+ */
+function get_hashtag_id($db, $text) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT id, hashtag FROM hashtags WHERE hashtag = ?");
+    $stmt->bind_param('s', $text);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+/**
+ * Функция берёт все хештеги поста
+ * Примеры использования:
+ * get_all_hashtags_post($db, $id);
+ *
+ * @param id $id id поста
+ */
+function get_all_hashtags_post($db, $id) {
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT post_id, hashtag_id, h.hashtag FROM hashtags_posts INNER JOIN hashtags h ON h.id = hashtags_posts.hashtag_id WHERE post_id = ?");
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+

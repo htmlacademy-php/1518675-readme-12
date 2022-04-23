@@ -6,8 +6,6 @@ if ($_GET) {
     $default_filter = false;
 }
 
-print_r($_POST);
-
 ?>
 
 <div class="page__main-section">

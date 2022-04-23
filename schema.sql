@@ -93,3 +93,5 @@ CREATE TABLE messages (
 	CONSTRAINT user_recipient_fk
 	FOREIGN KEY (user_recipient) REFERENCES users (id)
 );
+
+CREATE FULLTEXT INDEX posts ON posts(caption, content);

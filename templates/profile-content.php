@@ -4,7 +4,7 @@
     <div class="profile__user user container">
       <div class="profile__user-info user__info">
         <div class="profile__avatar user__avatar">
-          <img class="profile__picture user__picture" src="img/<?= (isset($posts[0]['avatar'])) ? $posts[0]['avatar'] : $_SESSION['user']['avatar']; ?>" alt="Аватар пользователя">
+          <img class="profile__picture user__picture" src="<?= isset($posts[0]['avatar']) ? $posts[0]['avatar'] : ''; ?>" alt="">
         </div>
         <div class="profile__name-wrapper user__name-wrapper">
           <span class="profile__name user__name"><?= (isset($posts[0]['login'])) ? $posts[0]['login'] : $_SESSION['user']['login']; ?></span>
@@ -52,6 +52,7 @@
           <?php if (isset($posts)): ?>
           <?php foreach ($posts as $post): ?>
             <?php print_r($post); ?>
+            <?php print_r($post['avatar']); ?>
             <?php if (get_type($post['type_post']) == 'text'): ?>
               <article class="profile__post post post-text">
                 <header class="post__header">
@@ -173,7 +174,7 @@
                 </header>
                 <div class="post__main">
                   <div class="post-photo__image-wrapper">
-                    <img src="img/<?= $post['img']; ?>" alt="Фото от пользователя" width="760" height="396">
+                    <img src="<?= $post['img']; ?>" alt="Фото от пользователя" width="760" height="396">
                   </div>
                 </div>
                 <footer class="post__footer">

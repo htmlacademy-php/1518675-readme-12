@@ -20,9 +20,7 @@ if (isset($_GET['filter'])) {
        $posts_list = get_filtered_posts($con, get_type_db($filter_value));
     }
 } else {
-    print_r('work');
     $posts_list = get_posts_with_users($con, $filter_order);
-    print_r('not work');
 }
 
 $types_list = get_all_types($con);
