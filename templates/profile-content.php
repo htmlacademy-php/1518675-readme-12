@@ -7,24 +7,24 @@
           <img class="profile__picture user__picture" src="<?= isset($posts[0]['avatar']) ? $posts[0]['avatar'] : ''; ?>" alt="">
         </div>
         <div class="profile__name-wrapper user__name-wrapper">
-          <span class="profile__name user__name"><?= (isset($posts[0]['login'])) ? $posts[0]['login'] : $_SESSION['user']['login']; ?></span>
+          <span class="profile__name user__name"><?=(isset($posts[0]['login'])) ? $posts[0]['login'] : $_SESSION['user']['login'];?></span>
           <time class="profile__user-time user__time" datetime="2014-03-20">5 лет на сайте</time>
         </div>
       </div>
       <div class="profile__rating user__rating">
         <p class="profile__rating-item user__rating-item user__rating-item--publications">
-          <span class="user__rating-amount"><?= (count($posts)) ? count($posts) : '0'; ?></span>
+          <span class="user__rating-amount"><?=(count($posts)) ? count($posts) : '0';?></span>
           <span class="profile__rating-text user__rating-text">публикаций</span>
         </p>
         <p class="profile__rating-item user__rating-item user__rating-item--subscribers">
-          <span class="user__rating-amount"><?= $subscribers; ?></span>
+          <span class="user__rating-amount"><?=$subscribers;?></span>
           <span class="profile__rating-text user__rating-text">подписчиков</span>
         </p>
       </div>
       <div class="profile__user-buttons user__buttons">
         <form action="subscribe.php" method="post">
-          <input class="visually-hidden" type="text" id="user-id" name="user-id" value="<?= $user_id; ?>">
-          <button class="profile__user-button user__button user__button--subscription button button--main" style="width: 100%" type="submit"><?= $subscribed ? 'Подписаться' : 'Отписаться'; ?></button>
+          <input class="visually-hidden" type="text" id="user-id" name="user-id" value="<?=$user_id;?>">
+          <button class="profile__user-button user__button user__button--subscription button button--main" style="width: 100%" type="submit"><?=$subscribed ? 'Подписаться' : 'Отписаться';?></button>
         </form>
         <a class="profile__user-button user__button user__button--writing button button--green" href="#">Сообщение</a>
       </div>
@@ -36,13 +36,13 @@
         <b class="profile__tabs-caption filters__caption">Показать:</b>
         <ul class="profile__tabs-list filters__list tabs__list">
           <li class="profile__tabs-item filters__item">
-            <a class="profile__tabs-link filters__button <?= ($filter == 'posts') ? 'filters__button--active' : ''; ?> tabs__item <?= ($filter == 'posts') ? 'tabs__item--active' : ''; ?> button" href="profile.php?id=<?= $user_id; ?>&filter=posts">Посты</a>
+            <a class="profile__tabs-link filters__button <?=($filter == 'posts') ? 'filters__button--active' : '';?> tabs__item <?=($filter == 'posts') ? 'tabs__item--active' : '';?> button" href="profile.php?id=<?=$user_id;?>&filter=posts">Посты</a>
           </li>
           <li class="profile__tabs-item filters__item">
-            <a class="profile__tabs-link filters__button <?= ($filter == 'likes') ? 'filters__button--active' : ''; ?> tabs__item <?= ($filter == 'likes') ? 'tabs__item--active' : ''; ?> button" href="profile.php?id=<?= $user_id; ?>&filter=likes">Лайки</a>
+            <a class="profile__tabs-link filters__button <?=($filter == 'likes') ? 'filters__button--active' : '';?> tabs__item <?=($filter == 'likes') ? 'tabs__item--active' : '';?> button" href="profile.php?id=<?=$user_id;?>&filter=likes">Лайки</a>
           </li>
           <li class="profile__tabs-item filters__item">
-            <a class="profile__tabs-link filters__button <?= ($filter == 'subscribers') ? 'filters__button--active' : ''; ?> tabs__item <?= ($filter == 'subscribers') ? 'tabs__item--active' : ''; ?> button" href="profile.php?id=<?= $user_id; ?>&filter=subscribers">Подписки</a>
+            <a class="profile__tabs-link filters__button <?=($filter == 'subscribers') ? 'filters__button--active' : '';?> tabs__item <?=($filter == 'subscribers') ? 'tabs__item--active' : '';?> button" href="profile.php?id=<?=$user_id;?>&filter=subscribers">Подписки</a>
           </li>
         </ul>
       </div>
@@ -78,7 +78,7 @@
                     <div class="post__buttons">
                       <form action="like.php" method="post">
                         <button type="submit" class="post__indicator post__indicator--likes button" title="Лайк">
-                            <input class="visually-hidden" name="" id="post-id" name="post-id" value="<?= $post_id; ?>" type="text">
+                            <input class="visually-hidden" name="" id="post-id" name="post-id" value="<?=$post_id;?>" type="text">
                             <svg class="post__indicator-icon" width="20" height="17">
                                 <use xlink:href="#icon-heart"></use>
                             </svg>
@@ -163,9 +163,9 @@
                   <button class="comments__submit button button--green" type="submit">Отправить</button>
                 </form>
               </article>
-            <?php elseif(get_type($post['type_post']) == 'quote'): ?>
+            <?php elseif (get_type($post['type_post']) == 'quote'): ?>
 
-            <?php elseif(get_type($post['type_post']) == 'photo'): ?>
+            <?php elseif (get_type($post['type_post']) == 'photo'): ?>
               <article class="profile__post post post-photo">
                 <header class="post__header">
                   <h2><a href="#"><?= htmlspecialchars($post['caption']); ?></a></h2>
@@ -211,13 +211,13 @@
                   <a class="comments__button button" href="#">Показать комментарии</a>
                 </div>
               </article>
-            <?php elseif(get_type($post['type_post']) == 'video'): ?>
+            <?php elseif (get_type($post['type_post']) == 'video'): ?>
 
-            <?php elseif(get_type($post['type_post']) == 'link'): ?>
+            <?php elseif (get_type($post['type_post']) == 'link'): ?>
 
-            <?php endif; ?>
-          <?php endforeach; ?>
-          <?php endif; ?>
+            <?php endif;?>
+          <?php endforeach;?>
+          <?php endif;?>
         </section>
         <section class="profile__likes tabs__content">
           <h2 class="visually-hidden">Лайки</h2>
