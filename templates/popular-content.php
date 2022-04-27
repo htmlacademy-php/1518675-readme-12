@@ -119,6 +119,18 @@ if (isset($_GET['filter']))
             <div class="post-photo__image-wrapper">
               <img src="<?= htmlspecialchars($post['img']) ?>" alt="Фото от пользователя" width="360" height="240">
             </div>
+          <?php elseif (get_type($post['type_post']) == 'video'): ?>
+            <div class="post-video__block">
+                <div class="post-video__preview">
+                    <?= embed_youtube_cover($post['video']); ?>
+                </div>
+                <a href="<?= $post['video']; ?>" class="post-video__play-big button">
+                    <svg class="post-video__play-big-icon" width="14" height="14">
+                        <use xlink:href="#icon-video-play-big"></use>
+                    </svg>
+                    <span class="visually-hidden">Запустить проигрыватель</span>
+                </a>
+            </div>
           <?php elseif (get_type($post['type_post']) == 'link'): ?>
             <div class="post-link__wrapper">
               <a class="post-link__external" href="<?= htmlspecialchars($post['site']); ?>" title="Перейти по ссылке">

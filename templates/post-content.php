@@ -45,7 +45,7 @@
           </div>
           <ul class="post__tags">
             <?php foreach($hashtags as $hashtag): ?>
-                <li><a href="#"><?= $hashtag['hashtag']; ?></a></li>
+                <li><a href="/search.php?header-search=<?= substr($hashtag['hashtag'], 1); ?>"><?= $hashtag['hashtag']; ?></a></li>
             <?php endforeach; ?>
           </ul>
           <div class="comments">
