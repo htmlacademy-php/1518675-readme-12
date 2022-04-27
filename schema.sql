@@ -42,6 +42,7 @@ CREATE TABLE posts (
 );
 
 CREATE TABLE hashtags_posts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
 	post_id INT NOT NULL,
 	hashtag_id INT NOT NULL,
 	CONSTRAINT post_hash_fk

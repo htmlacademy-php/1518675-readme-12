@@ -66,8 +66,8 @@ if ($_GET) {
               <div class="form__text-inputs">
                 <div class="adding-post__input-wrapper form__input-wrapper">
                   <label class="adding-post__label form__label" for="photo-heading">Заголовок <span class="form__input-required">*</span></label>
-                  <div class="form__input-section <?=array_key_exists('photo-heading', $errors) ? 'form__input-section--error' : '';?>">
-                    <input class="adding-post__input form__input" id="photo-heading" type="text" name="photo-heading" placeholder="Введите заголовок" value="<?=get_post_value('photo-heading');?>">
+                  <div class="form__input-section <?= array_key_exists('photo-heading', $errors) ? 'form__input-section--error' : ''; ?>">
+                    <input class="adding-post__input form__input" id="photo-heading" type="text" name="photo-heading" placeholder="Введите заголовок" value="<?= get_post_value('photo-heading'); ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
@@ -77,8 +77,8 @@ if ($_GET) {
                 </div>
                 <div class="adding-post__input-wrapper form__input-wrapper">
                   <label class="adding-post__label form__label" for="photo-url">Ссылка из интернета</label>
-                  <div class="form__input-section <?=array_key_exists('photo-url', $errors) ? 'form__input-section--error' : '';?>">
-                    <input class="adding-post__input form__input" id="photo-url" type="text" name="photo-url" placeholder="Введите ссылку" value="<?=get_post_value('photo-url');?>">
+                  <div class="form__input-section <?= array_key_exists('photo-url', $errors) ? 'form__input-section--error' : ''; ?>">
+                    <input class="adding-post__input form__input" id="photo-url" type="text" name="photo-url" placeholder="Введите ссылку" value="<?= get_post_value('photo-url'); ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
@@ -88,8 +88,8 @@ if ($_GET) {
                 </div>
                 <div class="adding-post__input-wrapper form__input-wrapper">
                   <label class="adding-post__label form__label" for="photo-tags">Теги</label>
-                  <div class="form__input-section <?=array_key_exists('photo-tags', $errors) ? 'form__input-section--error' : '';?>">
-                    <input class="adding-post__input form__input" id="photo-tags" type="text" name="photo-tags" placeholder="Введите теги" value="<?=get_post_value('photo-tags');?>">
+                  <div class="form__input-section <?= array_key_exists('photo-tags', $errors) ? 'form__input-section--error' : ''; ?>">
+                    <input class="adding-post__input form__input" id="photo-tags" type="text" name="photo-tags" placeholder="Введите теги" value="<?= get_post_value('photo-tags'); ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
@@ -99,25 +99,25 @@ if ($_GET) {
                 </div>
               </div>
               <?php if (!empty($errors)): ?>
-              <div class="form__invalid-block">
-                <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
-                <ul class="form__invalid-list">
-                  <?php foreach ($errors as $key => $value): ?>
-                    <?php
+                <div class="form__invalid-block">
+                  <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
+                  <ul class="form__invalid-list">
+                    <?php foreach ($errors as $key => $value): ?>
+                      <?php
 
-if ($key == 'photo-heading') {
-  $caption = 'Заголовок. ';
-} elseif ($key == 'photo-url') {
-  $caption = 'Ссылка из интернета. ';
-} elseif ($key == 'photo-tags') {
-  $caption = 'Теги. ';
-}
+                      if ($key == 'photo-heading') {
+                        $caption = 'Заголовок. ';
+                      } elseif ($key == 'photo-url') {
+                        $caption = 'Ссылка из интернета. ';
+                      } elseif ($key == 'photo-tags') {
+                        $caption = 'Теги. ';
+                      }
 
-?>
-                  <li class="form__invalid-item"><?=$caption;?> Это поле должно быть заполнено.</li>
-                  <?php endforeach;?>
-                </ul>
-              </div>
+                      ?>
+                      <li class="form__invalid-item"><?=$caption;?> Это поле должно быть заполнено.</li>
+                    <?php endforeach;?>
+                  </ul>
+                </div>
               <?php endif;?>
             </div>
             <div class="adding-post__input-file-container form__input-container form__input-container--file">
@@ -153,24 +153,24 @@ if ($key == 'photo-heading') {
             <div class="form__text-inputs-wrapper">
               <div class="form__text-inputs">
                 <div class="adding-post__input-wrapper form__input-wrapper">
-                  <label class="adding-post__label form__label" for="video-heading">Заголовок <span class="form__input-required">*</span></label>
-                  <div class="form__input-section">
-                    <input class="adding-post__input form__input" id="video-heading" type="text" name="video-heading" placeholder="Введите заголовок">
+                  <label class="adding-post__label form__label" for="video-caption">Заголовок <span class="form__input-required">*</span></label>
+                  <div class="form__input-section <?= array_key_exists('video-caption', $errors) ? 'form__input-section--error' : ''; ?>">
+                    <input class="adding-post__input form__input" id="video-caption" type="text" name="video-caption" placeholder="Введите заголовок" value="<?= get_post_value('video-caption'); ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                      <p class="form__error-desc"><?=$errors['video-caption'];?></p>
                     </div>
                   </div>
                 </div>
                 <div class="adding-post__input-wrapper form__input-wrapper">
                   <label class="adding-post__label form__label" for="video-url">Ссылка youtube <span class="form__input-required">*</span></label>
-                  <div class="form__input-section">
-                    <input class="adding-post__input form__input" id="video-url" type="text" name="video-heading" placeholder="Введите ссылку">
+                  <div class="form__input-section <?= array_key_exists('video-heading', $errors) ? 'form__input-section--error' : ''; ?>">
+                    <input class="adding-post__input form__input" id="video-url" type="text" name="video-heading" placeholder="Введите ссылку" value="<?= get_post_value('video-heading'); ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                      <p class="form__error-desc"><?=$errors['video-caption'];?></p>
                     </div>
                   </div>
                 </div>
@@ -186,12 +186,25 @@ if ($key == 'photo-heading') {
                   </div>
                 </div>
               </div>
-              <div class="form__invalid-block">
-                <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
-                <ul class="form__invalid-list">
-                  <li class="form__invalid-item">Заголовок. Это поле должно быть заполнено.</li>
-                </ul>
-              </div>
+              <?php if (!empty($errors)): ?>
+                <div class="form__invalid-block">
+                  <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
+                  <ul class="form__invalid-list">
+                    <?php foreach ($errors as $key => $value): ?>
+                      <?php
+
+                      if ($key == 'video-caption') {
+                        $caption = 'Заголовок. ';
+                      } elseif ($key == 'video-heading') {
+                        $caption = 'Ссылка Youtube. ';
+                      }
+
+                      ?>
+                      <li class="form__invalid-item"><?= $caption; ?> Это поле должно быть заполнено.</li>
+                    <?php endforeach;?>
+                  </ul>
+                </div>
+              <?php endif; ?>
             </div>
 
             <div class="adding-post__buttons">
@@ -209,23 +222,23 @@ if ($key == 'photo-heading') {
               <div class="form__text-inputs">
                 <div class="adding-post__input-wrapper form__input-wrapper">
                   <label class="adding-post__label form__label" for="text-heading">Заголовок <span class="form__input-required">*</span></label>
-                  <div class="form__input-section">
-                    <input class="adding-post__input form__input" id="text-heading" type="text" name="text-heading" placeholder="Введите заголовок">
+                  <div class="form__input-section <?= array_key_exists('text-heading', $errors) ? 'form__input-section--error' : ''; ?>">
+                    <input class="adding-post__input form__input" id="text-heading" type="text" name="text-heading" placeholder="Введите заголовок" value="<?= get_post_value('text-heading'); ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                      <p class="form__error-desc"><?=$errors['text-heading'];?></p>
                     </div>
                   </div>
                 </div>
                 <div class="adding-post__textarea-wrapper form__textarea-wrapper">
                   <label class="adding-post__label form__label" for="post-text">Текст поста <span class="form__input-required">*</span></label>
-                  <div class="form__input-section">
-                    <textarea class="adding-post__textarea form__textarea form__input" name="post-text" id="post-text" placeholder="Введите текст публикации"></textarea>
+                  <div class="form__input-section <?= array_key_exists('post-text', $errors) ? 'form__input-section--error' : ''; ?>">
+                    <textarea class="adding-post__textarea form__textarea form__input" name="post-text" id="post-text" placeholder="Введите текст публикации" value="<?= get_post_value('post-text'); ?>"></textarea>
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                      <p class="form__error-desc"><?= $errors['post-text']; ?></p>
                     </div>
                   </div>
                 </div>
@@ -241,13 +254,25 @@ if ($key == 'photo-heading') {
                   </div>
                 </div>
               </div>
-              <div class="form__invalid-block">
-                <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
-                <ul class="form__invalid-list">
-                  <li class="form__invalid-item">Заголовок. Это поле должно быть заполнено.</li>
-                  <li class="form__invalid-item">Цитата. Она не должна превышать 70 знаков.</li>
-                </ul>
-              </div>
+              <?php if (!empty($errors)): ?>
+                <div class="form__invalid-block">
+                  <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
+                  <ul class="form__invalid-list">
+                    <?php foreach ($errors as $key => $value): ?>
+                      <?php
+
+                      if ($key == 'text-heading') {
+                        $caption = 'Заголовок. ';
+                      } elseif ($key == 'post-text') {
+                        $caption = 'Цитата. ';
+                      }
+
+                      ?>
+                      <li class="form__invalid-item"><?= $caption; ?> Это поле должно быть заполнено.</li>
+                    <?php endforeach;?>
+                  </ul>
+                </div>
+              <?php endif; ?>
             </div>
             <div class="adding-post__buttons">
               <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>
@@ -264,23 +289,23 @@ if ($key == 'photo-heading') {
               <div class="form__text-inputs">
                 <div class="adding-post__input-wrapper form__input-wrapper">
                   <label class="adding-post__label form__label" for="quote-heading">Заголовок <span class="form__input-required">*</span></label>
-                  <div class="form__input-section">
-                    <input class="adding-post__input form__input" id="quote-heading" type="text" name="quote-heading" placeholder="Введите заголовок">
+                  <div class="form__input-section <?= array_key_exists('quote-heading', $errors) ? 'form__input-section--error' : ''; ?>">
+                    <input class="adding-post__input form__input" id="quote-heading" type="text" name="quote-heading" placeholder="Введите заголовок" value="<?= get_post_value('quote-heading'); ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                      <p class="form__error-desc"><?= $errors['quote-heading']; ?></p>
                     </div>
                   </div>
                 </div>
                 <div class="adding-post__input-wrapper form__textarea-wrapper">
                   <label class="adding-post__label form__label" for="cite-text">Текст цитаты <span class="form__input-required">*</span></label>
-                  <div class="form__input-section">
-                    <textarea class="adding-post__textarea adding-post__textarea--quote form__textarea form__input" name="cite-text" id="cite-text" placeholder="Текст цитаты"></textarea>
+                  <div class="form__input-section <?= array_key_exists('cite-text', $errors) ? 'form__input-section--error' : ''; ?>">
+                    <textarea class="adding-post__textarea adding-post__textarea--quote form__textarea form__input" name="cite-text" id="cite-text" placeholder="Текст цитаты" value="<?= get_post_value('cite-text'); ?>"></textarea>
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                      <p class="form__error-desc"><?= $errors['cite-text']; ?></p>
                     </div>
                   </div>
                 </div>
@@ -310,8 +335,18 @@ if ($key == 'photo-heading') {
               <div class="form__invalid-block">
                 <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                 <ul class="form__invalid-list">
-                  <li class="form__invalid-item">Заголовок. Это поле должно быть заполнено.</li>
-                  <li class="form__invalid-item">Цитата. Она не должна превышать 70 знаков.</li>
+                  <?php foreach ($errors as $key => $value): ?>
+                    <?php
+
+                    if ($key == 'quote-heading') {
+                      $caption = 'Заголовок. ';
+                    } elseif ($key == 'cite-text') {
+                      $caption = 'Цитата. ';
+                    }
+
+                    ?>
+                    <li class="form__invalid-item"><?= $caption; ?> Это поле должно быть заполнено.</li>
+                  <?php endforeach;?>
                 </ul>
               </div>
             </div>
@@ -330,24 +365,24 @@ if ($key == 'photo-heading') {
               <div class="form__text-inputs">
                 <div class="adding-post__input-wrapper form__input-wrapper">
                   <label class="adding-post__label form__label" for="link-heading">Заголовок <span class="form__input-required">*</span></label>
-                  <div class="form__input-section">
-                    <input class="adding-post__input form__input" id="link-heading" type="text" name="link-heading" placeholder="Введите заголовок">
+                  <div class="form__input-section <?= array_key_exists('link-heading', $errors) ? 'form__input-section--error' : ''; ?>">
+                    <input class="adding-post__input form__input" id="link-heading" type="text" name="link-heading" placeholder="Введите заголовок" value="<?= get_post_value('link-heading'); ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                      <p class="form__error-desc"><?= $errors['link-heading']; ?></p>
                     </div>
                   </div>
                 </div>
 
                 <div class="adding-post__textarea-wrapper form__input-wrapper">
                   <label class="adding-post__label form__label" for="post-link">Ссылка <span class="form__input-required">*</span></label>
-                  <div class="form__input-section">
-                    <input class="adding-post__input form__input" id="post-link" type="text" name="post-link">
+                  <div class="form__input-section <?= array_key_exists('post-link', $errors) ? 'form__input-section--error' : ''; ?>">
+                    <input class="adding-post__input form__input" id="post-link" type="text" name="post-link" value="<?= get_post_value('post-link'); ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                      <p class="form__error-desc"><?= $errors['post-link']; ?></p>
                     </div>
                   </div>
                 </div>
@@ -366,8 +401,18 @@ if ($key == 'photo-heading') {
               <div class="form__invalid-block">
                 <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                 <ul class="form__invalid-list">
-                  <li class="form__invalid-item">Заголовок. Это поле должно быть заполнено.</li>
-                  <li class="form__invalid-item">Цитата. Она не должна превышать 70 знаков.</li>
+                  <?php foreach ($errors as $key => $value): ?>
+                    <?php
+
+                    if ($key == 'link-heading') {
+                      $caption = 'Заголовок. ';
+                    } elseif ($key == 'post-link') {
+                      $caption = 'Цитата. ';
+                    }
+
+                    ?>
+                    <li class="form__invalid-item"><?= $caption; ?> Это поле должно быть заполнено.</li>
+                  <?php endforeach;?>
                 </ul>
               </div>
             </div>

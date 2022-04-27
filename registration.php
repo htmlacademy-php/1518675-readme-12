@@ -43,9 +43,6 @@ if (count($errors)) {
             $email = $_POST['email'];
             $login = $_POST['login'];
 
-            print_r($_FILES);
-
-
             $file_name = $_FILES['userpic-file']['name'];
             $file_path = __DIR__ . '/uploads/';
             $file_url = '/uploads/' . $file_name;

@@ -47,11 +47,9 @@ function cut_long_text($text, $text_limit) {
  */
 function get_posts_with_users($db, $filter)
 {
-    if ($filter == 'ASC') {
-        $sql = "SELECT p.id, author_id, counter, type_post, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id ORDER BY counter ASC";
-    } else {
-        $sql = "SELECT p.id, author_id, counter, type_post, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id ORDER BY counter DESC";
-    }
+    $filter = $filter === 'ASC' ? 'ASC' : 'DESC';
+
+    $sql = "SELECT p.id, author_id, counter, type_post, video, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id ORDER BY counter " . $filter;
 
     $stmt = $db->stmt_init();
     $stmt->prepare($sql);
@@ -141,7 +139,7 @@ function get_type_db($type) {
  * @return Возвращает массив с типами данных
  */
 function get_filtered_posts($db, $filter) {
-  $result_content = mysqli_query($db, "SELECT p.id, counter, type_post, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id AND type_post ='" . $filter . "' ORDER BY counter ASC");
+  $result_content = mysqli_query($db, "SELECT p.id, counter, type_post, video, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id AND type_post ='" . $filter . "' ORDER BY counter ASC");
   return $rows_content = mysqli_fetch_all($result_content, MYSQLI_ASSOC);
 }
 
@@ -157,7 +155,7 @@ function get_filtered_posts($db, $filter) {
  */
 function get_content_post($db, $id) {
   $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT p.id, counter, content, img, site, caption, avatar, type_post, login, author_quote FROM posts p JOIN users u ON p.author_id = u.id WHERE p.id = ? LIMIT 1");
+  $stmt->prepare("SELECT p.id, counter, video, content, img, site, caption, avatar, type_post, login, author_quote FROM posts p JOIN users u ON p.author_id = u.id WHERE p.id = ? LIMIT 1");
   $stmt->bind_param('i', $id);
   $stmt->execute();
   $result = $stmt->get_result();
