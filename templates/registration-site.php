@@ -10,22 +10,22 @@
           <div class="registration__input-wrapper form__input-wrapper">
             <label class="registration__label form__label" for="registration-email">Электронная почта <span class="form__input-required">*</span></label>
             <div class="form__input-section <?= array_key_exists('email', $errors) ? 'form__input-section--error' : ''; ?>">
-              <input class="registration__input form__input" id="registration-email" type="email" name="email" placeholder="Укажите эл.почту">
+              <input class="registration__input form__input" id="registration-email" type="email" name="email" placeholder="Укажите эл.почту" value="<?= isset($_POST['email']) ? $_POST['email'] : ''; ?>">
               <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
               <div class="form__error-text">
-                <h3 class="form__error-title">Заголовок сообщения</h3>
-                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                <h3 class="form__error-title">Электронная почта</h3>
+                <p class="form__error-desc"><?= isset($errors['email']) ? $errors['email'] : ''; ?></p>
               </div>
             </div>
           </div>
           <div class="registration__input-wrapper form__input-wrapper">
             <label class="registration__label form__label" for="registration-login">Логин <span class="form__input-required">*</span></label>
             <div class="form__input-section <?= array_key_exists('login', $errors) ? 'form__input-section--error' : ''; ?>">
-              <input class="registration__input form__input" id="registration-login" type="text" name="login" placeholder="Укажите логин">
+              <input class="registration__input form__input" id="registration-login" type="text" name="login" placeholder="Укажите логин" value="<?= isset($_POST['login']) ? $_POST['login'] : ''; ?>">
               <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
               <div class="form__error-text">
-                <h3 class="form__error-title">Заголовок сообщения</h3>
-                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                <h3 class="form__error-title">Логин</h3>
+                <p class="form__error-desc"><?= isset($errors['login']) ? $errors['login'] : ''; ?></p>
               </div>
             </div>
           </div>
@@ -35,8 +35,8 @@
               <input class="registration__input form__input" id="registration-password" type="password" name="password" placeholder="Придумайте пароль">
               <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
               <div class="form__error-text">
-                <h3 class="form__error-title">Заголовок сообщения</h3>
-                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                <h3 class="form__error-title">Пароль</h3>
+                <p class="form__error-desc"><?= isset($errors['password']) ? $errors['password'] : ''; ?></p>
               </div>
             </div>
           </div>
@@ -46,19 +46,30 @@
               <input class="registration__input form__input" id="registration-password-repeat" type="password" name="password-repeat" placeholder="Повторите пароль">
               <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
               <div class="form__error-text">
-                <h3 class="form__error-title">Заголовок сообщения</h3>
-                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
+                <h3 class="form__error-title">Повтор пароля</h3>
+                <p class="form__error-desc"><?= isset($errors['password-repeat']) ? $errors['password-repeat'] : ''; ?></p>
               </div>
             </div>
           </div>
         </div>
-        <div class="form__invalid-block">
-          <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
-          <ul class="form__invalid-list">
-            <li class="form__invalid-item">Заголовок. Это поле должно быть заполнено.</li>
-            <li class="form__invalid-item">Цитата. Она не должна превышать 70 знаков.</li>
-          </ul>
-        </div>
+        <?php if (!empty($errors)): ?>
+          <div class="form__invalid-block">
+            <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
+            <ul class="form__invalid-list">
+              <?php foreach($errors as $error => $value): ?>
+                <?php if ($error == 'email'): ?>
+                  <li class="form__invalid-item">Электронная почта. Это поле должно быть заполнено.</li>
+                <?php elseif ($error == 'login'): ?>
+                  <li class="form__invalid-item">Логин. Это поле должно быть заполнено.</li>
+                <?php elseif ($error == 'password'): ?>
+                  <li class="form__invalid-item">Пароль. Это поле должно быть заполнено.</li>
+                <?php elseif ($error == 'password-repeat'): ?>
+                  <li class="form__invalid-item">Повтор пароля. Это поле должно быть заполнено.</li>
+                <?php endif; ?>
+              <?php endforeach; ?>
+            </ul>
+          </div>
+        <?php endif; ?>
       </div>
       <div class="registration__input-file-container form__input-container form__input-container--file">
         <div class="registration__input-file-wrapper form__input-file-wrapper">

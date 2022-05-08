@@ -1,11 +1,11 @@
 USE readme;
 
 -- Добавляем данные в таблицу types согласно ТЗ
-INSERT INTO types (name, icon) VALUES ('Текст', 'text');
-INSERT INTO types (name, icon) VALUES ('Цитата', 'quote');
-INSERT INTO types (name, icon) VALUES ('Картинка', 'photo');
-INSERT INTO types (name, icon) VALUES ('Видео', 'video');
-INSERT INTO types (name, icon) VALUES ('Ссылка', 'link');
+INSERT INTO types (name) VALUES ('text');
+INSERT INTO types (name) VALUES ('quote');
+INSERT INTO types (name) VALUES ('photo');
+INSERT INTO types (name) VALUES ('video');
+INSERT INTO types (name) VALUES ('link');
 
 -- Добавляем в таблицу users несколько пользователей
 INSERT INTO users (dt_add, email, login, password, avatar) VALUES ('01.08.21', 'my-mail@mail.ru', 'Лариса', 'password367', 'userpic-larisa-small.jpg');
