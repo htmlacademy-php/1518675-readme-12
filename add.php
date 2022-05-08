@@ -64,138 +64,133 @@ if (!empty($_POST)) {
 
         $errors = array_filter($errors);
     }
+}
 
-    if (!count($errors)) {
-        if (!empty($_POST)) {
-            if ($_POST['post-type'] == 'photo') {
-                if (isset($_FILES['userpic-file-photo'])) {
+if (!count($errors)) {
+    if ($_POST['post-type'] === 'photo' and isset($_FILES['userpic-file-photo'])) {
+            $file_name = $_FILES['userpic-file-photo']['name'];
+            $file_path = __DIR__ . '/uploads/';
+            $file_url = '/uploads/' . $file_name;
 
-                    $file_name = $_FILES['userpic-file-photo']['name'];
-                    $file_path = __DIR__ . '/uploads/';
-                    $file_url = '/uploads/' . $file_name;
+            move_uploaded_file($_FILES['userpic-file-photo']['tmp_name'], $file_path . $file_name);
 
-                    move_uploaded_file($_FILES['userpic-file-photo']['tmp_name'], $file_path . $file_name);
+            $caption = $_POST['photo-heading'];
+            $link = $_POST['photo-url'];
+            $tags = $_POST['photo-tags'];
+            $content = '';
+            $type_post = get_type_db($_POST['post-type']);
 
-                    $caption = $_POST['photo-heading'];
-                    $link = $_POST['photo-url'];
-                    $tags = $_POST['photo-tags'];
-                    $content = '';
-                    $type_post = get_type_db($_POST['post-type']);
-
-                    $stmt = $con->stmt_init();
-                    $stmt->prepare("INSERT INTO posts(caption, img, content, type_post, author_id) VALUES (?, ?, ?, ?, ?)");
-                    $stmt->bind_param('sssii', $caption, $file_url, $content, $type_post, $_SESSION['user']['id']);
-                    $stmt->execute();
+            $stmt = $con->stmt_init();
+            $stmt->prepare("INSERT INTO posts(caption, img, content, type_post, author_id) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param('sssii', $caption, $file_url, $content, $type_post, $_SESSION['user']['id']);
+            $stmt->execute();
 
                     // Hashtahgs
-                    $hashtags = format_hashtags($tags);
-                    foreach($hashtags as $hashtag) {
-                        if (empty(check_hashtag($con, $hashtag))) {
-                            $stmt = $con->stmt_init();
-                            $stmt->prepare("INSERT INTO hashtags(hashtag) VALUES (?)");
-                            $stmt->bind_param('s', $hashtag);
-                            $stmt->execute();
-                        }
-
-                        $post_id = get_last_post_id($con, $_SESSION['user']['id']);
-                        $hashtag_id = get_hashtag_id($con, $hashtag);
-
-                        $stmt = $con->stmt_init();
-                        $stmt->prepare("INSERT INTO hashtags_posts(post_id, hashtag_id) VALUES (?, ?)");
-                        $stmt->bind_param('ii', $post_id[0]['id'], $hashtag_id[0]['id']);
-                        $stmt->execute();
-                    }
-
-                    header('Location: /feed.php');
-                }
-            } elseif($_POST['post-type'] == 'video') {
-                $type_post = get_type_db($_POST['post-type']);
-
-                $link = $_POST['video-heading'];
-                $caption = $_POST['video-caption'];
-                $tags = $_POST['photo-heading'];
-
-                $stmt = $con->stmt_init();
-                $stmt->prepare("INSERT INTO posts(caption, video, type_post, author_id) VALUES (?, ?, ?, ?)");
-                $stmt->bind_param('ssii', $caption, $link, $type_post, $_SESSION['user']['id']);
-                $stmt->execute();
-
-                // Hashtags
-                $hashtags = format_hashtags($tags);
-                foreach($hashtags as $hashtag) {
-                    if (empty(check_hashtag($con, $hashtag))) {
-                        $stmt = $con->stmt_init();
-                        $stmt->prepare("INSERT INTO hashtags(hashtag) VALUES (?)");
-                        $stmt->bind_param('s', $hashtag);
-                        $stmt->execute();
-                    }
-
-                    $post_id = get_last_post_id($con, $_SESSION['user']['id']);
-                    $hashtag_id = get_hashtag_id($con, $hashtag);
-
+            $hashtags = format_hashtags($tags);
+            foreach ($hashtags as $hashtag) {
+                if (empty(check_hashtag($con, $hashtag))) {
                     $stmt = $con->stmt_init();
-                    $stmt->prepare("INSERT INTO hashtags_posts(post_id, hashtag_id) VALUES (?, ?)");
-                    $stmt->bind_param('ii', $post_id[0]['id'], $hashtag_id[0]['id']);
+                    $stmt->prepare("INSERT INTO hashtags(hashtag) VALUES (?)");
+                    $stmt->bind_param('s', $hashtag);
                     $stmt->execute();
                 }
 
-                header('Location: /feed.php');
-
-            } elseif($_POST['post-type'] == 'text') {
-                $caption = $_POST['text-heading'];
-                $text = $_POST['post-text'];
-                $type_post = get_type_db($_POST['post-type']);
+                $post_id = get_last_post_id($con, $_SESSION['user']['id']);
+                $hashtag_id = get_hashtag_id($con, $hashtag);
 
                 $stmt = $con->stmt_init();
-                $stmt->prepare("INSERT INTO posts(caption, content, type_post, author_id) VALUES (?, ?, ?, ?)");
-                $stmt->bind_param('sssii', $caption, $content, $type_post, $_SESSION['user']['id']);
+                $stmt->prepare("INSERT INTO hashtags_posts(post_id, hashtag_id) VALUES (?, ?)");
+                $stmt->bind_param('ii', $post_id[0]['id'], $hashtag_id[0]['id']);
                 $stmt->execute();
-
-            } elseif($_POST['post-type'] == 'quote') {
-
-                $caption = $_POST['quote-heading'];
-                $text = $_POST['cite-text'];
-                $quote = $_POST['quote-author'];
-                $type_post = get_type_db($_POST['post-type']);
-
-                $stmt = $con->stmt_init();
-                $stmt->prepare("INSERT INTO posts(caption, content, author_quote, type_post, author_id) VALUES (?, ?, ?, ?, ?)");
-                $stmt->bind_param('sssii', $caption, $text, $author_quote, $type_post, $_SESSION['user']['id']);
-                $stmt->execute();
-
-            } elseif($_POST['post-type'] == 'link') {
-                $caption = $_POST['link-heading'];
-                $link = $_POST['post-link'];
-                $type_post = get_type_db($_POST['post-type']);
-                $tags = $_POST['photo-heading'];
-
-                $stmt = $con->stmt_init();
-                $stmt->prepare("INSERT INTO posts(caption, site, type_post, author_id) VALUES (?, ?, ?, ?)");
-                $stmt->bind_param('ssii', $caption, $link, $type_post, $_SESSION['user']['id']);
-                $stmt->execute();
-
-                // Hashtags
-                $hashtags = format_hashtags($tags);
-                foreach($hashtags as $hashtag) {
-                    if (empty(check_hashtag($con, $hashtag))) {
-                        $stmt = $con->stmt_init();
-                        $stmt->prepare("INSERT INTO hashtags(hashtag) VALUES (?)");
-                        $stmt->bind_param('s', $hashtag);
-                        $stmt->execute();
-                    }
-
-                    $post_id = get_last_post_id($con, $_SESSION['user']['id']);
-                    $hashtag_id = get_hashtag_id($con, $hashtag);
-
-                    $stmt = $con->stmt_init();
-                    $stmt->prepare("INSERT INTO hashtags_posts(post_id, hashtag_id) VALUES (?, ?)");
-                    $stmt->bind_param('ii', $post_id[0]['id'], $hashtag_id[0]['id']);
-                    $stmt->execute();
-                }
-
-                header('Location: /feed.php');
             }
+
+            header('Location: /feed.php');
+    } elseif ($_POST['post-type'] === 'video') {
+        $type_post = get_type_db($_POST['post-type']);
+
+        $link = $_POST['video-heading'];
+        $caption = $_POST['video-caption'];
+        $tags = $_POST['photo-heading'];
+
+        $stmt = $con->stmt_init();
+        $stmt->prepare("INSERT INTO posts(caption, video, type_post, author_id) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param('ssii', $caption, $link, $type_post, $_SESSION['user']['id']);
+        $stmt->execute();
+
+        // Hashtags
+        $hashtags = format_hashtags($tags);
+        foreach ($hashtags as $hashtag) {
+            if (empty(check_hashtag($con, $hashtag))) {
+                $stmt = $con->stmt_init();
+                $stmt->prepare("INSERT INTO hashtags(hashtag) VALUES (?)");
+                $stmt->bind_param('s', $hashtag);
+                $stmt->execute();
+            }
+
+            $post_id = get_last_post_id($con, $_SESSION['user']['id']);
+            $hashtag_id = get_hashtag_id($con, $hashtag);
+
+            $stmt = $con->stmt_init();
+            $stmt->prepare("INSERT INTO hashtags_posts(post_id, hashtag_id) VALUES (?, ?)");
+            $stmt->bind_param('ii', $post_id[0]['id'], $hashtag_id[0]['id']);
+            $stmt->execute();
         }
+
+        header('Location: /feed.php');
+
+    } elseif ($_POST['post-type'] === 'text') {
+        $caption = $_POST['text-heading'];
+        $text = $_POST['post-text'];
+        $type_post = get_type_db($_POST['post-type']);
+
+        $stmt = $con->stmt_init();
+        $stmt->prepare("INSERT INTO posts(caption, content, type_post, author_id) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param('sssii', $caption, $content, $type_post, $_SESSION['user']['id']);
+        $stmt->execute();
+
+    } elseif ($_POST['post-type'] === 'quote') {
+
+        $caption = $_POST['quote-heading'];
+        $text = $_POST['cite-text'];
+        $quote = $_POST['quote-author'];
+        $type_post = get_type_db($_POST['post-type']);
+
+        $stmt = $con->stmt_init();
+        $stmt->prepare("INSERT INTO posts(caption, content, author_quote, type_post, author_id) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param('sssii', $caption, $text, $author_quote, $type_post, $_SESSION['user']['id']);
+        $stmt->execute();
+
+    } elseif ($_POST['post-type'] === 'link') {
+        $caption = $_POST['link-heading'];
+        $link = filter_val($_POST['post-link'], FILTER_VALIDATE_URL);
+        $type_post = get_type_db($_POST['post-type']);
+        $tags = $_POST['photo-heading'];
+
+        $stmt = $con->stmt_init();
+        $stmt->prepare("INSERT INTO posts(caption, site, type_post, author_id) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param('ssii', $caption, $link, $type_post, $_SESSION['user']['id']);
+        $stmt->execute();
+
+        // Hashtags
+        $hashtags = format_hashtags($tags);
+        foreach($hashtags as $hashtag) {
+            if (empty(check_hashtag($con, $hashtag))) {
+                $stmt = $con->stmt_init();
+                $stmt->prepare("INSERT INTO hashtags(hashtag) VALUES (?)");
+                $stmt->bind_param('s', $hashtag);
+                $stmt->execute();
+            }
+
+            $post_id = get_last_post_id($con, $_SESSION['user']['id']);
+            $hashtag_id = get_hashtag_id($con, $hashtag);
+
+            $stmt = $con->stmt_init();
+            $stmt->prepare("INSERT INTO hashtags_posts(post_id, hashtag_id) VALUES (?, ?)");
+            $stmt->bind_param('ii', $post_id[0]['id'], $hashtag_id[0]['id']);
+            $stmt->execute();
+        }
+
+        header('Location: /feed.php');
     }
 }
 

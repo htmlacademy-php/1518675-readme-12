@@ -8,42 +8,44 @@ use Symfony\Component\Mime\Email;
  * Обрезает переданный текст, если он больше заданного значения
  *
  * Примеры использования:
- * cutLongText('Привет, я строка');
+ * cut_long_text('Привет, я строка');
  *
  * @param string $text Данные в виде строки
+ * @param int $text_limit Число, по которому обрезаем строку
  *
- * @return Возвращает обрезанную строку, если больше заданного значения, иначе просто возвращает исходные данные
+ * @return string Итоговый HTML
  */
 function cut_long_text($text, $text_limit) {
-  $text_size = mb_strlen($text);
+    $text_size = mb_strlen($text);
 
-  if ($text_size > $text_limit) {
-    $words = explode(' ', $text);
-    $words_count = 0;
-    $index = 0;
+    if ($text_size > $text_limit) {
+        $words = explode(' ', $text);
+        $words_count = 0;
+        $index = 0;
 
-    while ($words_count < $text_limit) {
-      $words_count += strlen($words[$index]);
-      $new_string_array[$index] = $words[$index];
-      $index++;
+        while ($words_count < $text_limit) {
+            $words_count += strlen($words[$index]);
+            $new_string_array[$index] = $words[$index];
+            $index++;
+        }
+
+        $link = '<a class="post-text__more-link" href="#">Читать далее</a>';
+
+        return $new_string = '<p>' . implode(' ', $new_string_array) . '...' . '</p>' . $link;
     }
-    
-    $link = '<a class="post-text__more-link" href="#">Читать далее</a>';
-
-    return $new_string = '<p>' . implode(' ', $new_string_array) . '...' . '</p>' . $link;
-  }
-  return '<p>' . $text . '</p>';
+    return '<p>' . $text . '</p>';
 }
 
 /**
  * Делает mySQL-запрос к базе данных для получения списка постов, объединённых с пользователями и отсортированный по популярности
  *
  * Примеры использования:
- * get_posts_with_users($db);
+ * get_posts_with_users($db, $filter);
  *
- * @param string $text Ссылка на базу данных
+ * @param mysqli $db Ресурс соединения
+ * @param string $filter Значение фильтра
  *
- * @return Возвращает массив с типами данных
+ * @return array Возвращает массив с типами данных
  */
 function get_posts_with_users($db, $filter)
 {
@@ -62,69 +64,69 @@ function get_posts_with_users($db, $filter)
  * Делает mySQL-запрос к базе данных со всеми возможными типами контента
  *
  * Примеры использования:
- * get_types($db);
+ * get_all_types($db);
  *
- * @param string $text Ссылка на базу данных
+ * @param mysqli $db Ресурс соединения
  *
- * @return Возвращает массив с типами данных
+ * @return array Возвращает массив с типами данных
  */
 function get_all_types($db) {
-  $result_content = mysqli_query($db, "SELECT * FROM types");
-  return $rows_content = mysqli_fetch_all($result_content, MYSQLI_ASSOC);
+    $result_content = mysqli_query($db, "SELECT * FROM types");
+    return $rows_content = mysqli_fetch_all($result_content, MYSQLI_ASSOC);
 }
 
 /**
  * Возвращает тип данных в формате string
  *
  * Примеры использования:
- * get_type($post['type_post']);
+ * get_type(1);
  *
- * @param number $type_id Ссылка на id в базе данных
+ * @param int $type_id Ссылка на id в базе данных
  *
- * @return Возвращает тип поста в формате string
+ * @return string Возвращает тип поста
  */
 function get_type($type_id) {
-  switch ($type_id) {
-  case 1:
-    return 'text';
-  case 2:
-    return 'quote';
-  case 3:
-    return 'photo';
-  case 4:
-    return 'video';
-  case 5:
-    return 'link';
-  default:
-    return 'empty';
-  }
+    switch ($type_id) {
+        case 1:
+        return 'text';
+        case 2:
+        return 'quote';
+        case 3:
+        return 'photo';
+        case 4:
+        return 'video';
+        case 5:
+        return 'link';
+        default:
+        return 'empty';
+    }
 };
 
 /**
  * Возвращает тип данных в формате string
  *
  * Примеры использования:
- * get_type_db($text);
+ * get_type_db(text);
  *
- * @param string $text Тип документа
+ * @param string $type Тип документа
  *
- * @return Возвращает тип поста в формате string
+ * @return string Возвращает тип поста
  */
 function get_type_db($type) {
-  switch ($type) {
-  case 'text':
-    return 1;
-  case 'quote':
-    return 2;
-  case 'photo':
-    return 3;
-  case 'video':
-    return 4;
-  case 'link':
-    return 5;
-  default:
-    return 'empty';
-  }
+    switch ($type) {
+        case 'text':
+        return 1;
+        case 'quote':
+        return 2;
+        case 'photo':
+        return 3;
+        case 'video':
+        return 4;
+        case 'link':
+        return 5;
+        default:
+        return 'empty';
+    }
 };
 
 /**
@@ -132,129 +134,136 @@ function get_type_db($type) {
  * с пользователями и отсортированный по популярности
  *
  * Примеры использования:
- * get_filtered_posts($db);
+ * get_filtered_posts($db, $filter);
  *
- * @param string $text Ссылка на базу данных
+ * @param mysqli $db Ресурс соединения
+ * @param string $filter Значение фильтра
  *
- * @return Возвращает массив с типами данных
+ * @return array Возвращает массив с типами данных
  */
 function get_filtered_posts($db, $filter) {
-  $result_content = mysqli_query($db, "SELECT p.id, counter, type_post, video, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id AND type_post ='" . $filter . "' ORDER BY counter ASC");
-  return $rows_content = mysqli_fetch_all($result_content, MYSQLI_ASSOC);
+    $result_content = mysqli_query($db, "SELECT p.id, counter, type_post, video, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id AND type_post ='" . $filter . "' ORDER BY counter ASC");
+    return $rows_content = mysqli_fetch_all($result_content, MYSQLI_ASSOC);
 }
 
 /**
  * Делает mySQL-запрос к базе данных для получения поста с нужным id
  *
  * Примеры использования:
- * get_post_id($_GET['id']);
+ * get_post_id($db, 2);
  *
- * @param string $text Ссылка на базу данных
+ * @param mysqli $db Ресурс соединения
+ * @param int $id Идентификатор поста
  *
- * @return Возвращает массив с типами данных
+ * @return array Возвращает массив данными о посте
  */
 function get_content_post($db, $id) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT p.id, counter, video, content, img, site, caption, avatar, type_post, login, author_quote FROM posts p JOIN users u ON p.author_id = u.id WHERE p.id = ? LIMIT 1");
-  $stmt->bind_param('i', $id);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT p.id, counter, video, content, img, site, caption, avatar, type_post, login, author_quote FROM posts p JOIN users u ON p.author_id = u.id WHERE p.id = ? LIMIT 1");
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**
  * Делает mySQL-запрос к базе данных для получения всех публикаций юзера с нужным id
  *
  * Примеры использования:
- * get_all_posts($_GET['id']);
+ * get_all_posts($db, 4);
  *
- * @param string $text Ссылка на базу данных
+ * @param mysqli $db Ресурс соединения
+ * @param int $id Идентификатор юзера
  *
- * @return Возвращает массив с типами данных
+ * @return array Возвращает массив с типами данных
  */
 function get_user_posts($db, $id) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT count(*) FROM posts WHERE author_id = ?");
-  $stmt->bind_param('i', $id);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_row($result);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT count(*) FROM posts WHERE author_id = ?");
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_row($result);
 }
 
 /**
  * Делает mySQL-запрос к базе данных для получения всех подписчиков юзера
  *
  * Примеры использования:
- * get_all_subscribers($_GET['id']);
+ * get_all_subscribers($db, $id);
  *
- * @param string $text Ссылка на базу данных
+ * @param mysqli $db Ресурс соединения
+ * @param int $id Идентификатор юзера
  *
- * @return Возвращает массив с типами данных
+ * @return array Возвращает массив с типами данных
  */
 function get_user_subscribers($db, $id) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT count(*) FROM subscribes WHERE user_id = ?");
-  $stmt->bind_param('i', $id);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_row($result);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT count(*) FROM subscribes WHERE user_id = ?");
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_row($result);
 }
 
 /**
  * Делает mySQL-запрос к базе данных для получения id юзера по id поста
  *
  * Примеры использования:
- * get_user_id($_GET['id']);
+ * get_user_id($db, 2);
  *
- * @param string $db Ссылка на базу данных
+ * @param mysqli $db Ресурс соединения
+ * @param int $id Идентификатор поста
  *
- * @return Возвращает массив с типами данных
+ * @return array Возвращает массив с типами данных
  */
 function get_user_id($db, $id) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT p.id, author_id FROM posts p JOIN users u ON p.author_id = u.id WHERE p.id = ?");
-  $stmt->bind_param('i', $id);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT p.id, author_id FROM posts p JOIN users u ON p.author_id = u.id WHERE p.id = ?");
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**
  * Делает mySQL-запрос к базе данных для проверки существующего поста
  *
  * Примеры использования:
- * check_exist_post($id);
+ * check_exist_post($db, 6);
  *
- * @param string $db Ссылка на базу данных
+ * @param mysqli $db Ресурс соединения
+ * @param int $id Идентификатор поста
  *
- * @return Возвращает массив с типами данных
+ * @return array Возвращает массив с типами данных, если он есть, иначе — пустой массив
  */
 function check_exist_post($db, $id) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT id FROM posts WHERE id = ?");
-  $stmt->bind_param('i', $id);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT id FROM posts WHERE id = ?");
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**
  * Делает mySQL-запрос к базе данных информации от юзера
  *
  * Примеры использования:
- * get_user_data($id);
+ * get_user_data($db, 'user500');
  *
- * @param string $db Ссылка на базу данных
+ * @param mysqli $db Ресурс соединения
+ * @param string $login Логин пользователя
  *
- * @return Возвращает массив с типами данных
+ * @return array Возвращает массив с типами данных
  */
 function get_user_data($db, $login) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT * FROM users WHERE login = ?");
-  $stmt->bind_param('s', $login);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT * FROM users WHERE login = ?");
+    $stmt->bind_param('s', $login);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**
@@ -263,17 +272,18 @@ function get_user_data($db, $login) {
  * Примеры использования:
  * get_name_and_avatar($db, $login);
  *
- * @param string $db Ссылка на базу данных
+ * @param mysqli $db Ресурс соединения
+ * @param string $login Логин пользователя
  *
- * @return Возвращает массив с типами данных
+ * @return array Возвращает массив с типами данных
  */
 function get_name_and_avatar($db, $login) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT login, avatar FROM users WHERE login = ?");
-  $stmt->bind_param('s', $login);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT login, avatar FROM users WHERE login = ?");
+    $stmt->bind_param('s', $login);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**
@@ -282,12 +292,12 @@ function get_name_and_avatar($db, $login) {
  * Примеры использования:
  * get_post_value($name);
  *
- * @param string $text наименование значения
+ * @param string $name Наименование значения
  *
- * @return Возвращает название поля либо пустую строку
+ * @return string Возвращает название поля либо пустую строку
  */
 function get_post_value($name) {
-  return $_POST[$name] ?? "";
+    return $_POST[$name] ?? "";
 }
 
 /**
@@ -296,18 +306,18 @@ function get_post_value($name) {
  * Примеры использования:
  * validate_length($text, 20, 100);
  *
- * @param string $text наименование значения
- * @param string $min минимальное значение строки
- * @param string $max максимальное значение строки
+ * @param string $text Наименование значения
+ * @param string $min Минимальное значение строки
+ * @param string $max Максимальное значение строки
  *
- * @return Возвращает название поля либо пустую строку
+ * @return string Возвращает название поля либо пустую строку
  */
 function validate_length($name, $min, $max) {
-  $len = strlen($_POST[$name]);
+    $len = strlen($_POST[$name]);
 
-  if ($len < $min or $len > $max) {
-    return 'Значение должно быть от $min до $max символов';
-  }
+    if ($len < $min or $len > $max) {
+        return 'Значение должно быть от $min до $max символов';
+    }
 }
 
 /**
@@ -316,52 +326,54 @@ function validate_length($name, $min, $max) {
  * Примеры использования:
  * validate_filled($name);
  *
- * @param string $name наименование значения
+ * @param string $name Наименование значения
  *
- * @return Возвращает название поля либо пустую строку
+ * @return string Возвращает название поля либо пустую строку
  */
 function validate_filled($name) {
-  if (empty($_POST[$name])) {
-    return "Это поле должно быть заполнено";
-  }
+    if (empty($_POST[$name])) {
+        return "Это поле должно быть заполнено";
+    }
 }
 
 /**
  * Функция для полнотекстового поиска
  *
  * Примеры использования:
- * search_text($text);
+ * search_by_text($db, $text);
  *
+ * @param mysqli $db Ресурс соединения
  * @param string $text набранный текст
  *
- * @return Возвращает определённый пост, в котором есть совпадение
+ * @return array Возвращает массив с содержанием поста, в котором есть совпадение, иначе — пустой массив
  */
 function search_by_text($db, $text) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT * FROM posts p LEFT JOIN users u ON p.author_id = u.id WHERE MATCH(caption, content) AGAINST(?)");
-  $stmt->bind_param('s', $text);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT * FROM posts p LEFT JOIN users u ON p.author_id = u.id WHERE MATCH(caption, content) AGAINST(?)");
+    $stmt->bind_param('s', $text);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**
  * Функция для получения всех постов юзера
  *
  * Примеры использования:
- * search_text($text);
+ * get_posts_with_content($db, 10);
  *
- * @param string $text набранный текст
+ * @param mysqli $db Ресурс соединения
+ * @param int $id Идентификатор юзера
  *
- * @return Возвращает определённый пост, в котором есть совпадение
+ * @return array Возвращает массив с содержанием поста, в котором есть совпадение, иначе — пустой массив
  */
 function get_posts_with_content($db, $id) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT * FROM posts p LEFT JOIN users u ON u.id = p.author_id WHERE author_id = ?");
-  $stmt->bind_param('i', $id);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT * FROM posts p LEFT JOIN users u ON u.id = p.author_id WHERE author_id = ?");
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**
@@ -370,45 +382,53 @@ function get_posts_with_content($db, $id) {
  * Примеры использования:
  * subscribe_user($db, 6, 2);
  *
- * @param string $id номер id
+ * @param mysqli $db Ресурс соединения
+ * @param int $id_user Идентификатор юзера
+ * @param int $id_sub Идентификатор юзера, на которого делается подписка
  */
 function subscribe_user($db, $id_user, $id_sub) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("INSERT INTO subscribes(user_id, user_subscribed) VALUES (?, ?)");
-  $stmt->bind_param('ii', $id_user, $id_sub);
-  $stmt->execute();
+    $stmt = $db->stmt_init();
+    $stmt->prepare("INSERT INTO subscribes(user_id, user_subscribed) VALUES (?, ?)");
+    $stmt->bind_param('ii', $id_user, $id_sub);
+    $stmt->execute();
 }
 
 /**
- * Функция проверки, подписан ли пользователь
+ * Функция проверки пользователя на наличие подписки
  *
  * Примеры использования:
  * is_subscribed($db, 6, 2);
  *
- * @param string $id номер id
+ * @param mysqli $db Ресурс соединения
+ * @param int $id_user Идентификатор юзера
+ * @param int $id_sub Идентификатор юзера, проверка на которого делается
+ *
+ * @return array Возвращает массив с содержанием id юзера, если он подписан, иначе — пустой массив
  */
 function is_subscribed($db, $id_user, $id_sub) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT user_id, user_subscribed FROM subscribes WHERE user_id = ? AND user_subscribed = ?");
-  $stmt->bind_param('ii', $id_user, $id_sub);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT user_id, user_subscribed FROM subscribes WHERE user_id = ? AND user_subscribed = ?");
+    $stmt->bind_param('ii', $id_user, $id_sub);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**
- * Функция удаляет запись из таблицы subscribed
+ * Функция удаляет пользователя из подписанных
  *
  * Примеры использования:
  * unsubscribe($db, 6, 2);
  *
- * @param string $id номер id
+ * @param mysqli $db Ресурс соединения
+ * @param int $id_user Идентификатор юзера
+ * @param int $id_sub Идентификатор юзера, от которого он хочет отписаться
  */
 function unsubscribe($db, $id_user, $id_sub) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("DELETE FROM subscribes WHERE user_id = ? AND user_subscribed = ?");
-  $stmt->bind_param('ii', $id_user, $id_sub);
-  $stmt->execute();
+    $stmt = $db->stmt_init();
+    $stmt->prepare("DELETE FROM subscribes WHERE user_id = ? AND user_subscribed = ?");
+    $stmt->bind_param('ii', $id_user, $id_sub);
+    $stmt->execute();
 }
 
 /**
@@ -417,13 +437,15 @@ function unsubscribe($db, $id_user, $id_sub) {
  * Примеры использования:
  * like_post($db, 6, 2);
  *
- * @param string $id номер id
+ * @param mysqli $db Ресурс соединения
+ * @param int $id_user Идентификатор юзера
+ * @param int $id_post Идентификатор поста, которому ставится лайк
  */
 function like_post($db, $id_user, $id_post) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("INSERT INTO likes(user_id, post_id) VALUES (?, ?)");
-  $stmt->bind_param('ii', $id_user, $id_post);
-  $stmt->execute();
+    $stmt = $db->stmt_init();
+    $stmt->prepare("INSERT INTO likes(user_id, post_id) VALUES (?, ?)");
+    $stmt->bind_param('ii', $id_user, $id_post);
+    $stmt->execute();
 }
 
 /**
@@ -431,30 +453,36 @@ function like_post($db, $id_user, $id_post) {
  * Примеры использования:
  * get_likes_count($db, 2);
  *
- * @param string $id номер id
+ * @param mysqli $db Ресурс соединения
+ * @param int $id_post Идентификатор поста, у которого определяется количество лайков
+ *
+ * @return array Возвращает массив с числом лайков
  */
 function get_likes_count($db, $id_post) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT COUNT(*) FROM likes WHERE post_id = ?");
-  $stmt->bind_param('i', $id_post);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT COUNT(*) FROM likes WHERE post_id = ?");
+    $stmt->bind_param('i', $id_post);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**
  * Функция добавляет комментарий к посту
  *
  * Примеры использования:
- * like_post($db, 6, 2);
+ * create_comment($db, 6, 2);
  *
- * @param string $id номер id
+ * @param mysqli $db Ресурс соединения
+ * @param int $id_user Идентификатор юзера
+ * @param int $id_post Идентификатор поста
+ * @param string $text Текст комментария
  */
 function create_comment($db, $id_user, $id_post, $text) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("INSERT INTO comments (user_id, post_id, content) VALUES (?, ?, ?)");
-  $stmt->bind_param('iis', $id_user, $id_post, $text);
-  $stmt->execute();
+    $stmt = $db->stmt_init();
+    $stmt->prepare("INSERT INTO comments (user_id, post_id, content) VALUES (?, ?, ?)");
+    $stmt->bind_param('iis', $id_user, $id_post, $text);
+    $stmt->execute();
 }
 
 /**
@@ -464,13 +492,15 @@ function create_comment($db, $id_user, $id_post, $text) {
  * validate_comment($text);
  *
  * @param string $text текст
+ *
+ * @return string Возвращает строку с ошибкой, если строка меньше 4 символов
  */
 function validate_comment($text) {
-  $len = strlen(trim($_POST[$text]));
+    $len = strlen(trim($_POST[$text]));
 
-  if ($len < 5) {
-    return 'Значение должно быть не меньше 4 символов';
-  }
+    if ($len < 5) {
+        return 'Значение должно быть не меньше 4 символов';
+    }
 }
 
 /**
@@ -478,15 +508,18 @@ function validate_comment($text) {
  * Примеры использования:
  * get_post_comments($db, 2);
  *
- * @param string $id номер id
+ * @param mysqli $db Ресурс соединения
+ * @param int $id_post Идентификатор поста
+ *
+ * @return array Возвращает массив со всеми комментариями поста
  */
 function get_post_comments($db, $id_post) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT avatar, content, c.dt_add, login, c.post_id FROM comments c JOIN users u ON c.user_id = u.id WHERE post_id = ?");
-  $stmt->bind_param('i', $id_post);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT avatar, content, c.dt_add, login, c.post_id FROM comments c JOIN users u ON c.user_id = u.id WHERE post_id = ?");
+    $stmt->bind_param('i', $id_post);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**
@@ -494,32 +527,38 @@ function get_post_comments($db, $id_post) {
  * Примеры использования:
  * get_feed_posts($db, 2);
  *
- * @param string $id номер id
+ * @param mysqli $db Ресурс соединения
+ * @param int $id_user Идентификатор юзера
+ *
+ * @return array Возвращает массив с постами
  */
 function get_feed_posts($db, $id_user) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT p.id, author_id, author_quote, counter, type_post, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id JOIN subscribes s ON s.user_id = p.author_id WHERE s.user_subscribed = ? ORDER BY counter ASC");
-  $stmt->bind_param('i', $id_user);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT p.id, author_id, author_quote, counter, type_post, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id JOIN subscribes s ON s.user_id = p.author_id WHERE s.user_subscribed = ? ORDER BY counter ASC");
+    $stmt->bind_param('i', $id_user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**
  * Функция берёт логин юзера для отправки email при подписке
  *
  * Примеры использования:
- * like_post($db, 6, 2);
+ * get_login($db, 2);
  *
- * @param string $id номер id
+ * @param mysqli $db Ресурс соединения
+ * @param int $id_user Идентификатор юзера
+ *
+ * @return array Возвращает массив с логином юзера
  */
 function get_login($db, $id_user) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT u.login, u.email FROM subscribes s INNER JOIN users u ON s.user_id = u.id WHERE s.user_id = ? LIMIT 1");
-  $stmt->bind_param('i', $id_user);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT u.login, u.email FROM subscribes s INNER JOIN users u ON s.user_id = u.id WHERE s.user_id = ? LIMIT 1");
+    $stmt->bind_param('i', $id_user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**
@@ -528,48 +567,53 @@ function get_login($db, $id_user) {
  * Примеры использования:
  * get_subscribers_list($db, 6);
  *
- * @param string $id номер id
+ * @param mysqli $db Ресурс соединения
+ * @param int $id_user Идентификатор юзера
+ *
+ * @return array Возвращает массив со списком юзеров
  */
 function get_subscribers_list($db, $id_user) {
-  $stmt = $db->stmt_init();
-  $stmt->prepare("SELECT s.user_id, s.user_subscribed, u.id, u.login, u.email FROM subscribes s INNER JOIN users u ON s.user_id = u.id WHERE s.user_subscribed = ?");
-  $stmt->bind_param('i', $id_user);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $stmt = $db->stmt_init();
+    $stmt->prepare("SELECT s.user_id, s.user_subscribed, u.id, u.login, u.email FROM subscribes s INNER JOIN users u ON s.user_id = u.id WHERE s.user_subscribed = ?");
+    $stmt->bind_param('i', $id_user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**
  * Функция делает email-рассылку пользователям
  *
  * Примеры использования:
- * send_mail($$to, $from, $text);
+ * send_mail($to, $from, $text_content);
  *
- * @param string $to текст
- * @param string $from текст
- * @param string $text текст
+ * @param string $to Email-адрес получателя
+ * @param string $from Email-адрес отправителя
+ * @param string $text_content Содержимое email
  */
 function send_mail($to, $title_content, $text_content) {
-  $message = new Email();
-  $message->to($to);
-  $message->from('gladoratorx@yandex.com');
-  $message->subject($title_content);
-  $message->text($text_content);
+    $message = new Email();
+    $message->to($to);
+    $message->from('gladoratorx@yandex.com');
+    $message->subject($title_content);
+    $message->text($text_content);
 
-  $dsn = 'smtp://gladoratorx@yandex.ru:мой_токен@smtp.yandex.ru:465?encryption=tls&auth_mode=login';
-  $transport = Transport::fromDsn($dsn);
+    $dsn = 'smtp://gladoratorx@yandex.ru:мой_токен@smtp.yandex.ru:465?encryption=tls&auth_mode=login';
+    $transport = Transport::fromDsn($dsn);
 
-  $mailer = new Mailer($transport);
-  $mailer->send($message);
+    $mailer = new Mailer($transport);
+    $mailer->send($message);
 }
 
 /**
- * Функция форматирует хештеги и проводит их к нужному виду
+ * Функция принимает хештеги в виде строки, форматирует их и возвращает в виду массива
  *
  * Примеры использования:
  * format_hashtags($text);
  *
- * @param string $text текст
+ * @param string $text Список хештегов
+ *
+ * @return array Возвращает массив со списком хештегов
  */
 function format_hashtags($text) {
     $words = explode(' ', $text);
@@ -578,7 +622,7 @@ function format_hashtags($text) {
 
     foreach($words as $word) {
         if (mb_strlen($word) >= 2) {
-            if ($word[0] == '#') {
+            if ($word[0] === '#') {
                 array_push($correct_hashtags, $word);
             } else {
 
@@ -594,9 +638,12 @@ function format_hashtags($text) {
 /**
  * Функция делают запрос по хештегу и проверяет, есть ли такой в базе
  * Примеры использования:
- * check_hashtag($db, #text);
+ * check_hashtag($db, $text);
  *
- * @param string $id номер id
+ * @param mysqli $db Ресурс соединения
+ * @param string $text Хештег
+ *
+ * @return array Возвращает массив с найденным хештегом, иначе — пустой массив
  */
 function check_hashtag($db, $text) {
     $stmt = $db->stmt_init();
@@ -610,9 +657,12 @@ function check_hashtag($db, $text) {
 /**
  * Функция берёт id последнего поста юзера
  * Примеры использования:
- * get_last_post_id($db, #text);
+ * get_last_post_id($db, 2);
  *
- * @param string $id номер id
+ * @param mysqli $db Ресурс соединения
+ * @param int $id Идентификатор поста
+ *
+ * @return array Возвращает массив с найденным последним постом, иначе — пустой массив
  */
 function get_last_post_id($db, $id) {
     $stmt = $db->stmt_init();
@@ -628,7 +678,10 @@ function get_last_post_id($db, $id) {
  * Примеры использования:
  * get_hashtag_id($db, $text);
  *
- * @param string $text текст
+ * @param mysqli $db Ресурс соединения
+ * @param string $text Хештег
+ *
+ * @return array Возвращает массив с найденным id хештега, иначе — пустой массив
  */
 function get_hashtag_id($db, $text) {
     $stmt = $db->stmt_init();
@@ -644,7 +697,10 @@ function get_hashtag_id($db, $text) {
  * Примеры использования:
  * get_all_hashtags_post($db, $id);
  *
- * @param id $id id поста
+ * @param mysqli $db Ресурс соединения
+ * @param int $id Идентификатор поста
+ *
+ * @return array Возвращает массив со всеми хештегами поста
  */
 function get_all_hashtags_post($db, $id) {
     $stmt = $db->stmt_init();
