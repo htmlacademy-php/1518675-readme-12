@@ -51,7 +51,7 @@
           <div class="comments">
             <form class="comments__form form" action="comment.php" method="post">
               <div class="comments__my-avatar">
-                <img class="comments__picture" src="img/userpic-medium.jpg" alt="Аватар пользователя">
+                <img class="comments__picture" src="<?= $avatar_user; ?>" alt="Аватар пользователя">
               </div>
               <div class="form__input-section form__input-section--error">
                 <textarea class="comments__textarea form__textarea form__input" name="text-content" id="text-content" placeholder="Ваш комментарий"></textarea>
@@ -72,7 +72,7 @@
                     <li class="comments__item user">
                         <div class="comments__avatar">
                             <a class="user__avatar-link" href="#">
-                                <img class="comments__picture" src="img/<?= $comment['avatar']; ?>" alt="Аватар пользователя">
+                                <img class="comments__picture" src="<?= $comment['avatar']; ?>" alt="Аватар пользователя">
                             </a>
                         </div>
                         <div class="comments__info">
@@ -97,12 +97,12 @@
         <div class="post-details__user user">
           <div class="post-details__user-info user__info">
             <div class="post-details__avatar user__avatar">
-              <a class="post-details__avatar-link user__avatar-link" href="#">
+              <a class="post-details__avatar-link user__avatar-link" href="profile.php?id=<?= $user_id; ?>">
                 <img class="post-details__picture user__picture" src="<?= $content['avatar']; ?>" alt="Аватар пользователя">
               </a>
             </div>
             <div class="post-details__name-wrapper user__name-wrapper">
-              <a class="post-details__name user__name" href="#">
+              <a class="post-details__name user__name" href="profile.php?id=<?= $user_id; ?>">
                 <span><?= htmlspecialchars($content['login']); ?></span>
               </a>
               <time class="post-details__time user__time" datetime="2014-03-20">5 лет на сайте</time>
@@ -119,7 +119,10 @@
             </p>
           </div>
           <div class="post-details__user-buttons user__buttons">
-            <button class="user__button user__button--subscription button button--main" type="button">Подписаться</button>
+            <form action="subscribe.php" method="post">
+              <input class="visually-hidden" type="text" id="user-id" name="user-id" value="<?= $user_id; ?>">
+              <button class="profile__user-button user__button user__button--subscription button button--main" style="width: 100%" type="submit"><?=$subscribed ? 'Подписаться' : 'Отписаться';?></button>
+            </form>
             <a class="user__button user__button--writing button button--green" href="#">Сообщение</a>
           </div>
         </div>

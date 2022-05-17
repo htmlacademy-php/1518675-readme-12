@@ -21,8 +21,14 @@ if (isset($_GET['id']) && check_exist_post($con, $_GET['id'])) {
 
     $comments = get_post_comments($con, $_GET['id']);
 
-    $page_content = include_template('post-content.php', ['content' => $content[0], 'user_posts' => $user_posts, 'user_subscribers' => $user_subscribers, 'user_id' => $user_id[0]['id'], 'comments' => $comments, 'hashtags' => $all_hashtags]);
-    $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => $user_name, 'is_auth' => $is_auth, 'avatar' => $name_and_avatar[0]['avatar'], 'url' => $current_url]);
+    $subscribe_handler = false;
+
+    if (empty(is_subscribed($con, $user_id[0]['author_id'], $_SESSION['user']['id']))) {
+        $subscribe_handler = true;
+    }
+
+    $page_content = include_template('post-content.php', ['content' => $content[0], 'user_posts' => $user_posts, 'user_subscribers' => $user_subscribers, 'user_id' => $user_id[0]['author_id'], 'comments' => $comments, 'hashtags' => $all_hashtags, 'avatar_user' => $name_and_avatar[0]['avatar'], 'subscribed' => $subscribe_handler]);
+    $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => $name_and_avatar[0]['login'], 'is_auth' => $is_auth, 'avatar' => $name_and_avatar[0]['avatar']]);
     print($layout_content);
 } else {
     $page_content = include_template('404-error.php');

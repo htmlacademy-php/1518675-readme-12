@@ -17,7 +17,7 @@ if ($_GET) {
       <div class="adding-post__tabs filters">
         <ul class="adding-post__tabs-list filters__list tabs__list">
           <li class="adding-post__tabs-item filters__item">
-            <a class="adding-post__tabs-link filters__button filters__button--photo <?=(($_GET['filter'] == 'photo') or $default_filter) ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=photo">
+            <a class="adding-post__tabs-link filters__button filters__button--photo <?=(($_GET['filter'] === 'photo') or $default_filter) ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=photo">
               <svg class="filters__icon" width="22" height="18">
                 <use xlink:href="#icon-filter-photo"></use>
               </svg>
@@ -25,7 +25,7 @@ if ($_GET) {
             </a>
           </li>
           <li class="adding-post__tabs-item filters__item">
-            <a class="adding-post__tabs-link filters__button filters__button--video <?=($_GET['filter'] == 'video') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=video">
+            <a class="adding-post__tabs-link filters__button filters__button--video <?=($_GET['filter'] === 'video') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=video">
               <svg class="filters__icon" width="24" height="16">
                 <use xlink:href="#icon-filter-video"></use>
               </svg>
@@ -33,7 +33,7 @@ if ($_GET) {
             </a>
           </li>
           <li class="adding-post__tabs-item filters__item">
-            <a class="adding-post__tabs-link filters__button filters__button--text <?=($_GET['filter'] == 'text') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=text">
+            <a class="adding-post__tabs-link filters__button filters__button--text <?=($_GET['filter'] === 'text') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=text">
               <svg class="filters__icon" width="20" height="21">
                 <use xlink:href="#icon-filter-text"></use>
               </svg>
@@ -41,7 +41,7 @@ if ($_GET) {
             </a>
           </li>
           <li class="adding-post__tabs-item filters__item">
-            <a class="adding-post__tabs-link filters__button filters__button--quote <?=($_GET['filter'] == 'quote') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=quote">
+            <a class="adding-post__tabs-link filters__button filters__button--quote <?=($_GET['filter'] === 'quote') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=quote">
               <svg class="filters__icon" width="21" height="20">
                 <use xlink:href="#icon-filter-quote"></use>
               </svg>
@@ -49,7 +49,7 @@ if ($_GET) {
             </a>
           </li>
           <li class="adding-post__tabs-item filters__item">
-            <a class="adding-post__tabs-link filters__button filters__button--link <?=($_GET['filter'] == 'link') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=link">
+            <a class="adding-post__tabs-link filters__button filters__button--link <?=($_GET['filter'] === 'link') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=link">
               <svg class="filters__icon" width="21" height="18">
                 <use xlink:href="#icon-filter-link"></use>
               </svg>
@@ -59,7 +59,7 @@ if ($_GET) {
         </ul>
       </div>
       <div class="adding-post__tab-content">
-        <section class="adding-post__photo tabs__content <?=(($_GET['filter'] == 'photo') or $default_filter) ? 'tabs__content--active' : '';?>">
+        <section class="adding-post__photo tabs__content <?=(($_GET['filter'] === 'photo') or $default_filter) ? 'tabs__content--active' : '';?>">
           <h2 class="visually-hidden">Форма добавления фото</h2>
           <form class="adding-post__form form" action="add.php" method="post" enctype="multipart/form-data" autocomplete="off">
             <div class="form__text-inputs-wrapper">
@@ -103,18 +103,23 @@ if ($_GET) {
                   <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                   <ul class="form__invalid-list">
                     <?php foreach ($errors as $key => $value): ?>
+                      <?php print_r($errors); ?>
                       <?php
 
-                      if ($key == 'photo-heading') {
+                      if ($key === 'photo-heading') {
                         $caption = 'Заголовок. ';
-                      } elseif ($key == 'photo-url') {
-                        $caption = 'Ссылка из интернета. ';
-                      } elseif ($key == 'photo-tags') {
+                      } elseif ($key === 'photo-url') {
+                        if ($value === 'Изображение')  {
+                          $caption = 'Изображение';
+                        } else {
+                          $caption = 'Ссылка из интернета. ';
+                        }
+                      } elseif ($key === 'photo-tags') {
                         $caption = 'Теги. ';
                       }
 
                       ?>
-                      <li class="form__invalid-item"><?=$caption;?> Это поле должно быть заполнено.</li>
+                      <li class="form__invalid-item"><?= $caption; ?> <?= $value; ?></li>
                     <?php endforeach;?>
                   </ul>
                 </div>
@@ -259,6 +264,7 @@ if ($_GET) {
                   <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                   <ul class="form__invalid-list">
                     <?php foreach ($errors as $key => $value): ?>
+                        <?php print_r($errors); ?>
                       <?php
 
                       if ($key == 'text-heading') {
@@ -332,6 +338,7 @@ if ($_GET) {
                   </div>
                 </div>
               </div>
+              <?php if (!empty($errors)): ?>
               <div class="form__invalid-block">
                 <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                 <ul class="form__invalid-list">
@@ -349,6 +356,7 @@ if ($_GET) {
                   <?php endforeach;?>
                 </ul>
               </div>
+              <?php endif; ?>
             </div>
             <div class="adding-post__buttons">
               <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>
@@ -398,6 +406,7 @@ if ($_GET) {
                   </div>
                 </div>
               </div>
+              <?php if (!empty($errors)): ?>
               <div class="form__invalid-block">
                 <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                 <ul class="form__invalid-list">
@@ -415,6 +424,7 @@ if ($_GET) {
                   <?php endforeach;?>
                 </ul>
               </div>
+            <?php endif; ?>
             </div>
             <div class="adding-post__buttons">
               <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>

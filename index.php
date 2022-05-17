@@ -38,7 +38,13 @@ if (!count($errors) and !empty($_POST)) {
             $_SESSION['user']['password'] = $result[0]['password'];
             $_SESSION['user']['avatar'] = $result[0]['avatar'];
             header("Location: /feed.php");
+        } else {
+            $errors['password'] = 'Неверный пароль';
         }
+
+
+    } else {
+        $errors['login'] = 'Неверный логин';
     }
 }
 
@@ -47,5 +53,5 @@ if (isset($_SESSION['user'])) {
     exit();
 }
 
-$page_content = include_template('main.php', []);
+$page_content = include_template('main.php', ['errors' => $errors]);
 print($page_content);

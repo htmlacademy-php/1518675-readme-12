@@ -47,11 +47,11 @@ function cut_long_text($text, $text_limit) {
  *
  * @return array Возвращает массив с типами данных
  */
-function get_posts_with_users($db, $filter)
+function get_posts_with_users($db, $fiter_type_post, $filter, $limit, $offset)
 {
     $filter = $filter === 'ASC' ? 'ASC' : 'DESC';
 
-    $sql = "SELECT p.id, author_id, counter, type_post, video, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id ORDER BY counter " . $filter;
+    $sql = "SELECT p.id, author_id, author_quote, counter, type_post, video, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id ORDER BY " . $fiter_type_post . " " . $filter . " LIMIT " . $limit . " OFFSET " . $offset;
 
     $stmt = $db->stmt_init();
     $stmt->prepare($sql);
@@ -141,8 +141,16 @@ function get_type_db($type) {
  *
  * @return array Возвращает массив с типами данных
  */
-function get_filtered_posts($db, $filter) {
-    $result_content = mysqli_query($db, "SELECT p.id, counter, type_post, video, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id AND type_post ='" . $filter . "' ORDER BY counter ASC");
+function get_filtered_posts($db, $filter_type_post, $filter_order_by, $filter_asc, $limit, $offset) {
+    if (empty($filter_type_post)) {
+        $correct_value_filter = '';
+    } else {
+        $correct_value_filter = 'AND type_post = ' . $filter_type_post;
+    }
+
+    $sql = "SELECT p.id, author_quote, author_id, counter, type_post, video, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id " . $correct_value_filter . " ORDER BY " . $filter_asc . " " . $filter_order_by . " LIMIT " . $limit . " OFFSET " . $offset;
+
+    $result_content = mysqli_query($db, "SELECT p.id, author_quote, author_id, counter, type_post, video, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id " . $correct_value_filter . " ORDER BY " . $filter_asc . " " . $filter_order_by . " LIMIT " . $limit . " OFFSET " . $offset);
     return $rows_content = mysqli_fetch_all($result_content, MYSQLI_ASSOC);
 }
 
@@ -369,7 +377,7 @@ function search_by_text($db, $text) {
  */
 function get_posts_with_content($db, $id) {
     $stmt = $db->stmt_init();
-    $stmt->prepare("SELECT * FROM posts p LEFT JOIN users u ON u.id = p.author_id WHERE author_id = ?");
+    $stmt->prepare("SELECT p.id, p.dt_add, caption, content, author_quote, img, video, site, counter, author_id, type_post, u.dt_add, u.email, u.login, u.password, u.avatar FROM posts p LEFT JOIN users u ON u.id = p.author_id WHERE author_id = ?");
     $stmt->bind_param('i', $id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -534,7 +542,7 @@ function get_post_comments($db, $id_post) {
  */
 function get_feed_posts($db, $id_user) {
     $stmt = $db->stmt_init();
-    $stmt->prepare("SELECT p.id, author_id, author_quote, counter, type_post, login, content, avatar, img, site, caption FROM posts p JOIN users u ON p.author_id = u.id JOIN subscribes s ON s.user_id = p.author_id WHERE s.user_subscribed = ? ORDER BY counter ASC");
+    $stmt->prepare("SELECT p.id, author_id, author_quote, counter, type_post, login, content, avatar, img, site, caption, video FROM posts p JOIN users u ON p.author_id = u.id JOIN subscribes s ON s.user_id = p.author_id WHERE s.user_subscribed = ? ORDER BY counter ASC");
     $stmt->bind_param('i', $id_user);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -711,4 +719,17 @@ function get_all_hashtags_post($db, $id) {
     return $rows_content = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
+/**
+ * Функция берёт последний id из таблицы posts
+ * Примеры использования:
+ * get_posts_last_id($db);
+ *
+ * @param mysqli $db Ресурс соединения
+ *
+ * @return array Возвращает массив с id последнего поста
+ */
+function get_posts_last_id($db) {
+    $result_content = mysqli_query($db, "SELECT max(id) FROM posts");
 
+    return $rows_content = mysqli_fetch_all($result_content, MYSQLI_ASSOC);
+}

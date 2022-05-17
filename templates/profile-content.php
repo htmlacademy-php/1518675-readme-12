@@ -1,3 +1,10 @@
+<?php
+
+require('config.php');
+require_once('utils.php');
+
+?>
+
 <h1 class="visually-hidden">Профиль</h1>
 <div class="profile profile--default">
   <div class="profile__user-wrapper">
@@ -7,17 +14,17 @@
           <img class="profile__picture user__picture" src="<?= isset($posts[0]['avatar']) ? $posts[0]['avatar'] : ''; ?>" alt="">
         </div>
         <div class="profile__name-wrapper user__name-wrapper">
-          <span class="profile__name user__name"><?=(isset($posts[0]['login'])) ? $posts[0]['login'] : $_SESSION['user']['login'];?></span>
+          <span class="profile__name user__name"><?= (isset($posts[0]['login'])) ? $posts[0]['login'] : $_SESSION['user']['login']; ?></span>
           <time class="profile__user-time user__time" datetime="2014-03-20">5 лет на сайте</time>
         </div>
       </div>
       <div class="profile__rating user__rating">
         <p class="profile__rating-item user__rating-item user__rating-item--publications">
-          <span class="user__rating-amount"><?=(count($posts)) ? count($posts) : '0';?></span>
+          <span class="user__rating-amount"><?= (count($posts)) ? count($posts) : '0'; ?></span>
           <span class="profile__rating-text user__rating-text">публикаций</span>
         </p>
         <p class="profile__rating-item user__rating-item user__rating-item--subscribers">
-          <span class="user__rating-amount"><?=$subscribers;?></span>
+          <span class="user__rating-amount"><?= $subscribers; ?></span>
           <span class="profile__rating-text user__rating-text">подписчиков</span>
         </p>
       </div>
@@ -100,12 +107,10 @@
                     <time class="post__time" datetime="2019-01-30T23:41">15 минут назад</time>
                   </div>
                   <ul class="post__tags">
-                    <li><a href="#">#nature</a></li>
-                    <li><a href="#">#globe</a></li>
-                    <li><a href="#">#photooftheday</a></li>
-                    <li><a href="#">#canon</a></li>
-                    <li><a href="#">#landscape</a></li>
-                    <li><a href="#">#щикарныйвид</a></li>
+                    <?php $hashtags = get_all_hashtags_post($con, $post['id']); ?>
+                    <?php foreach ($hashtags as $hashtag): ?>
+                      <li><a href="#"><?= $hashtag['hashtag']; ?></a></li>
+                    <?php endforeach; ?>
                   </ul>
                 </footer>
                 <div class="comments">
@@ -164,11 +169,60 @@
                 </form>
               </article>
             <?php elseif (get_type($post['type_post']) == 'quote'): ?>
-
+              <article class="profile__post post post-photo">
+                <header class="post__header">
+                  <h2><a href="post.php?id=<?= $post['id']; ?>"><?= htmlspecialchars($post['caption']); ?></a></h2>
+                </header>
+                <div class="post__main">
+                  <div class="post-details__image-wrapper post-quote">
+                    <div class="post__main">
+                      <blockquote>
+                        <p>
+                          <?= htmlspecialchars($post['content']); ?>
+                        </p>
+                        <cite><?= htmlspecialchars($post['author_quote']); ?></cite>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div>
+                <footer class="post__footer">
+                  <div class="post__indicators">
+                    <div class="post__buttons">
+                      <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
+                        <svg class="post__indicator-icon" width="20" height="17">
+                          <use xlink:href="#icon-heart"></use>
+                        </svg>
+                        <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
+                          <use xlink:href="#icon-heart-active"></use>
+                        </svg>
+                        <span>250</span>
+                        <span class="visually-hidden">количество лайков</span>
+                      </a>
+                      <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
+                        <svg class="post__indicator-icon" width="19" height="17">
+                          <use xlink:href="#icon-repost"></use>
+                        </svg>
+                        <span>5</span>
+                        <span class="visually-hidden">количество репостов</span>
+                      </a>
+                    </div>
+                    <time class="post__time" datetime="2019-01-30T23:41">15 минут назад</time>
+                  </div>
+                  <ul class="post__tags">
+                    <?php $hashtags = get_all_hashtags_post($con, $post['id']); ?>
+                    <?php foreach ($hashtags as $hashtag): ?>
+                      <li><a href="#"><?= $hashtag['hashtag']; ?></a></li>
+                    <?php endforeach; ?>
+                  </ul>
+                </footer>
+                <div class="comments">
+                  <a class="comments__button button" href="#">Показать комментарии</a>
+                </div>
+              </article>
             <?php elseif (get_type($post['type_post']) == 'photo'): ?>
               <article class="profile__post post post-photo">
                 <header class="post__header">
-                  <h2><a href="#"><?= htmlspecialchars($post['caption']); ?></a></h2>
+                  <h2><a href="post.php?id=<?= $post['id']; ?>"><?= htmlspecialchars($post['caption']); ?></a></h2>
                 </header>
                 <div class="post__main">
                   <div class="post-photo__image-wrapper">
@@ -199,12 +253,10 @@
                     <time class="post__time" datetime="2019-01-30T23:41">15 минут назад</time>
                   </div>
                   <ul class="post__tags">
-                    <li><a href="#">#nature</a></li>
-                    <li><a href="#">#globe</a></li>
-                    <li><a href="#">#photooftheday</a></li>
-                    <li><a href="#">#canon</a></li>
-                    <li><a href="#">#landscape</a></li>
-                    <li><a href="#">#щикарныйвид</a></li>
+                    <?php $hashtags = get_all_hashtags_post($con, $post['id']); ?>
+                    <?php foreach ($hashtags as $hashtag): ?>
+                      <li><a href="#"><?= $hashtag['hashtag']; ?></a></li>
+                    <?php endforeach; ?>
                   </ul>
                 </footer>
                 <div class="comments">
@@ -212,8 +264,103 @@
                 </div>
               </article>
             <?php elseif (get_type($post['type_post']) == 'video'): ?>
-
+              <article class="profile__post post post-photo">
+                <header class="post__header">
+                  <h2><a href="post.php?id=<?= $post['id']; ?>"><?= htmlspecialchars($post['caption']); ?></a></h2>
+                </header>
+                <div class="post__main">
+                  <div class="post-details__image-wrapper post-photo__image-wrapper">
+                    <?= embed_youtube_video($post['video']); ?>
+                  </div>
+                </div>
+                <footer class="post__footer">
+                  <div class="post__indicators">
+                    <div class="post__buttons">
+                      <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
+                        <svg class="post__indicator-icon" width="20" height="17">
+                          <use xlink:href="#icon-heart"></use>
+                        </svg>
+                        <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
+                          <use xlink:href="#icon-heart-active"></use>
+                        </svg>
+                        <span>250</span>
+                        <span class="visually-hidden">количество лайков</span>
+                      </a>
+                      <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
+                        <svg class="post__indicator-icon" width="19" height="17">
+                          <use xlink:href="#icon-repost"></use>
+                        </svg>
+                        <span>5</span>
+                        <span class="visually-hidden">количество репостов</span>
+                      </a>
+                    </div>
+                    <time class="post__time" datetime="2019-01-30T23:41">15 минут назад</time>
+                  </div>
+                  <ul class="post__tags">
+                    <?php $hashtags = get_all_hashtags_post($con, $post['id']); ?>
+                    <?php foreach ($hashtags as $hashtag): ?>
+                      <li><a href="#"><?= $hashtag['hashtag']; ?></a></li>
+                    <?php endforeach; ?>
+                  </ul>
+                </footer>
+                <div class="comments">
+                  <a class="comments__button button" href="#">Показать комментарии</a>
+                </div>
+              </article>
             <?php elseif (get_type($post['type_post']) == 'link'): ?>
+              <article class="profile__post post post-photo">
+                <header class="post__header">
+                  <h2><a href="post.php?id=<?= $post['id']; ?>"><?= htmlspecialchars($post['caption']); ?></a></h2>
+                </header>
+                <div class="post__main">
+                  <div class="post-link__wrapper">
+                    <a class="post-link__external" href="http://<?= $content['site']; ?>" title="Перейти по ссылке">
+                      <div class="post-link__info-wrapper">
+                        <div class="post-link__icon-wrapper">
+                          <img src="https://www.google.com/s2/favicons?domain=<?= $post['site']; ?>" alt="Иконка">
+                        </div>
+                        <div class="post-link__info">
+                          <h3><?= htmlspecialchars($post['caption']); ?></h3>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <footer class="post__footer">
+                  <div class="post__indicators">
+                    <div class="post__buttons">
+                      <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
+                        <svg class="post__indicator-icon" width="20" height="17">
+                          <use xlink:href="#icon-heart"></use>
+                        </svg>
+                        <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
+                          <use xlink:href="#icon-heart-active"></use>
+                        </svg>
+                        <span>250</span>
+                        <span class="visually-hidden">количество лайков</span>
+                      </a>
+                      <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
+                        <svg class="post__indicator-icon" width="19" height="17">
+                          <use xlink:href="#icon-repost"></use>
+                        </svg>
+                        <span>5</span>
+                        <span class="visually-hidden">количество репостов</span>
+                      </a>
+                    </div>
+                    <time class="post__time" datetime="2019-01-30T23:41">15 минут назад</time>
+                  </div>
+                  <ul class="post__tags">
+                    <?php $hashtags = get_all_hashtags_post($con, $post['id']); ?>
+                    <?php foreach ($hashtags as $hashtag): ?>
+                      <li><a href="#"><?= $hashtag['hashtag']; ?></a></li>
+                    <?php endforeach; ?>
+                  </ul>
+                </footer>
+                <div class="comments">
+                  <a class="comments__button button" href="#">Показать комментарии</a>
+                </div>
+              </article>
+
 
             <?php endif;?>
           <?php endforeach;?>
