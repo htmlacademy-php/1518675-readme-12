@@ -58,11 +58,11 @@
             <ul class="form__invalid-list">
               <?php foreach($errors as $error => $value): ?>
                 <?php if ($error == 'email'): ?>
-                  <li class="form__invalid-item">Электронная почта. Это поле должно быть заполнено.</li>
+                  <li class="form__invalid-item">Электронная почта. <?= $errors['email']; ?></li>
                 <?php elseif ($error == 'login'): ?>
-                  <li class="form__invalid-item">Логин. Это поле должно быть заполнено.</li>
+                  <li class="form__invalid-item">Логин. <?= $errors['login']; ?></li>
                 <?php elseif ($error == 'password'): ?>
-                  <li class="form__invalid-item">Пароль. Это поле должно быть заполнено.</li>
+                  <li class="form__invalid-item">Пароль. <?= $errors['password']; ?></li>
                 <?php elseif ($error == 'password-repeat'): ?>
                   <li class="form__invalid-item">Повтор пароля. Это поле должно быть заполнено.</li>
                 <?php endif; ?>

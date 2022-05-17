@@ -22,8 +22,6 @@ if (isset($_SESSION)) {
 
     $address = $sub[0]['email'];
 
-    print_r($address);
-
     $text_content = 'Здравствуйте, ' . $sub[0]['login'] . '. На вас подписался новый пользователь ' . $_SESSION['user']['login'] . '. Вот ссылка на его профиль: ' . 'https://readme/profile.php?id=' . $_SESSION['user']['id'];
 
     send_mail($address, $title_content, $text_content);

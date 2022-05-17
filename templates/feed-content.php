@@ -21,9 +21,9 @@ if (isset($_GET['filter'])) {
             <?php if ((isset($_GET['filter']) and ($_GET['filter'] == 'photo') or isset($_GET['filter']) and $_GET['filter'] == 'all') or (!isset($_GET['filter']))): ?>
               <article class="feed__post post post-photo">
                 <header class="post__header post__author">
-                  <a class="post__author-link" href="#" title="Автор">
+                  <a class="post__author-link" href="profile.php?id=<?= $post['author_id']; ?>" title="Автор">
                     <div class="post__avatar-wrapper">
-                      <img class="post__author-avatar" src="img/<?= $post['avatar']; ?>" alt="Аватар пользователя" width="60" height="60">
+                      <img class="post__author-avatar" src="<?= $post['avatar']; ?>" alt="Аватар пользователя" width="60" height="60">
                     </div>
                     <div class="post__info">
                       <b class="post__author-name"><?= htmlspecialchars($post['login']); ?></b>
@@ -32,9 +32,9 @@ if (isset($_GET['filter'])) {
                   </a>
                 </header>
                 <div class="post__main">
-                  <h2><a href="#"><?= htmlspecialchars($post['caption']); ?></a></h2>
+                  <h2><a href="post.php?id=<?= $post['id']; ?>"><?= htmlspecialchars($post['caption']); ?></a></h2>
                   <div class="post-photo__image-wrapper">
-                    <img src="img/<?= $post['img']; ?>" alt="Фото от пользователя" width="760" height="396">
+                    <img src="<?= $post['img']; ?>" alt="Фото от пользователя" width="760" height="396">
                   </div>
                 </div>
                 <footer class="post__footer post__indicators">
@@ -71,9 +71,9 @@ if (isset($_GET['filter'])) {
             <?php if ((isset($_GET['filter']) and ($_GET['filter'] == 'text') or isset($_GET['filter']) and $_GET['filter'] == 'all') or (!isset($_GET['filter']))): ?>
               <article class="feed__post post post-text">
                 <header class="post__header post__author">
-                <a class="post__author-link" href="#" title="Автор">
+                <a class="post__author-link" href="profile.php?id=<?= $post['author_id']; ?>" title="Автор">
                   <div class="post__avatar-wrapper">
-                    <img class="post__author-avatar" src="img/<?= $post['avatar']; ?>" alt="Аватар пользователя">
+                    <img class="post__author-avatar" src="<?= $post['avatar']; ?>" alt="Аватар пользователя">
                   </div>
                   <div class="post__info">
                     <b class="post__author-name"><?= htmlspecialchars($post['login']); ?></b>
@@ -82,7 +82,7 @@ if (isset($_GET['filter'])) {
                 </a>
               </header>
               <div class="post__main">
-                <h2><a href="#"><?= htmlspecialchars($post['caption']); ?></a></h2>
+                <h2><a href="post.php?id=<?= $post['id']; ?>"><?= htmlspecialchars($post['caption']); ?></a></h2>
                 <p>
                   <?= $post['content']; ?>
                 </p>
@@ -122,12 +122,12 @@ if (isset($_GET['filter'])) {
             <?php if ((isset($_GET['filter']) and ($_GET['filter'] == 'video') or isset($_GET['filter']) and $_GET['filter'] == 'all') or (!isset($_GET['filter']))): ?>
             <article class="feed__post post post-video">
               <header class="post__header post__author">
-                <a class="post__author-link" href="#" title="Автор">
+                <a class="post__author-link" href="profile.php?id=<?= $post['author_id']; ?>" title="Автор">
                   <div class="post__avatar-wrapper">
-                    <img class="post__author-avatar" src="img/userpic-petro.jpg" alt="Аватар пользователя">
+                    <img class="post__author-avatar" src="<?= $post['avatar']; ?>" alt="Аватар пользователя">
                   </div>
                   <div class="post__info">
-                    <b class="post__author-name">Петр Демин</b>
+                    <b class="post__author-name"><?= $post['login']; ?></b>
                     <span class="post__time">5 часов назад</span>
                   </div>
                 </a>
@@ -135,7 +135,7 @@ if (isset($_GET['filter'])) {
               <div class="post__main">
                 <div class="post-video__block">
                   <div class="post-video__preview">
-                    <img src="img/coast.jpg" alt="Превью к видео" width="760" height="396">
+                    <?= embed_youtube_video($post['video']); ?>
                   </div>
                   <div class="post-video__control">
                     <button class="post-video__play post-video__play--paused button button--video" type="button"><span class="visually-hidden">Запустить видео</span></button>
@@ -190,9 +190,9 @@ if (isset($_GET['filter'])) {
             <?php if ((isset($_GET['filter']) and ($_GET['filter'] == 'quote') or isset($_GET['filter']) and $_GET['filter'] == 'all') or (!isset($_GET['filter']))): ?>
             <article class="feed__post post post-quote">
               <header class="post__header post__author">
-                <a class="post__author-link" href="#" title="Автор">
+                <a class="post__author-link" href="profile.php?id=<?= $post['author_id']; ?>" title="Автор">
                   <div class="post__avatar-wrapper">
-                    <img class="post__author-avatar" src="img/<?= $post['avatar']; ?>" alt="Аватар пользователя">
+                    <img class="post__author-avatar" src="<?= $post['avatar']; ?>" alt="Аватар пользователя">
                   </div>
                   <div class="post__info">
                     <b class="post__author-name"><?= htmlspecialchars($post['login']); ?></b>
@@ -242,9 +242,9 @@ if (isset($_GET['filter'])) {
             <?php if ((isset($_GET['filter']) and ($_GET['filter'] == 'link') or isset($_GET['filter']) and $_GET['filter'] == 'all') or (!isset($_GET['filter']))): ?>
             <article class="feed__post post post-link">
               <header class="post__header post__author">
-                <a class="post__author-link" href="#" title="Автор">
+                <a class="post__author-link" href="profile.php?id=<?= $post['author_id']; ?>" title="Автор">
                   <div class="post__avatar-wrapper">
-                    <img class="post__author-avatar" src="img/<?= $post['avatar']; ?>" alt="Аватар пользователя">
+                    <img class="post__author-avatar" src="<?= $post['avatar']; ?>" alt="Аватар пользователя">
                   </div>
                   <div class="post__info">
                     <b class="post__author-name"><?= htmlspecialchars($post['login']); ?></b>

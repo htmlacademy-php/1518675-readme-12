@@ -39,9 +39,15 @@ if (!count($errors)) {
             $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
             $login = $_POST['login'];
 
-            $file_name = $_FILES['userpic-file']['name'];
-            $file_path = __DIR__ . '/uploads/';
-            $file_url = '/uploads/' . $file_name;
+            if (empty($fine_name)) {
+                $file_name = 'placeholder.png';
+                $file_path = __DIR__ . '/img/';
+                $file_url = '/img/' . $file_name;
+            } else {
+               $file_name = $_FILES['userpic-file']['name'];
+               $file_path = __DIR__ . '/uploads/';
+               $file_url = '/uploads/' . $file_name;
+            }
 
             move_uploaded_file($_FILES['userpic-file']['tmp_name'], $file_path . $file_name);
 

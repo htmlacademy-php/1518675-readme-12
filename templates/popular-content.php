@@ -17,32 +17,47 @@ if (isset($_GET['filter']))
 </div>
 <div class="popular container">
   <div class="popular__filters-wrapper">
-    <div class="popular__sorting sorting">
+    <div class="popular__sorting sorting" style="max-width: 560px;">
       <b class="popular__sorting-caption sorting__caption">Сортировка:</b>
       <ul class="popular__sorting-list sorting__list">
         <li class="sorting__item sorting__item--popular">
-          <a class="sorting__link sorting__link--active" href="#">
-            <span>Популярность</span>
-            <svg class="sorting__icon" width="10" height="12">
-              <use xlink:href="#icon-sort"></use>
-            </svg>
-          </a>
+          <form action="popular.php" method="get">
+            <input class="visually-hidden" type="text" id="filter" name="filter" value="<?= isset($_GET['filter']) ? $_GET['filter'] : 'all'; ?>">
+            <input class="visually-hidden" type="text" name="page" value="<?= $current_page; ?>">
+            <input class="visually-hidden" type="text" name="order" value="<?= 'id'; ?>">
+            <button class="sorting__link <?= (isset($_GET['order']) and ($_GET['order'] === 'id') or $sorting === 'counter') ? 'sorting__link--active' : ''; ?>" type="submit" style="border: 0; background: transparent; cursor: pointer;">
+              <span>Популярность</span>
+              <svg class="sorting__icon" width="10" height="12">
+                <use xlink:href="#icon-sort"></use>
+              </svg>
+            </button>
+          </form>
         </li>
         <li class="sorting__item">
-          <a class="sorting__link" href="#">
-            <span>Лайки</span>
-            <svg class="sorting__icon" width="10" height="12">
-              <use xlink:href="#icon-sort"></use>
-            </svg>
-          </a>
+          <form action="popular.php" method="get">
+            <input class="visually-hidden" type="text" id="filter" name="filter" value="<?= isset($_GET['filter']) ? $_GET['filter'] : 'all'; ?>">
+            <input class="visually-hidden" type="text" name="page" value="<?= $current_page; ?>">
+            <input class="visually-hidden" type="text" name="order" value="<?= 'counter'; ?>">
+            <button class="sorting__link <?= (isset($_GET['order']) and ($_GET['order'] === 'counter')) ? 'sorting__link--active' : ''; ?>" type="submit" style="border: 0; background: transparent; cursor: pointer;">
+              <span>Лайки</span>
+              <svg class="sorting__icon" width="10" height="12">
+                <use xlink:href="#icon-sort"></use>
+              </svg>
+            </button>
+          </form>
         </li>
         <li class="sorting__item">
-          <a class="sorting__link" href="#">
-            <span>Дата</span>
-            <svg class="sorting__icon" width="10" height="12">
-              <use xlink:href="#icon-sort"></use>
-            </svg>
-          </a>
+          <form action="popular.php" method="get">
+            <input class="visually-hidden" type="text" id="filter" name="filter" value="<?= isset($_GET['filter']) ? $_GET['filter'] : 'all'; ?>">
+            <input class="visually-hidden" type="text" name="page" value="<?= $current_page; ?>">
+            <input class="visually-hidden" type="text" name="order" value="<?= 'date'; ?>">
+            <button class="sorting__link <?= (isset($_GET['order']) and ($_GET['order'] === 'date')) ? 'sorting__link--active' : ''; ?>" type="submit" style="border: 0; background: transparent; cursor: pointer;">
+              <span>Дата</span>
+              <svg class="sorting__icon" width="10" height="12">
+                <use xlink:href="#icon-sort"></use>
+              </svg>
+            </button>
+          </form>
         </li>
       </ul>
     </div>
@@ -108,30 +123,30 @@ if (isset($_GET['filter']))
           <?php endif; ?>
         </header>
         <div class="post__main">
-          <?php if (get_type($post['type_post']) == 'quote'): ?>
+          <?php if (get_type($post['type_post']) === 'quote'): ?>
             <blockquote>
               <p><?= htmlspecialchars($post['content']); ?></p>
-              <cite>Неизвестный Автор</cite>
+              <cite><?= htmlspecialchars($post['author_quote']); ?></cite>
             </blockquote>
-          <?php elseif (get_type($post['type_post']) == 'text'): ?>
+          <?php elseif (get_type($post['type_post']) === 'text'): ?>
             <?= cut_long_text($post['content'], TEXT_LIMIT); ?>
-          <?php elseif (get_type($post['type_post']) == 'photo'): ?>
+          <?php elseif (get_type($post['type_post']) === 'photo'): ?>
             <div class="post-photo__image-wrapper">
               <img src="<?= htmlspecialchars($post['img']) ?>" alt="Фото от пользователя" width="360" height="240">
             </div>
-          <?php elseif (get_type($post['type_post']) == 'video'): ?>
+          <?php elseif (get_type($post['type_post']) === 'video'): ?>
             <div class="post-video__block">
-                <div class="post-video__preview">
-                    <?= embed_youtube_cover($post['video']); ?>
-                </div>
-                <a href="<?= $post['video']; ?>" class="post-video__play-big button">
-                    <svg class="post-video__play-big-icon" width="14" height="14">
-                        <use xlink:href="#icon-video-play-big"></use>
-                    </svg>
-                    <span class="visually-hidden">Запустить проигрыватель</span>
-                </a>
+              <div class="post-video__preview">
+                <?= embed_youtube_cover($post['video']); ?>
+              </div>
+              <a href="<?= $post['video']; ?>" class="post-video__play-big button">
+                <svg class="post-video__play-big-icon" width="14" height="14">
+                  <use xlink:href="#icon-video-play-big"></use>
+                </svg>
+                <span class="visually-hidden">Запустить проигрыватель</span>
+              </a>
             </div>
-          <?php elseif (get_type($post['type_post']) == 'link'): ?>
+          <?php elseif (get_type($post['type_post']) === 'link'): ?>
             <div class="post-link__wrapper">
               <a class="post-link__external" href="<?= htmlspecialchars($post['site']); ?>" title="Перейти по ссылке">
                 <div class="post-link__info-wrapper">
@@ -140,7 +155,7 @@ if (isset($_GET['filter']))
                   </div>
                   <div class="post-link__info">
                     <?php if (!empty($post['caption'])): ?>
-                    <h3><?= htmlspecialchars($post['caption']); ?></h3>
+                      <h3><?= htmlspecialchars($post['caption']); ?></h3>
                     <?php endif; ?>
                   </div>
                 </div>
@@ -221,7 +236,15 @@ if (isset($_GET['filter']))
     <?php endforeach; ?>
   </div>
   <div class="popular__page-links">
-    <a class="popular__page-link popular__page-link--prev button button--gray" href="#">Предыдущая страница</a>
-    <a class="popular__page-link popular__page-link--next button button--gray" href="#">Следующая страница</a>
-</div>
+    <form action="popular.php" method="get" style="<?= (($total_pages == 1) or ($current_page == 1)) ? 'opacity: 0.3; pointer-events: none; cursor: default;' : ''; ?>">
+      <input class="visually-hidden" type="text" id="filter" name="filter" value="<?= isset($_GET['filter']) ? $_GET['filter'] : 'all'; ?>">
+      <input class="visually-hidden" type="text" name="page" value="<?= $current_page - 1; ?>">
+      <input class="popular__page-link popular__page-link--prev button button--gray" type="submit" value="Предыдущая страница" style="width: 100%; padding: 26px 160px;">
+    </form>
+    <form class="" action="popular.php" method="get" style="<?= ($total_pages == $current_page) ? 'opacity: 0.3; pointer-events: none; cursor: default;' : ''; ?>">
+      <input class="visually-hidden" type="text" id="filter" name="filter" value="<?= isset($_GET['filter']) ? $_GET['filter'] : 'all'; ?>">
+      <input class="visually-hidden" type="text" name="page" value="<?= $current_page + 1; ?>">
+      <input class="popular__page-link popular__page-link--next button button--gray" type="submit" value="Следующая страница" style="width: 100%; padding: 26px 160px;">
+    </form>
+  </div>
 </div>

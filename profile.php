@@ -8,6 +8,7 @@ $is_auth = 1;
 $name_and_avatar = get_name_and_avatar($con, $_SESSION['user']['login']);
 
 $posts = get_posts_with_content($con, $_GET['id']);
+
 $user_subscribers = get_user_subscribers($con, $_GET['id']);
 
 if (isset($_GET['filter'])) {
