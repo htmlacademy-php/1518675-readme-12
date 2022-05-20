@@ -66,7 +66,7 @@
                 <use xlink:href="#icon-input-user"></use>
               </svg>
               <label class="visually-hidden">Логин</label>
-              <span class="form__error-label form__error-label--login" <?= isset($errors['login']) ? 'style="position: static; font-size: 16px;"' : ''; ?>><?= $errors['login']; ?></span>
+              <span class="form__error-label form__error-label--login" <?= isset($errors['login']) ? 'style="position: static; font-size: 16px;"' : ''; ?>><?= isset($errors['login']) ? $errors['login'] : ''; ?></span>
             </div>
             <div class="authorization__input-wrapper form__input-wrapper <?= isset($errors['password']) ? 'form__input-section--error' : ''; ?>">
               <input class="authorization__input authorization__input--password form__input" type="password" name="password" placeholder="Пароль" value="<?= !empty($_POST['password']) ? htmlspecialchars($_POST['password']) : ''; ?>">
