@@ -17,7 +17,7 @@ if ($_GET) {
       <div class="adding-post__tabs filters">
         <ul class="adding-post__tabs-list filters__list tabs__list">
           <li class="adding-post__tabs-item filters__item">
-            <a class="adding-post__tabs-link filters__button filters__button--photo <?=(($_GET['filter'] === 'photo') or $default_filter) ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=photo">
+            <a class="adding-post__tabs-link filters__button filters__button--photo <?=(isset($_GET) and ($_GET['filter'] === 'photo') or $default_filter) ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=photo">
               <svg class="filters__icon" width="22" height="18">
                 <use xlink:href="#icon-filter-photo"></use>
               </svg>
@@ -25,7 +25,7 @@ if ($_GET) {
             </a>
           </li>
           <li class="adding-post__tabs-item filters__item">
-            <a class="adding-post__tabs-link filters__button filters__button--video <?=($_GET['filter'] === 'video') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=video">
+            <a class="adding-post__tabs-link filters__button filters__button--video <?=(isset($_GET) and $_GET['filter'] === 'video') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=video">
               <svg class="filters__icon" width="24" height="16">
                 <use xlink:href="#icon-filter-video"></use>
               </svg>
@@ -33,7 +33,7 @@ if ($_GET) {
             </a>
           </li>
           <li class="adding-post__tabs-item filters__item">
-            <a class="adding-post__tabs-link filters__button filters__button--text <?=($_GET['filter'] === 'text') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=text">
+            <a class="adding-post__tabs-link filters__button filters__button--text <?=(isset($_GET) and $_GET['filter'] === 'text') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=text">
               <svg class="filters__icon" width="20" height="21">
                 <use xlink:href="#icon-filter-text"></use>
               </svg>
@@ -41,7 +41,7 @@ if ($_GET) {
             </a>
           </li>
           <li class="adding-post__tabs-item filters__item">
-            <a class="adding-post__tabs-link filters__button filters__button--quote <?=($_GET['filter'] === 'quote') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=quote">
+            <a class="adding-post__tabs-link filters__button filters__button--quote <?=(isset($_GET) and $_GET['filter'] === 'quote') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=quote">
               <svg class="filters__icon" width="21" height="20">
                 <use xlink:href="#icon-filter-quote"></use>
               </svg>
@@ -49,7 +49,7 @@ if ($_GET) {
             </a>
           </li>
           <li class="adding-post__tabs-item filters__item">
-            <a class="adding-post__tabs-link filters__button filters__button--link <?=($_GET['filter'] === 'link') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=link">
+            <a class="adding-post__tabs-link filters__button filters__button--link <?=(isset($_GET) and $_GET['filter'] === 'link') ? 'filters__button--active tabs__item--active' : '';?> tabs__item button" href="add.php?filter=link">
               <svg class="filters__icon" width="21" height="18">
                 <use xlink:href="#icon-filter-link"></use>
               </svg>
@@ -59,7 +59,7 @@ if ($_GET) {
         </ul>
       </div>
       <div class="adding-post__tab-content">
-        <section class="adding-post__photo tabs__content <?=(($_GET['filter'] === 'photo') or $default_filter) ? 'tabs__content--active' : '';?>">
+        <section class="adding-post__photo tabs__content <?=(isset($_GET) and ($_GET['filter'] === 'photo') or $default_filter) ? 'tabs__content--active' : '';?>">
           <h2 class="visually-hidden">Форма добавления фото</h2>
           <form class="adding-post__form form" action="add.php" method="post" enctype="multipart/form-data" autocomplete="off">
             <div class="form__text-inputs-wrapper">
@@ -103,7 +103,6 @@ if ($_GET) {
                   <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                   <ul class="form__invalid-list">
                     <?php foreach ($errors as $key => $value): ?>
-                      <?php print_r($errors); ?>
                       <?php
 
                       if ($key === 'photo-heading') {
@@ -152,7 +151,7 @@ if ($_GET) {
           </form>
         </section>
 
-        <section class="adding-post__video tabs__content tabs__content <?=($_GET['filter'] == 'video') ? 'tabs__content--active' : '';?>">
+        <section class="adding-post__video tabs__content tabs__content <?=(isset($_GET['filter']) and $_GET['filter'] === 'video') ? 'tabs__content--active' : '';?>">
           <h2 class="visually-hidden">Форма добавления видео</h2>
           <form class="adding-post__form form" action="#" method="post" enctype="multipart/form-data" autocomplete="off">
             <div class="form__text-inputs-wrapper">
@@ -164,7 +163,7 @@ if ($_GET) {
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc"><?=$errors['video-caption'];?></p>
+                      <p class="form__error-desc"><?= isset($errors) ? $errors['video-caption'] : '';?></p>
                     </div>
                   </div>
                 </div>
@@ -175,7 +174,7 @@ if ($_GET) {
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc"><?=$errors['video-caption'];?></p>
+                      <p class="form__error-desc"><?= isset($errors) ? $errors['video-caption'] : '';?></p>
                     </div>
                   </div>
                 </div>
@@ -198,9 +197,9 @@ if ($_GET) {
                     <?php foreach ($errors as $key => $value): ?>
                       <?php
 
-                      if ($key == 'video-caption') {
+                      if ($key === 'video-caption') {
                         $caption = 'Заголовок. ';
-                      } elseif ($key == 'video-heading') {
+                      } elseif ($key === 'video-heading') {
                         $caption = 'Ссылка Youtube. ';
                       }
 
@@ -220,7 +219,7 @@ if ($_GET) {
           </form>
         </section>
 
-        <section class="adding-post__text tabs__content <?=($_GET['filter'] == 'text') ? 'tabs__content--active' : '';?>">
+        <section class="adding-post__text tabs__content <?=(isset($_GET['filter']) and $_GET['filter'] === 'text') ? 'tabs__content--active' : '';?>">
           <h2 class="visually-hidden">Форма добавления текста</h2>
           <form class="adding-post__form form" action="#" method="post" autocomplete="off">
             <div class="form__text-inputs-wrapper">
@@ -232,7 +231,7 @@ if ($_GET) {
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc"><?=$errors['text-heading'];?></p>
+                      <p class="form__error-desc"><?= isset($errors) ? $errors['text-heading'] : '';?></p>
                     </div>
                   </div>
                 </div>
@@ -243,7 +242,7 @@ if ($_GET) {
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc"><?= $errors['post-text']; ?></p>
+                      <p class="form__error-desc"><?= isset($errors) ? $errors['post-text'] : '';?></p>
                     </div>
                   </div>
                 </div>
@@ -267,9 +266,9 @@ if ($_GET) {
                         <?php print_r($errors); ?>
                       <?php
 
-                      if ($key == 'text-heading') {
+                      if ($key === 'text-heading') {
                         $caption = 'Заголовок. ';
-                      } elseif ($key == 'post-text') {
+                      } elseif ($key === 'post-text') {
                         $caption = 'Цитата. ';
                       }
 
@@ -288,7 +287,7 @@ if ($_GET) {
           </form>
         </section>
 
-        <section class="adding-post__quote tabs__content <?=($_GET['filter'] == 'quote') ? 'tabs__content--active' : '';?>">
+        <section class="adding-post__quote tabs__content <?= (isset($_GET['filter']) and $_GET['filter'] === 'quote') ? 'tabs__content--active' : ''; ?>">
           <h2 class="visually-hidden">Форма добавления цитаты</h2>
           <form class="adding-post__form form" action="#" method="post" autocomplete="off">
             <div class="form__text-inputs-wrapper">
@@ -300,7 +299,7 @@ if ($_GET) {
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc"><?= $errors['quote-heading']; ?></p>
+                      <p class="form__error-desc"><?= isset($errors['quote_heading']) ? $errors['quote-heading'] : ''; ?></p>
                     </div>
                   </div>
                 </div>
@@ -311,7 +310,7 @@ if ($_GET) {
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc"><?= $errors['cite-text']; ?></p>
+                      <p class="form__error-desc"><?= isset($errors['cite-text']) ? $errors['cite-text'] : ''; ?></p>
                     </div>
                   </div>
                 </div>
@@ -345,9 +344,9 @@ if ($_GET) {
                   <?php foreach ($errors as $key => $value): ?>
                     <?php
 
-                    if ($key == 'quote-heading') {
+                    if ($key === 'quote-heading') {
                       $caption = 'Заголовок. ';
-                    } elseif ($key == 'cite-text') {
+                    } elseif ($key === 'cite-text') {
                       $caption = 'Цитата. ';
                     }
 
@@ -366,7 +365,7 @@ if ($_GET) {
           </form>
         </section>
 
-        <section class="adding-post__link tabs__content <?=($_GET['filter'] == 'link') ? 'tabs__content--active' : '';?>">
+        <section class="adding-post__link tabs__content <?=(isset($_GET['filter']) and $_GET['filter'] === 'link') ? 'tabs__content--active' : '';?>">
           <h2 class="visually-hidden">Форма добавления ссылки</h2>
           <form class="adding-post__form form" action="#" method="post" autocomplete="off">
             <div class="form__text-inputs-wrapper">
@@ -378,7 +377,7 @@ if ($_GET) {
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc"><?= $errors['link-heading']; ?></p>
+                      <p class="form__error-desc"><?= isset($errors['link-heading']) ? $errors['link-heading'] : ''; ?></p>
                     </div>
                   </div>
                 </div>
@@ -390,7 +389,7 @@ if ($_GET) {
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
                       <h3 class="form__error-title">Заголовок сообщения</h3>
-                      <p class="form__error-desc"><?= $errors['post-link']; ?></p>
+                      <p class="form__error-desc"><?= isset($errors['post-link']) ? $errors['post-link'] : ''; ?></p>
                     </div>
                   </div>
                 </div>
@@ -413,9 +412,9 @@ if ($_GET) {
                   <?php foreach ($errors as $key => $value): ?>
                     <?php
 
-                    if ($key == 'link-heading') {
+                    if ($key === 'link-heading') {
                       $caption = 'Заголовок. ';
-                    } elseif ($key == 'post-link') {
+                    } elseif ($key === 'post-link') {
                       $caption = 'Цитата. ';
                     }
 

@@ -96,3 +96,9 @@ CREATE TABLE messages (
 );
 
 CREATE FULLTEXT INDEX posts ON posts(caption, content);
+
+INSERT INTO types (name) VALUES ('text');
+INSERT INTO types (name) VALUES ('quote');
+INSERT INTO types (name) VALUES ('photo');
+INSERT INTO types (name) VALUES ('video');
+INSERT INTO types (name) VALUES ('link');
